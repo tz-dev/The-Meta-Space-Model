@@ -1,8 +1,6 @@
 https://tz-dev.github.io/The-Meta-Space-Model/
 
-The Meta-Space Model
-
- - Projective Emergence of Spacetime, Matter, and Constants from a Thermodynamically Structured Over-Geometry -
+The Meta-Space Model - Projective Emergence of Spacetime, Matter, and Constants from a Thermodynamically Structured Over-Geometry
 
 Modern theoretical physics has seen the emergence of numerous models that extend far beyond empirical verification. String Theory, Loop Quantum Gravity, and other higher-dimensional frameworks have introduced layers of abstraction without clear experimental validation. These models, while mathematically elegant, often lack testable predictions that would allow them to be conclusively confirmed or falsified.
 
