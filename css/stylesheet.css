@@ -24,7 +24,6 @@
 }
  nav {
      position: fixed;
-     height: 100%;
      top: 80px;
      left: 0px;
      width: 20%;
@@ -33,6 +32,13 @@
      overflow-x: hidden;
      overflow-y: auto;
      display: block;
+}
+ nav h2 {
+     margin-top: 0px;
+     padding-top: 15px;
+     padding-bottom: 4px;
+     text-align: center;
+     background: #999;
 }
  nav a {
      display: block;
@@ -48,8 +54,7 @@
      padding: 0px 20px 20px 20%;
 }
  h2, h3, h4 {
-     position: relative;
-     scroll-margin-top: 110px !important;
+     scroll-margin-top: 110px !important;     
 }
  blockquote {
      font-weight: normal;
@@ -132,19 +137,9 @@
      position: fixed;
      float: left;
      margin-right: 10px;
+     margin-bottom: 50px;
      height: 100%;
      overflow-y: auto;
-}
- ul#toc-list {
-     margin-top: 0 !important;
-     padding-top: 0 !important;
-}
- nav h2 {
-     margin-top: 0px;
-     padding-top: 15px;
-     padding-bottom: 4px;
-     text-align: center;
-     background: #999;
 }
  #toc ul {
      list-style: none;
@@ -157,6 +152,9 @@
      font-weight: bold;
      padding: 0;
      margin: 0;
+}
+#toc ul li:last-child ul {
+     margin-bottom: 175px;
 }
  #toc ul li ul li {
      font-weight: normal;
