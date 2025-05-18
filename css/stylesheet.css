@@ -1,8 +1,11 @@
 * {
     cursor: default;
 }
- a {
+ a, a code {
     cursor: pointer;
+}
+code {
+    font-size: 1.2em;
 }
  body {
      margin: 0;
