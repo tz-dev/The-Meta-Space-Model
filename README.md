@@ -12,4 +12,4 @@ The Meta-Space Model proposes a novel perspective: instead of assuming the exist
 
 ---
 
-Please note: You can download the index.html, upload it to Chat-GPT and have it do calculations based on this model.
+**Please note:** You can download the index.html, upload it to Chat-GPT and have it do calculations based on this model.
