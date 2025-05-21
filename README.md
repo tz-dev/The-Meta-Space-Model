@@ -12,9 +12,5 @@ The Meta-Space Model proposes a novel perspective: instead of assuming the exist
 
 ---
 
-**Please note:** You can download the index.html, upload it or give the link to a service like Chat-GPT/Grok/your local AI and:
-- have it do calculations based on this model
-- inquire probabilities for future measurements from satellites and LHC
-- ask it to classify & compare the model to other theories
-- ask about consequences for technologies
-- just have fun!
+To-Do:
+- re-structure appendix c
