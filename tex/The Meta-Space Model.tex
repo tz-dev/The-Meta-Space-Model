@@ -1,21 +1,29 @@
 \documentclass[10.5pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
-\usepackage{amsmath, amssymb}
-\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{array}
-\usepackage{makecell}
-\usepackage{longtable}
-\usepackage{longtable}
-\usepackage{graphicx}
-\usepackage{hyperref}
-\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{caption}
 \usepackage{enumitem}
-\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{lmodern}
+\usepackage{longtable}
+\usepackage{ltablex} 
+\usepackage{makecell}
 \usepackage{parskip}
+\usepackage{pdflscape}
+\usepackage{rotating}
+\usepackage{tabularx}
 \geometry{margin=0.5in}
 \title{The Meta-Space Model\\\large Projective Emergence of Spacetime, Matter, and Constants from a Thermodynamically Structured Over-Geometry}
 \author{Till Zoeller\\\texttt{till.zoeller@gmx.de}}
 \date{}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\keepXColumns
 
 \begin{document}
 \maketitle
@@ -517,12 +525,12 @@ over cosmic distances. The stabilization is mathematically represented as:
 \nabla_\tau S_{\text{dark}}(x, \tau) = \beta \cdot \exp\left(-\frac{|x_i - x_j|^2}{\ell_D^2} - \frac{\Delta \phi_D}{\sigma}\right)
 \]
 where:
-\begin{longtable}{@{}p{0.05\linewidth}@{\quad}p{0.9\linewidth}@{}}
- & \( S_{\text{dark}}(x, \tau) \) is the entropy field specific to dark matter regions, \\
- & \( \beta \) is the holographic stabilization coefficient, \\
- & \( \ell_D \) defines the dark matter coherence length, \\
- & \( \Delta \phi_D \) describes the phase shifts that maintain structural stability. \\
-\end{longtable}
+\begin{itemize}
+  \item \( S_{\text{dark}}(x, \tau) \) ist das Entropiefeld, das spezifisch für Dunkle-Materie-Regionen definiert ist.
+  \item \( \beta \) ist der holographische Stabilitätskoeffizient.
+  \item \( \ell_D \) definiert die Kohärenzlänge der Dunklen Materie.
+  \item \( \Delta \phi_D \) beschreibt die Phasenverschiebungen, die die strukturelle Stabilität aufrechterhalten.
+\end{itemize}
 \end{quote}
 
 This mechanism explains why dark matter remains gravitationally influential but electromagnetically transparent; 
@@ -549,22 +557,22 @@ phase-stable projections. This is mathematically formulated as:
 \mathcal{P}_{\text{gluon}} = \int_\Sigma G_{\mu\nu} G^{\mu\nu} \, dV
 \]
 where:
-\begin{longtable}{@{}p{0.05\linewidth}@{\quad}p{0.9\linewidth}@{}}
- & \( G_{\mu\nu} \) is the spectral flux tensor representing color interaction in Meta-Space, \\
- & \( \Sigma \) represents the projection surface where color exchange is realized, \\
- & \( dV \) is the volumetric projection element in Meta-Space. \\
-\end{longtable}
+\begin{itemize}
+  \item \( G_{\mu\nu} \) is the spectral flux tensor representing color interaction in Meta-Space,
+  \item \( \Sigma \) represents the projection surface where color exchange is realized,
+  \item \( dV \) is the volumetric projection element in Meta-Space.
+\end{itemize}
 \end{quote}
 
 The stability of gluonic interactions is maintained through entropy-coherent alignment, preventing phase 
 decoherence and ensuring color confinement.
 
 This postulate explains:
-\begin{longtable}{@{}p{0.03\linewidth}@{\quad}p{0.92\linewidth}@{}}
- & The absolute confinement of color charge (no free quarks observed), \\
- & The stability of hadronic structures under strong interactions, \\
- & The absence of long-range color forces outside the confinement region. \\
-\end{longtable}
+\begin{itemize}
+  \item The absolute confinement of color charge (no free quarks observed),
+  \item The stability of hadronic structures under strong interactions,
+  \item The absence of long-range color forces outside the confinement region.
+\end{itemize}
 
 \subsubsection*{Transition from Gluon Interaction Projection to Extended Quantum Gravity}
 
@@ -852,12 +860,12 @@ This postulate provides:
 
 \subsection{Interrelations of the 14 Extended Postulates}
 
-{\small
-\begin{longtable}{p{3.5cm} p{4cm} p{3.5cm} p{5cm}}
-\hline
-\textbf{Postulate} & \textbf{Derived From / Foundation} & \textbf{Linked Postulates} & \textbf{Description of the Relationship} \\
-\hline
-\endhead
+\begin{landscape}
+
+\begin{tabularx}{\linewidth}{>{\bfseries}X X X X}
+\toprule
+Postulate & Derived From / Foundation & Linked Postulates & Description of the Relationship \\
+\midrule
 
 \textbf{I. Gradient-Locked Coherence} &
 Fundamental Postulate, direct spectral projection in Meta-Space. &
@@ -929,9 +937,12 @@ Derived from I (Gradient-Locked Coherence) and V (Thermodynamic Stability) &
 VIII (Extended Quantum Gravity), VI (Dark Matter Projection) &
 Projects spacetime geometry holographically, integrating quantum gravity and dark matter effects. \\
 
-\hline
-\end{longtable}
-}
+\bottomrule
+\end{tabularx}
+
+\end{landscape}
+
+
 The extended 14 postulates of the Meta-Space Model are interconnected through various dependencies and mutual reinforcements. 
 This section outlines the structured relationships between these fundamental concepts, demonstrating how stability in one domain 
 often enhances or necessitates stability in another.
@@ -972,50 +983,49 @@ The \textbf{14 Extended Postulates} of the Meta-Space Model provide a granular d
 
 The following table presents the mapping of the 14 Extended Postulates to the 6 Meta-Projections:
 {\small
-\begin{longtable}{p{4cm} p{5cm} p{6cm}}
-\hline
-\textbf{Meta-Projection} & \textbf{Consolidated Postulates} & \textbf{Description} \\
-\hline
-\endhead
+\begin{tabularx}{\textwidth}{>{\bfseries}p{4cm} p{5cm} X}
+\toprule
+Meta-Projection & Consolidated Postulates & Description \\
+\midrule
 
-\textbf{P1 – Spectral Coherence \& Meta-Stability} &
+P1 – Spectral Coherence \& Meta-Stability &
 I (Gradient-Locked Coherence), II (Phase-Locked Projection), V (Thermodynamic Stability) &
 Combines the principles of entropy-driven coherence and phase stability to enforce quantum consistency 
 and thermodynamic protection across projections. This stabilizes matter-wave interactions and prevents phase collapse 
 in high-energy domains. \\
 
-\textbf{P2 – Universal Quark Confinement} &
+P2 – Universal Quark Confinement &
 III (Spectral Flux Barrier), IV (Exotic Quark Projections) &
 Describes the stabilization of all quark types (light and heavy) through spectral flux barriers, 
 ensuring color confinement and stable hadronic matter. This mechanism is entropy-driven and 
 prevents quark deconfinement under standard model conditions. \\
 
-\textbf{P3 – Gluonic and Topological Projections} &
+P3 – Gluonic and Topological Projections &
 VII (Gluon Interaction Projection), XIII (Topological Effects) &
 Merges gluon field representations and topological invariants, stabilizing quantum chromodynamics (QCD) 
 interactions through spectral alignments and topological protection. This includes monopole stability 
 and instanton coherence. \\
 
-\textbf{P4 – Electroweak Symmetry \& Supersymmetry} &
+P4 – Electroweak Symmetry \& Supersymmetry &
 IX (Supersymmetry Projection), XI (Higgs Mechanism) &
 Integrates the Higgs mechanism and supersymmetric projections, forming a coherent framework for mass 
 generation and electroweak stability within entropy-aligned domains. SUSY projections stabilize gauge interactions 
 by minimizing entropy divergence in \( \mathcal{M}_4 \). \\
 
-\textbf{P5 – Flavor Oscillations \& CP Violation} &
+P5 – Flavor Oscillations \& CP Violation &
 X (CP Violation), XII (Neutrino Oscillations) &
 Describes the phase-locked oscillatory behavior of neutrinos and CP violations as entropic realignments 
 in Meta-Space, stabilizing flavor transitions. This aligns with observed neutrino oscillations in 
 JUNO, DUNE, and Hyper-K experiments. \\
 
-\textbf{P6 – Holographic Spacetime \& Dark Matter} &
+P6 – Holographic Spacetime \& Dark Matter &
 VI (Dark Matter Projection), VIII (Extended Quantum Gravity), XIV (Holographic Projection of Spacetime) &
 Represents spacetime and dark matter as holographic projections from Meta-Space, driven by entropy 
 gradients and stabilized by holographic boundaries. These projections maintain phase coherence 
 and gravitational stability without particle-based dark matter. \\
 
-\hline
-\end{longtable}
+\bottomrule
+\end{tabularx}
 }
 \subsection{The Consolidation Process}
 
@@ -1674,20 +1684,18 @@ Gauge symmetries emerge as stable projections:
 
 \subsubsection*{2. Covariant Field Strength Tensors}
 
-\begin{itemize}
-    \item 
-    \[
-        F_{\mu\nu} = \partial_\mu A_\nu - \partial_\nu A_\mu + i g [A_\mu, A_\nu]
-    \]
-    \item
-    \[
-        G_{\mu\nu} = \partial_\mu G_\nu - \partial_\nu G_\mu + i g_s [G_\mu, G_\nu]
-    \]
-    \item
-    \[
-        W_{\mu\nu} = \partial_\mu W_\nu - \partial_\nu W_\mu + i g [W_\mu, W_\nu]
-    \]
-\end{itemize}
+\[
+    F_{\mu\nu} = \partial_\mu A_\nu - \partial_\nu A_\mu + i g [A_\mu, A_\nu]
+\] 
+
+\[
+    G_{\mu\nu} = \partial_\mu G_\nu - \partial_\nu G_\mu + i g_s [G_\mu, G_\nu]
+\] 
+
+\[
+    W_{\mu\nu} = \partial_\mu W_\nu - \partial_\nu W_\mu + i g [W_\mu, W_\nu]
+\]
+
 
 \begin{itemize}
     \item Jet anomalies at TeV scale
@@ -1847,39 +1855,36 @@ Validation in Appendix C.5.
 \end{itemize}
 
 \subsection{Comparison with Other GUT Models}
+
+\keepXColumns % Wichtig für ltablex
+\renewcommand{\arraystretch}{1.4}
+
+\begin{center}
+\captionof{table}{Comparison of GUT models and their features.}
 {\small
-\begin{longtable}{|p{3cm}|c|c|c|c|c|c|}
-\hline
+\begin{tabularx}{\textwidth}{@{} p{3.5cm} *{6}{>{\centering\arraybackslash}X} @{}}
+\toprule
 \textbf{Theory / Sector} 
 & \textbf{SU(5) GUT} 
 & \textbf{SO(10) GUT} 
 & \makecell{\textbf{Pati-Salam}} 
 & \textbf{String Theory} 
-& \makecell{\textbf{Loop Quantum}\\\textbf{Gravity}}
-& \makecell{\textbf{Meta-Space}\\\textbf{Model}}\\
-\hline
+& \makecell{\textbf{Loop Quantum}\\\textbf{Gravity}} 
+& \makecell{\textbf{Meta-Space}\\\textbf{Model}} \\
+\midrule
+
 Electromagnetic Interaction & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
-\hline
 Weak Interaction & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
-\hline
 Strong Interaction & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
-\hline
 Gravitation & \texttimes & \texttimes & \texttimes & \checkmark & \checkmark & \checkmark \\
-\hline
 Dark Matter & \texttimes & \texttimes & \texttimes & \checkmark & \texttimes & \checkmark \\
-\hline
 Dark Energy & \texttimes & \texttimes & \texttimes & \checkmark & \texttimes & \checkmark \\
-\hline
 Neutrino Oscillations & \texttimes & \checkmark & \checkmark & \checkmark & \texttimes & \checkmark \\
-\hline
 Cosmology (CMB, Galaxies) & \texttimes & \texttimes & \texttimes & \checkmark & \texttimes & \checkmark \\
-\hline
 Topological Effects & \texttimes & \texttimes & \texttimes & \checkmark & \texttimes & \checkmark \\
-\hline
 Higgs Mechanism & \checkmark & \checkmark & \checkmark & \checkmark & \texttimes & \checkmark \\
-\hline
 CP Violation & \checkmark & \checkmark & \checkmark & \checkmark & \texttimes & \checkmark \\
-\hline
+\midrule
 \textbf{Nr of Assumptions} 
 & \textbf{3}\textsuperscript{[1]} 
 & \textbf{4}\textsuperscript{[2]} 
@@ -1887,10 +1892,11 @@ CP Violation & \checkmark & \checkmark & \checkmark & \checkmark & \texttimes & 
 & \textbf{>10}\textsuperscript{[4]} 
 & \textbf{6}\textsuperscript{[5]} 
 & \textbf{6}\textsuperscript{[6]} \\
-\hline
-\caption{Comparison of GUT models and their features.}
-\end{longtable}
+\bottomrule
+\end{tabularx}
 }
+\end{center}
+
 \noindent \textbf{Notes:}
 \begin{itemize}
     \item [1] SU(5), Higgs Field, Symmetry Breaking
@@ -2951,57 +2957,64 @@ The setup emulates gravitational lensing behavior from a purely entropic perspec
 
 The symmetric distribution and centered mean angle validate the statistical soundness of the entropic lensing hypothesis.
 
+\clearpage
+
 \subsection{Full Module Integration and Validation Summary}
 
 The following table documents all core Python modules used in the projectional derivations, including the target constants, internal consistency, and relative deviations (if applicable). 
 All results are computed independently within the Meta-Space Model and validated through simulation or symbolic derivation.
+
+\renewcommand{\arraystretch}{1.8}
+
 {\small
-\begin{longtable}{p{5cm}p{1.5cm}p{3cm}p{6cm}}
+
+\begin{longtable}{p{7.5cm}p{1.5cm}p{2cm}p{5.5cm}}
+\hline
 \textbf{Code} & \textbf{Module} & \textbf{Validation} & \textbf{Remarks} \\
 \hline
 \endhead
 
-\texttt{c1\_1\_entropy\_field\_simulation\_and\_hessian.py} & C.1.1 & \checkmark\ Model-based \& stable & Uncalibrated, used as foundational entropy field \\
-\texttt{c1\_1\_entropy\_field\_simulation\_and\_hessian.py} & C.1.2 & \checkmark\ Stable tensor structure & Computes Hessian (Information Tensor) from $\partial^2 S$ \\
+\texttt{c1\_1\_entropy\_field\_simulation\_and\_hessian.py} & C.1.1 & Model-based \& stable & Uncalibrated, used as foundational entropy field \\
+\texttt{c1\_1\_entropy\_field\_simulation\_and\_hessian.py} & C.1.2 & Stable tensor structure & Computes Hessian (Information Tensor) from $\partial^2 S$ \\
 \texttt{c1\_3\_entropy\_field\_highres\_longtime\_analysis.py} & C.1.3 & \checkmark & Generates high-resolution $\Delta S(\tau)$ snapshots \\
 \texttt{c1\_3\_generate\_entropy\_vs\_tau\_csv.py} & C.1.3 & \checkmark & CSV output used in $\tau$-based analysis \\
-\texttt{c1\_3\_find\_beta\_cal\_for\_hbar.py} & C.1.3 & \checkmark\ 1.026\% & Calibrates $\beta_{\mathrm{cal}}$ for $\hbar$ matching \\
-\texttt{c1\_3\_rescaling\_comparison.py} & C.1.3 & \checkmark\ $-0.0112\%$ & Non-circular scaling comparison between methods \\
-\texttt{c1\_3\_hbar\_reconstruction\_from\_model.py} & C.1.3 & \checkmark\ $-0.01\%$ & Reconstruction of $\hbar$ from $a_0$, $m_e$, $c$, $\alpha$ \\
-\texttt{c1\_3\_hessian\_stability\_analysis\_all.py} & C.1.3 & \checkmark\ 195112 samples & Shows isotropy in spatial Hessian curvature \\
-\texttt{c1\_4\_gravitational\_constant\_from\_model.py} & C.1.4 & \checkmark\ $-0.02\%$ & Projection of $G$ from model-consistent values \\
-\texttt{c2\_1\_lagrangian\_sim.py} & C.2.1 & \checkmark\ Stable & Lagrangian density from entropic variation \\
+\texttt{c1\_3\_find\_beta\_cal\_for\_hbar.py} & C.1.3 & 1.026\% & Calibrates $\beta_{\mathrm{cal}}$ for $\hbar$ matching \\
+\texttt{c1\_3\_rescaling\_comparison.py} & C.1.3 & $-0.0112\%$ & Non-circular scaling comparison between methods \\
+\texttt{c1\_3\_hbar\_reconstruction\_from\_model.py} & C.1.3 & $-0.01\%$ & Reconstruction of $\hbar$ from $a_0$, $m_e$, $c$, $\alpha$ \\
+\texttt{c1\_3\_hessian\_stability\_analysis\_all.py} & C.1.3 & 195112 samples & Shows isotropy in spatial Hessian curvature \\
+\texttt{c1\_4\_gravitational\_constant\_from\_model.py} & C.1.4 & $-0.02\%$ & Projection of $G$ from model-consistent values \\
+\texttt{c2\_1\_lagrangian\_sim.py} & C.2.1 & Stable & Lagrangian density from entropic variation \\
 \texttt{c2\_2\_entropy\_vectorfield.py} & C.2.2 & \checkmark & Entropy flow visualized as vector field \\
-\texttt{c2\_3\_supersym\_projection.py} & C.2.3 & \checkmark\ Symmetric & Supersymmetric projection with plausible $\Delta m$ \\
-\texttt{c2\_4\_yangmills\_dynamics.py} & C.2.4 & \checkmark\ Stable & Shows realistic energy flow \\
-\texttt{c2\_5\_lorentz\_signature\_from\_entropy.py} & C.2.5 & \checkmark\ Correct signs & Projection of metric signatures from $\partial^2 S$ \\
-\texttt{c2\_6\_einstein\_equations\_from\_entropy.py} & C.2.6 & \checkmark\ Exact & Field equations via tensor projection \\
+\texttt{c2\_3\_supersym\_projection.py} & C.2.3 & Symmetric & Supersymmetric projection with plausible $\Delta m$ \\
+\texttt{c2\_4\_yangmills\_dynamics.py} & C.2.4 & Stable & Shows realistic energy flow \\
+\texttt{c2\_5\_lorentz\_signature\_from\_entropy.py} & C.2.5 & Correct signs & Projection of metric signatures from $\partial^2 S$ \\
+\texttt{c2\_6\_einstein\_equations\_from\_entropy.py} & C.2.6 & Exact & Field equations via tensor projection \\
 \texttt{c2\_7\_lorentz\_matrix} & C.2.7 & \checkmark & Logical derivation of Lorentz matrix \\
-\texttt{c3\_1\_e8\_branching\_dimension\_validation.py} & C.3.1 & \checkmark\ Exact & Confirms dimensional branching of $E_8$ \\
-\texttt{c3\_2\_topological\_protection.py} & C.3.2 & \checkmark\ Topologically consistent & All anomaly checks passed \\
-\texttt{c4\_1\_rg\_flow\_unification.py} & C.4.1 & \checkmark\ Exact Unification & Clean 1-loop test of gauge coupling convergence \\
-\texttt{c4\_2\_rg\_flow\_top\_yukawa.py} & C.4.2 & \checkmark\ Plausible & Initial value correct, flows as expected \\
-\texttt{c4\_3\_yukawa\_matrix\_eigenflow.py} & C.4.3 & \checkmark\ Stable eigenvalues & No degeneracy, logically consistent evolution \\
-\texttt{c4\_4\_rg\_stability\_param\_mapping.py} & C.4.4 & \checkmark\ Stable couplings & Very small derivative variations, robust mapping \\
-\texttt{c5\_1\_electron\_mass\_from\_yukawa.py} & C.5.1 & \checkmark\ 0.08\% & Very close agreement with experimental value \\
-\texttt{c5\_2\_speed\_of\_light\_projection.py} & C.5.2 & \checkmark\ 0.01\% & Derived from meta-temporal scaling \\
-\texttt{c5\_3\_vacuum\_permeability\_projection.py} & C.5.3 & \checkmark\ $<0.03\%$ & Computed from $\varepsilon_0$ and projected speed of light \\
-\texttt{c5\_4\_boltzmann\_constant\_projection.py} & C.5.4 & \checkmark\ Exact & Entropy-based derivation, highly stable \\
-\texttt{c5\_5\_bohr\_radius\_projection.py} & C.5.5 & \checkmark\ 0.08\% & Well within model tolerance \\
-\texttt{c5\_6\_rydberg\_constant\_projection.py} & C.5.6 & \checkmark\ 0.07\% & Fully model-derived from entropic relations \\
-\texttt{c5\_7\_binding\_energy\_from\_alpha.py} & C.5.7 & \checkmark\ $<0.06\%$ & Accurate projection via fine-structure constant \\
-\texttt{c5\_8\_proton\_mass\_from\_strong\_coupling.py} & C.5.8 & \checkmark\ 0.18\% & Strong coupling corrected, solid agreement \\
-\texttt{c5\_9\_muon\_mass\_projection.py} & C.5.9 & \checkmark\ Exact & Computed via geometric mean of $e$ and $\tau$ mass \\
-\texttt{c5\_10\_neutron\_mass\_projection.py} & C.5.10 & \checkmark\ Exact & Derived from proton mass + asymmetry energy \\
-\texttt{c5\_11\_tau\_mass\_projection.py} & C.5.11 & \checkmark\ 0.08\% & Empirical $\beta_\tau$ calibration, theoretically explainable \\
-\texttt{c6\_1\_cosmological\_constant\_from\_hubble.py} & C.6.1 & \checkmark\ 55.45\% & $\Lambda$ is very small; uses entropic $\beta_H \approx 3.645 \times 10^{83}$ \\
-\texttt{c6\_2\_hubble\_constant\_from\_entropyflow.py} & C.6.2 & \checkmark\ 0.02\% & From entropy flow and spacetime scaling \\
-\texttt{c6\_3\_thomson\_cross\_section\_projection.py} & C.6.3 & \checkmark\ 0.14\% & Projected from $\alpha$, $\hbar$, $m_e$, and $c$ \\
-\texttt{c6\_4\_compton\_wavelength.py} & C.6.4 & \checkmark\ $-0.07\%$ & Based on full Planck constant $h$ \\
-\texttt{c6\_5\_avogadro\_number\_projection.py} & C.6.5 & \checkmark\ Exact & Derived from mass unit scaling \\
-\texttt{c6\_6\_atomic\_mass\_unit\_projection.py} & C.6.6 & \checkmark\ 0.73\% & Acceptable deviation via mass averaging \\
-\texttt{c7\_1\_montecarlo\_entropic\_lensing.py} & C.7.1 & \checkmark\ Statistically consistent & Symmetric angular distribution; $\sim$0° center \\
-
+\texttt{c3\_1\_e8\_branching\_dimension\_validation.py} & C.3.1 & Exact & Confirms dimensional branching of $E_8$ \\
+\texttt{c3\_2\_topological\_protection.py} & C.3.2 & Topologically consistent & All anomaly checks passed \\
+\texttt{c4\_1\_rg\_flow\_unification.py} & C.4.1 & Exact Unification & Clean 1-loop test of gauge coupling convergence \\
+\texttt{c4\_2\_rg\_flow\_top\_yukawa.py} & C.4.2 & Plausible & Initial value correct, flows as expected \\
+\texttt{c4\_3\_yukawa\_matrix\_eigenflow.py} & C.4.3 & Stable eigenvalues & No degeneracy, logically consistent evolution \\
+\texttt{c4\_4\_rg\_stability\_param\_mapping.py} & C.4.4 & Stable couplings & Very small derivative variations, robust mapping \\
+\texttt{c5\_1\_electron\_mass\_from\_yukawa.py} & C.5.1 & 0.08\% & Very close agreement with experimental value \\
+\texttt{c5\_2\_speed\_of\_light\_projection.py} & C.5.2 & 0.01\% & Derived from meta-temporal scaling \\
+\texttt{c5\_3\_vacuum\_permeability\_projection.py} & C.5.3 & $<0.03\%$ & Computed from $\varepsilon_0$ and projected speed of light \\
+\texttt{c5\_4\_boltzmann\_constant\_projection.py} & C.5.4 & Exact & Entropy-based derivation, highly stable \\
+\texttt{c5\_5\_bohr\_radius\_projection.py} & C.5.5 & 0.08\% & Well within model tolerance \\
+\texttt{c5\_6\_rydberg\_constant\_projection.py} & C.5.6 & 0.07\% & Fully model-derived from entropic relations \\
+\texttt{c5\_7\_binding\_energy\_from\_alpha.py} & C.5.7 & $<0.06\%$ & Accurate projection via fine-structure constant \\
+\texttt{c5\_8\_proton\_mass\_from\_strong\_coupling.py} & C.5.8 & 0.18\% & Strong coupling corrected, solid agreement \\
+\texttt{c5\_9\_muon\_mass\_projection.py} & C.5.9 & Exact & Computed via geometric mean of $e$ and $\tau$ mass \\
+\texttt{c5\_10\_neutron\_mass\_projection.py} & C.5.10 & Exact & Derived from proton mass + asymmetry energy \\
+\texttt{c5\_11\_tau\_mass\_projection.py} & C.5.11 & 0.08\% & Empirical $\beta_\tau$ calibration, theoretically explainable \\
+\texttt{c6\_1\_cosmological\_constant\_from\_hubble.py} & C.6.1 & 55.45\% & $\Lambda$ is very small; uses entropic $\beta_H \approx 3.645 \times 10^{83}$ \\
+\texttt{c6\_2\_hubble\_constant\_from\_entropyflow.py} & C.6.2 & 0.02\% & From entropy flow and spacetime scaling \\
+\texttt{c6\_3\_thomson\_cross\_section\_projection.py} & C.6.3 & 0.14\% & Projected from $\alpha$, $\hbar$, $m_e$, and $c$ \\
+\texttt{c6\_4\_compton\_wavelength.py} & C.6.4 & $-0.07\%$ & Based on full Planck constant $h$ \\
+\texttt{c6\_5\_avogadro\_number\_projection.py} & C.6.5 & Exact & Derived from mass unit scaling \\
+\texttt{c6\_6\_atomic\_mass\_unit\_projection.py} & C.6.6 & 0.73\% & Acceptable deviation via mass averaging \\
+\texttt{c7\_1\_montecarlo\_entropic\_lensing.py} & C.7.1 & Statistically consistent & Symmetric angular distribution; $\sim$0° center \\
+\hline
 \end{longtable}
 }
 \subsection{Integration, Automation, Workflow (Meta Validation)}
@@ -3032,19 +3045,14 @@ This appendix provides a comprehensive glossary of key terms and concepts used i
 
 \subsection{Core Postulates}
 This section provides a detailed tabular overview of the eight core postulates of the Meta-Space Model, which form the foundational principles for its theoretical framework.
-{\small
-\begin{longtable}{r p{3.5cm} p{6cm} p{5cm} p{5cm}}
-\caption{Core Postulates of the Meta-Space Model} \\
 
-\hline
-\# & Title & Description & Mathematical Representation & Context/Relevance \\
-\hline
-\endfirsthead
+{\small
+\begin{longtable}{p{0.5cm} p{1.75cm} p{4.5cm} p{5cm} p{4.5cm}}
 
 \multicolumn{5}{c}%
-{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+{} \\
 \hline
-\# & Title & Description & Mathematical Representation & Context/Relevance \\
+\# & \textbf{Title} & \textbf{Description} & \textbf{Mathematical Representation} & \textbf{Context/Relevance} \\
 \hline
 \endhead
 
@@ -3082,23 +3090,19 @@ This section provides a detailed tabular overview of the eight core postulates o
 }
 \subsection{Extended Postulates}
 This section details the fourteen extended postulates that build upon the core postulates, providing specific mechanisms for physical phenomena in the Meta-Space Model.
-{\small
-\begin{longtable}{r p{3.5cm} p{6cm} p{5cm} p{5cm}}
-\caption{Extended Postulates of the Meta-Space Model} \\
 
-\hline
-\# & Title & Description & Mathematical Representation & Context/Relevance \\
-\hline
-\endfirsthead
+\begin{landscape}
+{\small
+\begin{longtable}{p{0.5cm} p{3cm} p{8cm} p{8cm} p{4.5cm}}
 
 \multicolumn{5}{c}%
-{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+{} \\
 \hline
-\# & Title & Description & Mathematical Representation & Context/Relevance \\
+\# & \textbf{Title} & \textbf{Description} & \textbf{Mathematical Representation} & \textbf{Context/Relevance} \\
 \hline
 \endhead
 
-\hline \multicolumn{5}{r}{{Continued on next page}} \\
+
 \endfoot
 
 \hline
@@ -3150,14 +3154,14 @@ This section details the fourteen extended postulates that build upon the core p
 
 \end{longtable}
 }
+\end{landscape}
+
+
 \subsection{Meta-Postulates/Projections}
 This section outlines the six meta-postulates/projections that define the overarching principles for deriving physical laws from Meta-Space, ensuring structural coherence.
+
 {\small
-\begin{longtable}{p{1cm} p{3.5cm} p{5.5cm} p{3.5cm} p{3.5cm}}
-\hline
-\textbf{\#} & \textbf{Title} & \textbf{Description} & \textbf{Mathematical Representation} & \textbf{Context/Relevance} \\
-\hline
-\endfirsthead
+\begin{longtable}{p{0.5cm} p{2.25cm} p{4.25cm} p{5.75cm} p{3.75cm}}
 \hline
 \textbf{\#} & \textbf{Title} & \textbf{Description} & \textbf{Mathematical Representation} & \textbf{Context/Relevance} \\
 \hline
@@ -3227,7 +3231,7 @@ M6 & Topological Unification & All interactions are unified through topologicall
 \subsection{Glossary of Terms}
 
 {\small
-\begin{longtable}{p{3cm} p{6.5cm} p{4cm} p{4cm}}
+\begin{longtable}{p{2.5cm} p{4.75cm} p{5cm} p{4.25cm}}
 \caption{Glossary of Terms}\\
 \toprule
 \textbf{Term} & \textbf{Definition} & \textbf{Mathematical Representation} & \textbf{Context/Relevance} \\
