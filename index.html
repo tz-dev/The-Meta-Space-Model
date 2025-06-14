@@ -532,230 +532,383 @@
 				</p>
 			</section>
 			<section>
-				<h3>3.1 Extended Postulate I – Gradient-Locked Coherence</h3>
-				<p>
-					The first of the extended postulates describes the stabilization of spectral projections through thermodynamic gradients, 
-					specifically within hadronic structures. In the Meta-Space Model, the entropic flow enforces coherence within regions of 
-					strong gradient alignment, locking quantum states into stable configurations.
-				</p>
-				<blockquote>
-					<p>
-						<strong>Extended Postulate I – Gradient-Locked Coherence:</strong>  
-						Spectral projections are stabilized through entropic gradients in Meta-Space. The stabilization condition is given by:
-					</p>
-					<p style="text-align: center">
-						\( \nabla_\tau S_{\text{proj}}(q_i, q_j) \geq \kappa \cdot \exp\left(-\frac{|x_i - x_j|^2}{\ell^2}\right) \)
-					</p>
-					<p>
-						where:
-					</p>
-					<ul>
-						<li>\( q_i, q_j \) are projection coordinates of hadronic structures,</li>
-						<li>\( \kappa \) is a spectral locking constant dependent on the entropy density,</li>
-						<li>\( \ell \) is the characteristic coherence length in the entropy landscape.</li>
-					</ul>
-				</blockquote>
-				<p>
-					This postulate guarantees that hadronic mass distributions are stable and coherent over entropic timescales, 
-					preventing random phase decoherence.
-				</p>
-				<p>
-					For definitions of model-specific terms used in the core postulates, refer to <a href="#heading-128">Appendix D: Glossary</a>.
-				</p>
+			    <h3>3.1 Extended Postulate I – Gradient-Locked Coherence</h3>
+			    <p>
+			        The first of the extended postulates describes the stabilization of spectral projections through thermodynamic gradients, 
+			        specifically within hadronic structures. In the Meta-Space Model, the entropic flow enforces coherence within regions of 
+			        strong gradient alignment, locking quantum states into stable configurations.
+			    </p>
+			    <blockquote>
+			        <p>
+			            <strong>Extended Postulate I – Gradient-Locked Coherence:</strong>  
+			            Spectral projections are stabilized through entropic gradients in Meta-Space. The stabilization condition is given by:
+			        </p>
+			        <p style="text-align: center">
+			            \( \nabla_\tau S_{\text{proj}}(q_i, q_j) \geq \kappa \cdot \exp\left(-\frac{|x_i - x_j|^2}{\ell^2}\right) \)
+			        </p>
+			        <p>
+			            where:
+			        </p>
+			        <ul>
+			            <li>\( q_i, q_j \) are projection coordinates of hadronic structures,</li>
+			            <li>\( \kappa \) is a spectral locking constant dependent on the entropy density,</li>
+			            <li>\( \ell \) is the characteristic coherence length in the entropy landscape.</li>
+			        </ul>
+			    </blockquote>
+			    <p>
+			        This postulate guarantees that hadronic mass distributions are stable and coherent over entropic timescales, 
+			        preventing random phase decoherence.
+			    </p>
+			    <p>
+			        For definitions of model-specific terms used in the core postulates, refer to <a href="#heading-128">Appendix D: Glossary</a>.
+			    </p>
+			    <h4>Derivation from Core Postulates</h4>
+			    <p>
+			        Extended Postulate I (EP I) is derived from Core Postulates CP1 (Geometrical Substrate), CP2 (Entropy-Driven Causality), 
+			        CP3 (Projection Principle), and CP5 (Entropy-Coherent Stability). The Meta-Space geometry 
+			        \( \mathcal{M}_{\text{meta}} = S^3 \times CY_3 \times \mathbb{R}_\tau \) (CP1) provides the manifold for spectral 
+			        projections, where entropic gradients \( \nabla_\tau S(x, \tau) > 0 \) (CP2) drive stabilization. CP3 ensures that 
+			        physical states are projections from higher-dimensional Meta-Space, and CP5 enforces minimal entropy production for 
+			        stable configurations.
+			    </p>
+			    <p>
+			        The Meta-Lagrangian (Appendix A.3) includes fermionic terms \( \bar{\Psi}(i\Gamma^A D_A - m[S])\Psi \), where 
+			        \( m[S] \) is the entropy-dependent mass term. Applying the projection operator \( \mathcal{P} \) (Appendix B) to 
+			        hadronic coordinates \( q_i, q_j \), the entropic gradient is derived as:
+			    </p>
+			    <p style="text-align: center">
+			        \( \nabla_\tau S_{\text{proj}}(q_i, q_j) = \mathcal{P} \left[ \int \bar{\Psi}(q_i) \Gamma^\tau D_\tau \Psi(q_j) \, d^4x \right] \).
+			    </p>
+			    <p>
+			        The stabilization condition arises from CP5, requiring \( \nabla_\tau S_{\text{proj}} \geq \kappa \), where 
+			        \( \kappa \) is proportional to the entropy density. The exponential term \( \exp\left(-\frac{|x_i - x_j|^2}{\ell^2}\right) \) 
+			        reflects the Gaussian decay of coherence over the characteristic length \( \ell \), consistent with CP2’s causality 
+			        constraints. This ensures that hadronic structures remain coherent against entropic fluctuations.
+			    </p>
+			    <p>
+			        EP I influences EP III (Spectral Flux Barrier) by providing the gradient framework for quark confinement and EP V 
+			        (Gauge-Projected Confinement) by enforcing entropic stability in gauge interactions. See Section 3.15 for interrelations.
+			    </p>
 			</section>
 			<section>
-				<h4>Transition from Gradient-Locked Coherence to Phase-Locked Projection</h4>
-				<p>
-					The gradient locking in hadronic structures imposes phase stability within spectral projections. For quantum 
-					states to remain coherent over extended time intervals, the phases of these states must be entropically synchronized.
-					This introduces the concept of <strong>Phase-Locked Projection</strong>, where fermionic projections maintain 
-					phase coherence under entropic alignment.
-				</p>
+			    <h4>Transition from Gradient-Locked Coherence to Phase-Locked Projection</h4>
+			    <p>
+			        The gradient locking in hadronic structures imposes phase stability within spectral projections. For quantum 
+			        states to remain coherent over extended time intervals, the phases of these states must be entropically synchronized.
+			        This introduces the concept of <strong>Phase-Locked Projection</strong>, where fermionic projections maintain 
+			        phase coherence under entropic alignment.
+			    </p>
 			</section>
 			<section>
-				<h3>3.2 Extended Postulate II – Phase-Locked Projection (Quantum Coherence)</h3>
-				<p>
-					In the Meta-Space Model, quantum coherence is not imposed externally but emerges through synchronized 
-					entropy gradients within the spectral projection. Fermionic states, when phase-locked, maintain stability 
-					against perturbations in the entropy field.
-				</p>
-				<blockquote>
-					<p>
-						<strong>Extended Postulate II – Phase-Locked Projection:</strong>  
-						Fermions project into stable, phase-coherent states in Meta-Space. The projection is governed by:
-					</p>
-					<p style="text-align: center">
-						\( \mathcal{T}(\tau) = \oint_\Sigma \psi_i(\tau) \, d\phi \)
-					</p>
-					<p>
-						where:
-					</p>
-					<ul>
-						<li>\( \mathcal{T}(\tau) \) represents the integrated phase coherence over a closed surface \( \Sigma \),</li>
-						<li>\( \psi_i(\tau) \) are the phase-aligned spectral modes of fermionic states,</li>
-						<li>\( d\phi \) is the phase differential in the projection region.</li>
-					</ul>
-				</blockquote>
-				<p>
-					This phase alignment ensures that quantum states remain coherent under entropic flow, forming stable 
-					informational nodes in the projection space.
-				</p>
+			    <h3>3.2 Extended Postulate II – Phase-Locked Projection (Quantum Coherence)</h3>
+			    <p>
+			        In the Meta-Space Model, quantum coherence is not imposed externally but emerges through synchronized 
+			        entropy gradients within the spectral projection. Fermionic states, when phase-locked, maintain stability 
+			        against perturbations in the entropy field.
+			    </p>
+			    <blockquote>
+			        <p>
+			            <strong>Extended Postulate II – Phase-Locked Projection:</strong>  
+			            Fermions project into stable, phase-coherent states in Meta-Space. The projection is governed by:
+			        </p>
+			        <p style="text-align: center">
+			            \( \mathcal{T}(\tau) = \oint_\Sigma \psi_i(\tau) \, d\phi \)
+			        </p>
+			        <p>
+			            where:
+			        </p>
+			        <ul>
+			            <li>\( \mathcal{T}(\tau) \) represents the integrated phase coherence over a closed surface \( \Sigma \),</li>
+			            <li>\( \psi_i(\tau) \) are the phase-aligned spectral modes of fermionic states,</li>
+			            <li>\( d\phi \) is the phase differential in the projection region.</li>
+			        </ul>
+			    </blockquote>
+			    <p>
+			        This phase alignment ensures that quantum states remain coherent under entropic flow, forming stable 
+			        informational nodes in the projection space.
+			    </p>
+			    <h4>Derivation from Core Postulates</h4>
+			    <p>
+			        Extended Postulate II (EP II) follows from CP2 (Entropy-Driven Causality), CP3 (Projection Principle), and 
+			        CP4 (Spectral Flow). CP2 establishes that entropic gradients synchronize physical processes, while CP3 defines 
+			        fermions as projections of higher-dimensional states. CP4 introduces the spectral flow \( \mathcal{F} = \int_\Sigma J^\mu d\Sigma_\mu \), 
+			        which governs phase dynamics in Meta-Space.
+			    </p>
+			    <p>
+			        The phase coherence condition is derived from the Meta-Lagrangian’s fermionic action (Appendix A.3), where the 
+			        phase differential \( d\phi \) is related to the spectral current \( J^\mu = \bar{\Psi} \Gamma^\mu \Psi \). Projecting 
+			        onto a closed surface \( \Sigma \) (Appendix B), the phase-locked condition is:
+			    </p>
+			    <p style="text-align: center">
+			        \( \mathcal{T}(\tau) = \oint_\Sigma \psi_i(\tau) \, d\phi = \mathcal{P} \left[ \int_\Sigma \bar{\Psi} \Gamma^\mu \Psi \, d\Sigma_\mu \right] \).
+			    </p>
+			    <p>
+			        CP2 ensures that \( \mathcal{T}(\tau) \) is stable under entropic flow, as phase misalignment would increase entropy, 
+			        violating CP5’s stability condition. The closed surface integral reflects CP4’s requirement that spectral modes 
+			        \( \psi_i(\tau) \) maintain topological invariance. This results in phase-locked fermionic states resistant to 
+			        entropic perturbations.
+			    </p>
+			    <p>
+			        EP II supports EP I by providing phase stability for gradient-locked coherence and enables EP III by ensuring 
+			        phase-aligned quark states for confinement. Interrelations are detailed in Section 3.15.
+			    </p>
 			</section>
 			<section>
-				<h4>Transition from Phase-Locked Projection to Spectral Flux Barrier</h4>
-				<p>
-					With phase coherence established in Postulate II, fermionic states become resistant to local perturbations. 
-					This stability is extended to quark interactions, where color charge distributions are confined through 
-					<strong>Spectral Flux Barriers</strong>. This mechanism prevents quarks from decoupling under entropy shifts.
-				</p>
+			    <h4>Transition from Phase-Locked Projection to Spectral Flux Barrier</h4>
+			    <p>
+			        With phase coherence established in Postulate II, fermionic states become resistant to local perturbations. 
+			        This stability is extended to quark interactions, where color charge distributions are confined through 
+			        <strong>Spectral Flux Barriers</strong>. This mechanism prevents quarks from decoupling under entropy shifts.
+			    </p>
 			</section>
 			<section>
-				<h3>3.3 Extended Postulate III – Spectral Flux Barrier</h3>
-				<p>
-					The Meta-Space Model introduces the concept of a spectral flux barrier to describe the confinement of quarks 
-					and color charges. These barriers emerge as entropy-driven boundaries in the spectral projections, stabilizing 
-					quark configurations and preventing color charge isolation.
-				</p>
-				<blockquote>
-					<p>
-						<strong>Extended Postulate III – Spectral Flux Barrier:</strong>  
-						Localization of quarks and color types (Up, Down, Strange) is maintained through spectral flux barriers, 
-						preventing isolated quark states. This is mathematically represented by:
-					</p>
-					<p style="text-align: center">
-						\( \nabla_\tau S(q_i, q_j) \geq \kappa \cdot \exp\left(-\frac{|x_i - x_j|^2}{\ell^2} - \frac{\Delta \phi_G}{\sigma}\right) \)
-					</p>
-					<p>
-						where:
-					</p>
-					<ul>
-						<li>\( q_i, q_j \) are the quark states,</li>
-						<li>\( \Delta \phi_G \) is the phase shift induced by gluonic interactions,</li>
-						<li>\( \sigma \) represents the entropic stabilization factor for gluon fields.</li>
-					</ul>
-				</blockquote>
-				<p>
-					This mechanism ensures that quarks remain bound and color-neutral (singlet states), maintaining the integrity 
-					of hadronic matter across entropy flows.
-				</p>
+			    <h3>3.3 Extended Postulate III – Spectral Flux Barrier</h3>
+			    <p>
+			        The Meta-Space Model introduces the concept of a spectral flux barrier to describe the confinement of quarks 
+			        and color charges. These barriers emerge as entropy-driven boundaries in the spectral projections, stabilizing 
+			        quark configurations and preventing color charge isolation.
+			    </p>
+			    <blockquote>
+			        <p>
+			            <strong>Extended Postulate III – Spectral Flux Barrier:</strong>  
+			            Localization of quarks and color types (Up, Down, Strange) is maintained through spectral flux barriers, 
+			            preventing isolated quark states. This is mathematically represented by:
+			        </p>
+			        <p style="text-align: center">
+			            \( \nabla_\tau S(q_i, q_j) \geq \kappa \cdot \exp\left(-\frac{|x_i - x_j|^2}{\ell^2} - \frac{\Delta \phi_G}{\sigma}\right) \)
+			        </p>
+			        <p>
+			            where:
+			        </p>
+			        <ul>
+			            <li>\( q_i, q_j \) are the quark states,</li>
+			            <li>\( \Delta \phi_G \) is the phase shift induced by gluonic interactions,</li>
+			            <li>\( \sigma \) represents the entropic stabilization factor for gluon fields.</li>
+			        </ul>
+			    </blockquote>
+			    <p>
+			        This mechanism ensures that quarks remain bound and color-neutral (singlet states), maintaining the integrity 
+			        of hadronic matter across entropy flows.
+			    </p>
+			    <h4>Derivation from Core Postulates</h4>
+			    <p>
+			        Extended Postulate III (EP III) is derived from CP1 (Geometrical Substrate), CP2 (Entropy-Driven Causality), 
+			        CP3 (Projection Principle), and CP6 (Gauge-Entropy Coupling). CP1 defines the Meta-Space geometry, CP2 drives 
+			        entropic confinement, CP3 projects quark states, and CP6 couples gauge fields (gluons) to entropy gradients.
+			    </p>
+			    <p>
+			        The Meta-Lagrangian (Appendix A.3) includes gauge terms \( -\frac{1}{4} F_{\mu\nu}^a F^{a\mu\nu} \), where 
+			        \( F_{\mu\nu}^a \) is the gluon field strength. The entropic gradient for quark states \( q_i, q_j \) is modified 
+			        by gluonic phase shifts \( \Delta \phi_G \), derived from the gauge-coupled action (Appendix B):
+			    </p>
+			    <p style="text-align: center">
+			        \( \nabla_\tau S(q_i, q_j) = \mathcal{P} \left[ \int \bar{\Psi}(q_i) (i\Gamma^\mu D_\mu - m[S]) \Psi(q_j) \, d^4x - \frac{1}{4} \int F_{\mu\nu}^a F^{a\mu\nu} \, d^4x \right] \).
+			    </p>
+			    <p>
+			        CP6 ensures that \( \Delta \phi_G / \sigma \) stabilizes color charges, where \( \sigma \) is the entropic 
+			        scale of gluon interactions. The confinement condition \( \nabla_\tau S(q_i, q_j) \geq \kappa \) incorporates 
+			        the spatial term \( \exp\left(-\frac{|x_i - x_j|^2}{\ell^2}\right) \) from CP2 and the gluonic term 
+			        \( \exp\left(-\frac{\Delta \phi_G}{\sigma}\right) \) from CP6, preventing quark isolation. This results in 
+			        color-neutral singlet states, consistent with QCD confinement.
+			    </p>
+			    <p>
+			        EP III builds on EP I’s gradient framework and EP II’s phase coherence, enabling stable quark confinement. 
+			        It influences EP V (Gauge-Projected Confinement) by providing the entropic basis for gauge interactions. 
+			        See Section 3.15 for interrelations.
+			    </p>
 			</section>
 			<section>
-				<h4>Transition from Spectral Flux Barrier to Exotic Quark Projections</h4>
-				<p>
-					While Postulate III secures the stability of light quarks, the emergence of heavy quark states (Charm, Bottom, Top) 
-					requires enhanced spectral flux barriers. These higher-mass states project stably in Meta-Space under extended 
-					entropy gradients, leading directly to the next principle.
-				</p>
+			    <h4>Transition from Spectral Flux Barrier to Exotic Quark Projections</h4>
+			    <p>
+			        While Postulate III secures the stability of light quarks, the emergence of heavy quark states (Charm, Bottom, Top) 
+			        requires enhanced spectral flux barriers. These higher-mass states project stably in Meta-Space under extended 
+			        entropy gradients, leading directly to the next principle.
+			    </p>
 			</section>
 			<section>
-				<h3>3.4 Extended Postulate IV – Exotic Quark Projections</h3>
-				<p>
-					The Meta-Space Model extends the stability of quark projections to include heavy quark states such as 
-					<strong>Charm (c), Bottom (b), and Top (t)</strong>. These heavier states require deeper spectral flux barriers 
-					due to their larger mass and increased entropy interaction within the Meta-Space manifold.
-				</p>
-				<blockquote>
-					<p>
-						<strong>Extended Postulate IV – Exotic Quark Projections:</strong>  
-						Stabilization of exotic quarks (Charm, Bottom, Top) is achieved through enhanced spectral flux barriers in Meta-Space. 
-						The stabilization condition is described by:
-					</p>
-					<p style="text-align: center">
-						\( \nabla_\tau S(q_i, q_j) \geq \kappa_c \cdot \exp\left(-\frac{|x_i - x_j|^2}{\ell^2} - \frac{\Delta \phi_G}{\sigma}\right) \)
-					</p>
-					<p>
-						where:
-					</p>
-					<ul>
-						<li>\( \kappa_c \) is the extended spectral locking constant for heavy quarks,</li>
-						<li>\( \ell \) represents the coherence length within the Meta-Space entropy landscape,</li>
-						<li>\( \Delta \phi_G \) is the phase shift regulated by gluon interactions,</li>
-						<li>\( \sigma \) controls the entropic stabilization of color charge under high-mass states.</li>
-					</ul>
-				</blockquote>
-				<p>
-					This postulate ensures that heavy quarks project stably within the Meta-Space manifold, maintaining coherent color configurations 
-					and preventing disintegration under entropy shifts.
-				</p>
+			    <h3>3.4 Extended Postulate IV – Exotic Quark Projections</h3>
+			    <p>
+			        The Meta-Space Model extends the stability of quark projections to include heavy quark states such as 
+			        <strong>Charm (c), Bottom (b), and Top (t)</strong>. These heavier states require deeper spectral flux barriers 
+			        due to their larger mass and increased entropy interaction within the Meta-Space manifold.
+			    </p>
+			    <blockquote>
+			        <p>
+			            <strong>Extended Postulate IV – Exotic Quark Projections:</strong>  
+			            Stabilization of exotic quarks (Charm, Bottom, Top) is achieved through enhanced spectral flux barriers in Meta-Space. 
+			            The stabilization condition is described by:
+			        </p>
+			        <p style="text-align: center">
+			            \( \nabla_\tau S(q_i, q_j) \geq \kappa_c \cdot \exp\left(-\frac{|x_i - x_j|^2}{\ell^2} - \frac{\Delta \phi_G}{\sigma}\right) \)
+			        </p>
+			        <p>
+			            where:
+			        </p>
+			        <ul>
+			            <li>\( \kappa_c \) is the extended spectral locking constant for heavy quarks,</li>
+			            <li>\( \ell \) represents the coherence length within the Meta-Space entropy landscape,</li>
+			            <li>\( \Delta \phi_G \) is the phase shift regulated by gluon interactions,</li>
+			            <li>\( \sigma \) controls the entropic stabilization of color charge under high-mass states.</li>
+			        </ul>
+			    </blockquote>
+			    <p>
+			        This postulate ensures that heavy quarks project stably within the Meta-Space manifold, maintaining coherent color configurations 
+			        and preventing disintegration under entropy shifts.
+			    </p>
+			    <h4>Derivation from Core Postulates</h4>
+			    <p>
+			        Extended Postulate IV (EP IV) is derived from Core Postulates CP1 (Geometrical Substrate), CP2 (Entropy-Driven Causality), 
+			        CP3 (Projection Principle), and CP6 (Gauge-Entropy Coupling). CP1 provides the Meta-Space geometry 
+			        \( \mathcal{M}_{\text{meta}} = S^3 \times CY_3 \times \mathbb{R}_\tau \), where heavy quarks project. CP2 drives 
+			        entropic stabilization, CP3 defines quark states as projections, and CP6 couples gluon fields to entropy gradients, 
+			        critical for heavy quark confinement.
+			    </p>
+			    <p>
+			        The Meta-Lagrangian (Appendix A.3) includes heavy quark terms \( \bar{\Psi}_h (i\Gamma^\mu D_\mu - m_h[S])\Psi_h \), 
+			        where \( m_h[S] \) is the entropy-dependent mass for heavy quarks (Charm, Bottom, Top). The entropic gradient is:
+			    </p>
+			    <p style="text-align: center">
+			        \( \nabla_\tau S(q_i, q_j) = \mathcal{P} \left[ \int \bar{\Psi}_h(q_i) (i\Gamma^\mu D_\mu - m_h[S]) \Psi_h(q_j) \, d^4x - \frac{1}{4} \int F_{\mu\nu}^a F^{a\mu\nu} \, d^4x \right] \).
+			    </p>
+			    <p>
+			        CP6 enhances the spectral flux barrier for heavy quarks, reflected in the larger locking constant \( \kappa_c > \kappa \), 
+			        accounting for increased mass. The term \( \exp\left(-\frac{|x_i - x_j|^2}{\ell^2}\right) \) arises from CP2’s spatial 
+			        coherence, while \( \exp\left(-\frac{\Delta \phi_G}{\sigma}\right) \) incorporates gluonic phase shifts from CP6, 
+			        ensuring color confinement. This stabilizes heavy quarks against entropic decoupling, extending EP III’s mechanism.
+			    </p>
+			    <p>
+			        EP IV builds on EP III (Spectral Flux Barrier) by enhancing confinement for heavy quarks and supports EP V 
+			        (Thermodynamic Stability) by ensuring stability under high-energy conditions. Interrelations are detailed in Section 3.15.
+			    </p>
 			</section>
 			<section>
-				<h4>Transition from Exotic Quark Projections to Thermodynamic Stability</h4>
-				<p>
-					With the stability of both light and heavy quarks established through spectral flux barriers, 
-					the model introduces the concept of <strong>Thermodynamic Stability</strong> in Meta-Space. 
-					This extension secures the entropic coherence of matter under fluctuating thermal conditions, 
-					ensuring that phase structures remain intact even under high-energy interactions.
-				</p>
+			    <h4>Transition from Exotic Quark Projections to Thermodynamic Stability</h4>
+			    <p>
+			        With the stability of both light and heavy quarks established through spectral flux barriers, 
+			        the model introduces the concept of <strong>Thermodynamic Stability</strong> in Meta-Space. 
+			        This extension secures the entropic coherence of matter under fluctuating thermal conditions, 
+			        ensuring that phase structures remain intact even under high-energy interactions.
+			    </p>
 			</section>
 			<section>
-				<h3>3.5 Extended Postulate V – Thermodynamic Stability in Meta-Space</h3>
-				<p>
-					In conventional physics, thermal fluctuations often disrupt quantum coherence. However, the Meta-Space Model 
-					postulates that entropic gradients provide a stabilizing effect even under extreme thermal conditions. 
-					This is described mathematically through entropy-aligned thermodynamic stabilization:
-				</p>
-				<blockquote>
-					<p>
-						<strong>Extended Postulate V – Thermodynamic Stability in Meta-Space:</strong>  
-						Spectral projections are stabilized through entropy-driven thermal gradients, maintaining coherence 
-						under varying energy distributions. The stabilization condition is expressed as:
-					</p>
-					<p style="text-align: center">
-						\( \nabla_\tau S_{\text{thermo}}(x, \tau) = \alpha \cdot T(x, \tau) \)
-					</p>
-					<p>
-						where:
-					</p>
-					<ul>
-						<li>\( S_{\text{thermo}}(x, \tau) \) represents the entropy distribution in Meta-Space,</li>
-						<li>\( T(x, \tau) \) is the local thermodynamic temperature field,</li>
-						<li>\( \alpha \) is a thermal coupling constant that aligns entropy with temperature gradients.</li>
-					</ul>
-				</blockquote>
-				<p>
-					This postulate guarantees that even under high-energy conditions, matter configurations remain stable 
-					through entropy-aligned thermal protection, preventing decoherence and phase collapse.
-				</p>
+			    <h3>3.5 Extended Postulate V – Thermodynamic Stability in Meta-Space</h3>
+			    <p>
+			        In conventional physics, thermal fluctuations often disrupt quantum coherence. However, the Meta-Space Model 
+			        postulates that entropic gradients provide a stabilizing effect even under extreme thermal conditions. 
+			        This is described mathematically through entropy-aligned thermodynamic stabilization:
+			    </p>
+			    <blockquote>
+			        <p>
+			            <strong>Extended Postulate V – Thermodynamic Stability in Meta-Space:</strong>  
+			            Spectral projections are stabilized through entropy-driven thermal gradients, maintaining coherence 
+			            under varying energy distributions. The stabilization condition is expressed as:
+			        </p>
+			        <p style="text-align: center">
+			            \( \nabla_\tau S_{\text{thermo}}(x, \tau) = \alpha \cdot T(x, \tau) \)
+			        </p>
+			        <p>
+			            where:
+			        </p>
+			        <ul>
+			            <li>\( S_{\text{thermo}}(x, \tau) \) represents the entropy distribution in Meta-Space,</li>
+			            <li>\( T(x, \tau) \) is the local thermodynamic temperature field,</li>
+			            <li>\( \alpha \) is a thermal coupling constant that aligns entropy with temperature gradients.</li>
+			        </ul>
+			    </blockquote>
+			    <p>
+			        This postulate guarantees that even under high-energy conditions, matter configurations remain stable 
+			        through entropy-aligned thermal protection, preventing decoherence and phase collapse.
+			    </p>
+			    <h4>Derivation from Core Postulates</h4>
+			    <p>
+			        Extended Postulate V (EP V) follows from CP2 (Entropy-Driven Causality), CP3 (Projection Principle), CP5 
+			        (Entropy-Coherent Stability), and CP7 (Thermodynamic Entropy Mapping). CP2 ensures entropic gradients drive 
+			        physical processes, CP3 projects states into Meta-Space, CP5 enforces minimal entropy production, and CP7 maps 
+			        thermodynamic properties to Meta-Space entropy.
+			    </p>
+			    <p>
+			        The Meta-Lagrangian (Appendix A.3) incorporates thermodynamic effects via the entropy term 
+			        \( S_{\text{thermo}}(x, \tau) \), coupled to the temperature field \( T(x, \tau) \). The projection operator 
+			        \( \mathcal{P} \) (Appendix B) yields the entropic gradient:
+			    </p>
+			    <p style="text-align: center">
+			        \( \nabla_\tau S_{\text{thermo}}(x, \tau) = \mathcal{P} \left[ \int \mathcal{L}_{\text{thermo}}(T(x, \tau)) \, d^4x \right] \).
+			    </p>
+			    <p>
+			        CP7 posits that \( \mathcal{L}_{\text{thermo}} \propto T(x, \tau) \), leading to \( \nabla_\tau S_{\text{thermo}} = \alpha \cdot T(x, \tau) \), 
+			        where \( \alpha \) is the coupling constant derived from CP5’s stability condition. CP2 ensures that thermal fluctuations 
+			        align with entropic gradients, preventing decoherence. This stabilizes matter configurations under high-energy conditions, 
+			        extending EP I’s coherence mechanism to thermal domains.
+			    </p>
+			    <p>
+			        EP V builds on EP I (Gradient-Locked Coherence) and EP IV (Exotic Quark Projections) by ensuring thermal stability 
+			        for all quark states. It supports EP VI (Dark Matter Projection) by providing the entropic framework for large-scale 
+			        stability. See Section 3.15 for interrelations.
+			    </p>
 			</section>
 			<section>
-				<h4>Transition from Thermodynamic Stability to Dark Matter Projection</h4>
-				<p>
-					The principle of thermodynamic stability in Meta-Space introduces the capacity for matter to remain coherent 
-					even at large cosmological scales. This provides the foundation for the projection of Dark Matter as 
-					a holographic shadow in Meta-Space. Unlike visible matter, dark matter does not collapse under standard thermodynamic 
-					rules but is stabilized through enhanced entropy gradients across galactic distances.
-				</p>
+			    <h4>Transition from Thermodynamic Stability to Dark Matter Projection</h4>
+			    <p>
+			        The principle of thermodynamic stability in Meta-Space introduces the capacity for matter to remain coherent 
+			        even at large cosmological scales. This provides the foundation for the projection of Dark Matter as 
+			        a holographic shadow in Meta-Space. Unlike visible matter, dark matter does not collapse under standard thermodynamic 
+			        rules but is stabilized through enhanced entropy gradients across galactic distances.
+			    </p>
 			</section>
 			<section>
-				<h3>3.6 Extended Postulate VI – Dark Matter Projection</h3>
-				<p>
-					In the Meta-Space Model, dark matter is conceptualized not as isolated particles, but as a <strong>holographic 
-					shadow projection</strong> within Meta-Space. Its stability is maintained through extended entropy gradients, 
-					which prevent decoupling and preserve galactic coherence.
-				</p>
-				<blockquote>
-					<p>
-						<strong>Extended Postulate VI – Dark Matter Projection:</strong>  
-						Dark Matter emerges as a holographically stabilized projection in Meta-Space, maintaining non-luminous mass distributions 
-						over cosmic distances. The stabilization is mathematically represented as:
-					</p>
-					<p style="text-align: center">
-						\( \nabla_\tau S_{\text{dark}}(x, \tau) = \beta \cdot \exp\left(-\frac{|x_i - x_j|^2}{\ell_D^2} - \frac{\Delta \phi_D}{\sigma}\right) \)
-					</p>
-					<p>
-						where:
-					</p>
-					<ul>
-						<li>\( S_{\text{dark}}(x, \tau) \) is the entropy field specific to dark matter regions,</li>
-						<li>\( \beta \) is the holographic stabilization coefficient,</li>
-						<li>\( \ell_D \) defines the dark matter coherence length,</li>
-						<li>\( \Delta \phi_D \) describes the phase shifts that maintain structural stability.</li>
-					</ul>
-				</blockquote>
-				<p>
-					This mechanism explains why dark matter remains gravitationally influential but electromagnetically transparent; 
-					it is a stable holographic projection, not a traditional particle field.
-				</p>
+			    <h3>3.6 Extended Postulate VI – Dark Matter Projection</h3>
+			    <p>
+			        In the Meta-Space Model, dark matter is conceptualized not as isolated particles, but as a <strong>holographic 
+			        shadow projection</strong> within Meta-Space. Its stability is maintained through extended entropy gradients, 
+			        which prevent decoupling and preserve galactic coherence.
+			    </p>
+			    <blockquote>
+			        <p>
+			            <strong>Extended Postulate VI – Dark Matter Projection:</strong>  
+			            Dark Matter emerges as a holographically stabilized projection in Meta-Space, maintaining non-luminous mass distributions 
+			            over cosmic distances. The stabilization is mathematically represented as:
+			        </p>
+			        <p style="text-align: center">
+			            \( \nabla_\tau S_{\text{dark}}(x, \tau) = \beta \cdot \exp\left(-\frac{|x_i - x_j|^2}{\ell_D^2} - \frac{\Delta \phi_D}{\sigma}\right) \)
+			        </p>
+			        <p>
+			            where:
+			        </p>
+			        <ul>
+			            <li>\( S_{\text{dark}}(x, \tau) \) is the entropy field specific to dark matter regions,</li>
+			            <li>\( \beta \) is the holographic stabilization coefficient,</li>
+			            <li>\( \ell_D \) defines the dark matter coherence length,</li>
+			            <li>\( \Delta \phi_D \) describes the phase shifts that maintain structural stability.</li>
+			        </ul>
+			    </blockquote>
+			    <p>
+			        This mechanism explains why dark matter remains gravitationally influential but electromagnetically transparent; 
+			        it is a stable holographic projection, not a traditional particle field.
+			    </p>
+			    <h4>Derivation from Core Postulates</h4>
+			    <p>
+			        Extended Postulate VI (EP VI) is derived from CP1 (Geometrical Substrate), CP2 (Entropy-Driven Causality), 
+			        CP3 (Projection Principle), and CP8 (Holographic Entropy Mapping). CP1 defines the Meta-Space geometry, CP2 drives 
+			        entropic stabilization, CP3 projects dark matter as a shadow state, and CP8 establishes holographic principles 
+			        for large-scale entropy distributions.
+			    </p>
+			    <p>
+			        The Meta-Lagrangian (Appendix A.3) includes a holographic term \( \mathcal{L}_{\text{holo}} \), which projects 
+			        non-luminous mass distributions. The entropic gradient for dark matter is:
+			    </p>
+			    <p style="text-align: center">
+			        \( \nabla_\tau S_{\text{dark}}(x, \tau) = \mathcal{P} \left[ \int \mathcal{L}_{\text{holo}}(x, \tau) \, d^4x \right] \).
+			    </p>
+			    <p>
+			        CP8 posits that \( \mathcal{L}_{\text{holo}} \propto \exp\left(-\frac{|x_i - x_j|^2}{\ell_D^2} - \frac{\Delta \phi_D}{\sigma}\right) \), 
+			        where \( \ell_D \) is the cosmological coherence length and \( \Delta \phi_D \) represents phase shifts in the 
+			        holographic projection. The coefficient \( \beta \) arises from CP3’s projection strength, ensuring gravitational 
+			        stability. CP2 aligns the gradient with entropic flow, preventing decoupling over cosmic scales.
+			    </p>
+			    <p>
+			        EP VI extends EP V’s thermodynamic stability to cosmological scales and supports EP VII (not shown) by providing 
+			        the holographic framework for large-scale structures. Interrelations are detailed in Section 3.15.
+			    </p>
 			</section>
 			<section>
 				<h4>Transition from Dark Matter Projection to Gluon Interaction Projection</h4>
@@ -767,289 +920,435 @@
 				</p>
 			</section>
 			<section>
-				<h3>3.7 Extended Postulate VII – Gluon Interaction Projection</h3>
-				<p>
-					The Meta-Space Model introduces a novel interpretation of gluon interactions, where the exchange of color charge 
-					is represented as a <strong>spectral projection</strong> within the Meta-Space framework. These projections are 
-					inherently stable through entropy-aligned spectral overlap, eliminating the need for traditional gauge field descriptions.
-				</p>
-				<blockquote>
-					<p>
-						<strong>Extended Postulate VII – Gluon Interaction Projection:</strong>  
-						The strong interaction between quarks is governed by spectral alignment in Meta-Space, represented as 
-						phase-stable projections. This is mathematically formulated as:
-					</p>
-					<p style="text-align: center">
-						\( \mathcal{P}_{\text{gluon}} = \int_\Sigma G_{\mu\nu} G^{\mu\nu} \, dV \)
-					</p>
-					<p>
-						where:
-					</p>
-					<ul>
-						<li>\( G_{\mu\nu} \) is the spectral flux tensor representing color interaction in Meta-Space,</li>
-						<li>\( \Sigma \) represents the projection surface where color exchange is realized,</li>
-						<li>\( dV \) is the volumetric projection element in Meta-Space.</li>
-					</ul>
-				</blockquote>
-				<p>
-					The stability of gluonic interactions is maintained through entropy-coherent alignment, preventing phase 
-					decoherence and ensuring color confinement.
-				</p>
-				<p>
-					This postulate explains:
-				</p>
-				<ul>
-					<li>The absolute confinement of color charge (no free quarks observed),</li>
-					<li>The stability of hadronic structures under strong interactions,</li>
-					<li>The absence of long-range color forces outside the confinement region.</li>
-				</ul>
+			    <h3>3.7 Extended Postulate VII – Gluon Interaction Projection</h3>
+			    <p>
+			        The Meta-Space Model introduces a novel interpretation of gluon interactions, where the exchange of color charge 
+			        is represented as a <strong>spectral projection</strong> within the Meta-Space framework. These projections are 
+			        inherently stable through entropy-aligned spectral overlap, eliminating the need for traditional gauge field descriptions.
+			    </p>
+			    <blockquote>
+			        <p>
+			            <strong>Extended Postulate VII – Gluon Interaction Projection:</strong>  
+			            The strong interaction between quarks is governed by spectral alignment in Meta-Space, represented as 
+			            phase-stable projections. This is mathematically formulated as:
+			        </p>
+			        <p style="text-align: center">
+			            \( \mathcal{P}_{\text{gluon}} = \int_\Sigma G_{\mu\nu} G^{\mu\nu} \, dV \)
+			        </p>
+			        <p>
+			            where:
+			        </p>
+			        <ul>
+			            <li>\( G_{\mu\nu} \) is the spectral flux tensor representing color interaction in Meta-Space,</li>
+			            <li>\( \Sigma \) represents the projection surface where color exchange is realized,</li>
+			            <li>\( dV \) is the volumetric projection element in Meta-Space.</li>
+			        </ul>
+			    </blockquote>
+			    <p>
+			        The stability of gluonic interactions is maintained through entropy-coherent alignment, preventing phase 
+			        decoherence and ensuring color confinement.
+			    </p>
+			    <p>
+			        This postulate explains:
+			    </p>
+			    <ul>
+			        <li>The absolute confinement of color charge (no free quarks observed),</li>
+			        <li>The stability of hadronic structures under strong interactions,</li>
+			        <li>The absence of long-range color forces outside the confinement region.</li>
+			    </ul>
+			    <h4>Derivation from Core Postulates</h4>
+			    <p>
+			        Extended Postulate VII (EP VII) is derived from Core Postulates CP1 (Geometrical Substrate), CP2 (Entropy-Driven Causality), 
+			        CP3 (Projection Principle), and CP6 (Gauge-Entropy Coupling). CP1 provides the Meta-Space geometry 
+			        \( \mathcal{M}_{\text{meta}} = S^3 \times CY_3 \times \mathbb{R}_\tau \), where gluon interactions project. CP2 drives 
+			        entropic stabilization, CP3 defines interactions as spectral projections, and CP6 couples gauge fields (gluons) to entropy gradients.
+			    </p>
+			    <p>
+			        The Meta-Lagrangian (Appendix A.3) includes the gauge term \( -\frac{1}{4} G_{\mu\nu}^a G^{a\mu\nu} \), where 
+			        \( G_{\mu\nu}^a \) is the gluon field strength tensor. The projection operator \( \mathcal{P} \) (Appendix B) maps this 
+			        to Meta-Space, yielding:
+			    </p>
+			    <p style="text-align: center">
+			        \( \mathcal{P}_{\text{gluon}} = \mathcal{P} \left[ \int_\Sigma -\frac{1}{4} G_{\mu\nu}^a G^{a\mu\nu} \, dV \right] = \int_\Sigma G_{\mu\nu} G^{\mu\nu} \, dV \).
+			    </p>
+			    <p>
+			        CP6 ensures that the spectral flux tensor \( G_{\mu\nu} \) aligns with entropy gradients, maintaining phase stability. 
+			        CP2 enforces entropic coherence, preventing decoherence of color interactions. The integral over \( \Sigma \) reflects 
+			        CP3’s projection of gauge interactions onto a stable surface, ensuring confinement. This formalism extends EP III 
+			        (Spectral Flux Barrier) by describing the dynamics of gluon-mediated interactions.
+			    </p>
+			    <p>
+			        EP VII builds on EP III and EP IV (Exotic Quark Projections) by providing the mechanism for gluon interactions and 
+			        supports EP VIII (Extended Quantum Gravity) by establishing spectral projection principles applicable to other forces. 
+			        Interrelations are detailed in Section 3.15.
+			    </p>
 			</section>
 			<section>
-				<h4>Transition from Gluon Interaction Projection to Extended Quantum Gravity</h4>
-				<p>
-					The stabilization of color interactions through entropy-aligned spectral fields opens the conceptual path 
-					for extending these principles to gravitational interactions. In the Meta-Space Model, gravity is not a force 
-					mediated by a classical field but emerges as a spectrally stabilized projection influenced by the curvature of 
-					informational density within Meta-Space. This mechanism generalizes Einstein's curvature tensor to include 
-					entropic effects, leading to the next postulate: Extended Quantum Gravity.
-				</p>
+			    <h4>Transition from Gluon Interaction Projection to Extended Quantum Gravity</h4>
+			    <p>
+			        The stabilization of color interactions through entropy-aligned spectral fields opens the conceptual path 
+			        for extending these principles to gravitational interactions. In the Meta-Space Model, gravity is not a force 
+			        mediated by a classical field but emerges as a spectrally stabilized projection influenced by the curvature of 
+			        informational density within Meta-Space. This mechanism generalizes Einstein's curvature tensor to include 
+			        entropic effects, leading to the next postulate: Extended Quantum Gravity.
+			    </p>
 			</section>
 			<section>
-				<h3>3.8 Extended Postulate VIII – Extended Quantum Gravity in Meta-Space</h3>
-				<p>
-					Traditional approaches to quantum gravity often struggle with unifying quantum mechanics and spacetime curvature. 
-					The Meta-Space Model introduces a reformulation where gravitational effects are interpreted as spectral 
-					curvatures in an informational manifold, stabilized by entropy gradients.
-				</p>
-				<blockquote>
-					<p>
-						<strong>Extended Postulate VIII – Extended Quantum Gravity in Meta-Space:</strong>  
-						Gravitational interactions emerge as entropy-coherent projections within Meta-Space, governed by 
-						extended curvature tensors:
-					</p>
-					<p style="text-align: center">
-						\( \mathcal{P}_{\text{gravity, extended}} = -\sqrt{2} \cdot R_{\mu\nu} \cdot \cos(2\pi \omega + \frac{\pi}{4}) / \omega + ... \)
-					</p>
-					<p>
-						where:
-					</p>
-					<ul>
-						<li>\( R_{\mu\nu} \) represents the entropic curvature tensor in Meta-Space,</li>
-						<li>\( \omega \) is the spectral oscillation parameter derived from entropy alignment,</li>
-						<li>The cosine term introduces phase-coherence in gravitational curvature, stabilizing cosmic structures.</li>
-					</ul>
-				</blockquote>
-				<p>
-					This formalism unifies quantum coherence and spacetime curvature by embedding them within an entropy-aligned 
-					projection, ensuring phase stability even under extreme gravitational conditions.
-				</p>
-				<p>
-					The implications of this postulate include:
-				</p>
-				<ul>
-					<li>Stabilized gravitational interactions without divergence at singularities,</li>
-					<li>Holographic correspondence of spacetime curvature to entropy flows,</li>
-					<li>Compatibility with quantum phase coherence in high-energy regions.</li>
-				</ul>
+			    <h3>3.8 Extended Postulate VIII – Extended Quantum Gravity in Meta-Space</h3>
+			    <p>
+			        Traditional approaches to quantum gravity often struggle with unifying quantum mechanics and spacetime curvature. 
+			        The Meta-Space Model introduces a reformulation where gravitational effects are interpreted as spectral 
+			        curvatures in an informational manifold, stabilized by entropy gradients.
+			    </p>
+			    <blockquote>
+			        <p>
+			            <strong>Extended Postulate VIII – Extended Quantum Gravity in Meta-Space:</strong>  
+			            Gravitational interactions emerge as entropy-coherent projections within Meta-Space, governed by 
+			            extended curvature tensors:
+			        </p>
+			        <p style="text-align: center">
+			            \( \mathcal{P}_{\text{gravity, extended}} = -\sqrt{2} \cdot R_{\mu\nu} \cdot \cos(2\pi \omega + \frac{\pi}{4}) / \omega + ... \)
+			        </p>
+			        <p>
+			            where:
+			        </p>
+			        <ul>
+			            <li>\( R_{\mu\nu} \) represents the entropic curvature tensor in Meta-Space,</li>
+			            <li>\( \omega \) is the spectral oscillation parameter derived from entropy alignment,</li>
+			            <li>The cosine term introduces phase-coherence in gravitational curvature, stabilizing cosmic structures.</li>
+			        </ul>
+			    </blockquote>
+			    <p>
+			        This formalism unifies quantum coherence and spacetime curvature by embedding them within an entropy-aligned 
+			        projection, ensuring phase stability even under extreme gravitational conditions.
+			    </p>
+			    <p>
+			        The implications of this postulate include:
+			    </p>
+			    <ul>
+			        <li>Stabilized gravitational interactions without divergence at singularities,</li>
+			        <li>Holographic correspondence of spacetime curvature to entropy flows,</li>
+			        <li>Compatibility with quantum phase coherence in high-energy regions.</li>
+			    </ul>
+			    <h4>Derivation from Core Postulates</h4>
+			    <p>
+			        Extended Postulate VIII (EP VIII) follows from CP1 (Geometrical Substrate), CP2 (Entropy-Driven Causality), 
+			        CP3 (Projection Principle), and CP8 (Holographic Entropy Mapping). CP1 defines the Meta-Space geometry, CP2 drives 
+			        entropic stabilization, CP3 projects gravitational effects, and CP8 establishes holographic principles for curvature.
+			    </p>
+			    <p>
+			        The Meta-Lagrangian (Appendix A.3) includes a gravitational term \( \mathcal{L}_{\text{grav}} \propto R \), where 
+			        \( R \) is the scalar curvature. The projection operator \( \mathcal{P} \) (Appendix B) maps this to the entropic 
+			        curvature tensor \( R_{\mu\nu} \):
+			    </p>
+			    <p style="text-align: center">
+			        \( \mathcal{P}_{\text{gravity, extended}} = \mathcal{P} \left[ \int R_{\mu\nu} \, d^4x \right] \).
+			    </p>
+			    <p>
+			        CP8 introduces the phase-coherence term \( \cos(2\pi \omega + \frac{\pi}{4}) / \omega \), where \( \omega \) is derived 
+			        from entropic oscillations (Appendix B). CP2 ensures that the projection aligns with entropy gradients, stabilizing 
+			        curvature against decoherence. The factor \( -\sqrt{2} \) normalizes the projection strength, ensuring compatibility 
+			        with general relativity at large scales. This extends EP VI’s holographic principles to gravitational interactions.
+			    </p>
+			    <p>
+			        EP VIII builds on EP VI (Dark Matter Projection) and EP VII (Gluon Interaction Projection) by generalizing spectral 
+			        projections to gravity. It supports EP IX (Supersymmetry Projection) by providing the entropic framework for symmetry 
+			        stabilization. Interrelations are detailed in Section 3.15.
+			    </p>
 			</section>
 			<section>
-				<h4>Transition from Extended Quantum Gravity to Supersymmetry (SUSY) Projection</h4>
-				<p>
-					The entropic stabilization of gravitational interactions in Meta-Space naturally extends to the concept of 
-					<strong>Supersymmetry (SUSY)</strong>. Within the projection framework, SUSY emerges as a symmetry of spectral 
-					overlap between fermionic and bosonic projections. The stability conditions derived from entropic curvature 
-					in Meta-Space enforce coherent pairings, leading directly to the next postulate.
-				</p>
+			    <h4>Transition from Extended Quantum Gravity to Supersymmetry (SUSY) Projection</h4>
+			    <p>
+			        The entropic stabilization of gravitational interactions in Meta-Space naturally extends to the concept of 
+			        <strong>Supersymmetry (SUSY)</strong>. Within the projection framework, SUSY emerges as a symmetry of spectral 
+			        overlap between fermionic and bosonic projections. The stability conditions derived from entropic curvature 
+			        in Meta-Space enforce coherent pairings, leading directly to the next postulate.
+			    </p>
 			</section>
 			<section>
-				<h3>3.9 Extended Postulate IX – Supersymmetry (SUSY) Projection</h3>
-				<p>
-					In the Meta-Space Model, supersymmetry is not an imposed symmetry but an emergent property of coherent 
-					entropy-aligned spectral projections. Fermions and bosons are stabilized as dual aspects of the same 
-					informational structure, maintained through entropy gradients.
-				</p>
-				<blockquote>
-					<p>
-						<strong>Extended Postulate IX – Supersymmetry (SUSY) Projection:</strong>  
-						Supersymmetric pairings are stabilized in Meta-Space through phase-coherent entropy projections:
-					</p>
-					<p style="text-align: center">
-						\( \mathcal{P}_{\text{SUSY}} = \int_\Omega \psi_i(\tau) \cdot \phi_i(\tau) \, dV \)
-					</p>
-					<p>
-						where:
-					</p>
-					<ul>
-						<li>\( \psi_i(\tau) \) represents fermionic spectral modes,</li>
-						<li>\( \phi_i(\tau) \) represents bosonic spectral modes,</li>
-						<li>\( \Omega \) is the projection region in Meta-Space where the pairing occurs,</li>
-						<li>\( dV \) is the volumetric element of phase alignment.</li>
-					</ul>
-				</blockquote>
-				<p>
-					The entropy gradient in Meta-Space enforces stability in these pairings, preventing phase decoherence 
-					and ensuring long-term coherence even in high-energy domains.
-				</p>
-				<p>
-					This postulate explains:
-				</p>
-				<ul>
-					<li>The existence of fermion-boson dualities as a natural outcome of spectral alignment,</li>
-					<li>The persistence of supersymmetric configurations in high-entropy regions,</li>
-					<li>The natural alignment of mass and charge distributions under coherent entropy flow.</li>
-				</ul>
+			    <h3>3.9 Extended Postulate IX – Supersymmetry (SUSY) Projection</h3>
+			    <p>
+			        In the Meta-Space Model, supersymmetry is not an imposed symmetry but an emergent property of coherent 
+			        entropy-aligned spectral projections. Fermions and bosons are stabilized as dual aspects of the same 
+			        informational structure, maintained through entropy gradients.
+			    </p>
+			    <blockquote>
+			        <p>
+			            <strong>Extended Postulate IX – Supersymmetry (SUSY) Projection:</strong>  
+			            Supersymmetric pairings are stabilized in Meta-Space through phase-coherent entropy projections:
+			        </p>
+			        <p style="text-align: center">
+			            \( \mathcal{P}_{\text{SUSY}} = \int_\Omega \psi_i(\tau) \cdot \phi_i(\tau) \, dV \)
+			        </p>
+			        <p>
+			            where:
+			        </p>
+			        <ul>
+			            <li>\( \psi_i(\tau) \) represents fermionic spectral modes,</li>
+			            <li>\( \phi_i(\tau) \) represents bosonic spectral modes,</li>
+			            <li>\( \Omega \) is the projection region in Meta-Space where the pairing occurs,</li>
+			            <li>\( dV \) is the volumetric element of phase alignment.</li>
+			        </ul>
+			    </blockquote>
+			    <p>
+			        The entropy gradient in Meta-Space enforces stability in these pairings, preventing phase decoherence 
+			        and ensuring long-term coherence even in high-energy domains.
+			    </p>
+			    <p>
+			        This postulate explains:
+			    </p>
+			    <ul>
+			        <li>The existence of fermion-boson dualities as a natural outcome of spectral alignment,</li>
+			        <li>The persistence of supersymmetric configurations in high-entropy regions,</li>
+			        <li>The natural alignment of mass and charge distributions under coherent entropy flow.</li>
+			    </ul>
+			    <h4>Derivation from Core Postulates</h4>
+			    <p>
+			        Extended Postulate IX (EP IX) is derived from CP2 (Entropy-Driven Causality), CP3 (Projection Principle), 
+			        CP5 (Entropy-Coherent Stability), and CP8 (Holographic Entropy Mapping). CP2 drives entropic stabilization, 
+			        CP3 projects fermionic and bosonic states, CP5 ensures minimal entropy production, and CP8 supports 
+			        holographic symmetries in Meta-Space.
+			    </p>
+			    <p>
+			        The Meta-Lagrangian (Appendix A.3) includes supersymmetric terms \( \mathcal{L}_{\text{SUSY}} \propto \bar{\Psi} \Phi + \Phi \bar{\Psi} \), 
+			        where \( \Psi \) and \( \Phi \) are fermionic and bosonic fields. The projection operator \( \mathcal{P} \) (Appendix B) yields:
+			    </p>
+			    <p style="text-align: center">
+			        \( \mathcal{P}_{\text{SUSY}} = \mathcal{P} \left[ \int_\Omega \psi_i(\tau) \cdot \phi_i(\tau) \, dV \right] \).
+			    </p>
+			    <p>
+			        CP5 ensures that the pairing \( \psi_i \cdot \phi_i \) minimizes entropy production, maintaining phase coherence. 
+			        CP8’s holographic mapping enforces symmetry between fermionic and bosonic modes, stabilizing the projection over 
+			        \( \Omega \). CP2 aligns the pairing with entropic gradients, preventing decoherence. This results in emergent 
+			        supersymmetry, extending EP VIII’s entropic stabilization to symmetric pairings.
+			    </p>
+			    <p>
+			        EP IX builds on EP VIII (Extended Quantum Gravity) by incorporating entropic symmetries and supports EP X (not shown) 
+			        by providing the framework for CP violation through phase perturbations. Interrelations are detailed in Section 3.15.
+			    </p>
 			</section>
 			<section>
-				<h4>Transition from Supersymmetry Projection to CP Violation and Matter-Antimatter Asymmetry</h4>
-				<p>
-					The entropy-stabilized projection of supersymmetric states introduces phase invariance, which is necessary for 
-					the emergence of CP symmetry. However, minor entropy perturbations introduce phase shifts that result in CP 
-					violations, leading to matter-antimatter asymmetry. This is a natural consequence of entropic realignment 
-					during projection and will be formalized in the next postulate.
-				</p>
+			    <h4>Transition from Supersymmetry Projection to CP Violation and Matter-Antimatter Asymmetry</h4>
+			    <p>
+			        The entropy-stabilized projection of supersymmetric states introduces phase invariance, which is necessary for 
+			        the emergence of CP symmetry. However, minor entropy perturbations introduce phase shifts that result in CP 
+			        violations, leading to matter-antimatter asymmetry. This is a natural consequence of entropic realignment 
+			        during projection and will be formalized in the next postulate.
+			    </p>
 			</section>
 			<section>
-				<h3>3.10 Extended Postulate X – CP Violation and Matter-Antimatter Asymmetry</h3>
-				<p>
-					In the Meta-Space Model, CP violation is not an inherent property of particles but an emergent phenomenon resulting 
-					from entropy-aligned spectral shifts during projection. Minor perturbations in the entropy landscape during phase 
-					synchronization introduce asymmetries in matter-antimatter distributions.
-				</p>
-				<blockquote>
-					<p>
-						<strong>Extended Postulate X – CP Violation and Matter-Antimatter Asymmetry:</strong>  
-						The asymmetry between matter and antimatter is projected through entropy-driven phase shifts in Meta-Space, 
-						leading to observable CP violations. This is represented as:
-					</p>
-					<p style="text-align: center">
-						\( \mathcal{P}_{\text{CP}} = \int_\Omega \bar{\psi} \gamma^5 \psi \cdot \exp(i\theta) \, dV \)
-					</p>
-					<p>
-						where:
-					</p>
-					<ul>
-						<li>\( \bar{\psi} \) and \( \psi \) are the matter-antimatter conjugate spectral modes,</li>
-						<li>\( \gamma^5 \) introduces chirality into the projection space,</li>
-						<li>\( \theta \) is the phase shift induced by entropy perturbation,</li>
-						<li>\( \Omega \) represents the interaction region in Meta-Space,</li>
-						<li>\( dV \) is the volumetric projection element.</li>
-					</ul>
-				</blockquote>
-				<p>
-					This formulation guarantees that slight phase shifts during entropy realignment manifest as observable 
-					asymmetries in baryon and lepton distributions.
-				</p>
-				<p>
-					This postulate explains:
-				</p>
-				<ul>
-					<li>The dominance of matter over antimatter in the observable universe,</li>
-					<li>The presence of CP violations in weak interactions,</li>
-					<li>The stability of asymmetry over cosmological timescales.</li>
-				</ul>
+			    <h3>3.10 Extended Postulate X – CP Violation and Matter-Antimatter Asymmetry</h3>
+			    <p>
+			        In the Meta-Space Model, CP violation is not an inherent property of particles but an emergent phenomenon resulting 
+			        from entropy-aligned spectral shifts during projection. Minor perturbations in the entropy landscape during phase 
+			        synchronization introduce asymmetries in matter-antimatter distributions.
+			    </p>
+			    <blockquote>
+			        <p>
+			            <strong>Extended Postulate X – CP Violation and Matter-Antimatter Asymmetry:</strong>  
+			            The asymmetry between matter and antimatter is projected through entropy-driven phase shifts in Meta-Space, 
+			            leading to observable CP violations. This is represented as:
+			        </p>
+			        <p style="text-align: center">
+			            \( \mathcal{P}_{\text{CP}} = \int_\Omega \bar{\psi} \gamma^5 \psi \cdot \exp(i\theta) \, dV \)
+			        </p>
+			        <p>
+			            where:
+			        </p>
+			        <ul>
+			            <li>\( \bar{\psi} \) and \( \psi \) are the matter-antimatter conjugate spectral modes,</li>
+			            <li>\( \gamma^5 \) introduces chirality into the projection space,</li>
+			            <li>\( \theta \) is the phase shift induced by entropy perturbation,</li>
+			            <li>\( \Omega \) represents the interaction region in Meta-Space,</li>
+			            <li>\( dV \) is the volumetric projection element.</li>
+			        </ul>
+			    </blockquote>
+			    <p>
+			        This formulation guarantees that slight phase shifts during entropy realignment manifest as observable 
+			        asymmetries in baryon and lepton distributions.
+			    </p>
+			    <p>
+			        This postulate explains:
+			    </p>
+			    <ul>
+			        <li>The dominance of matter over antimatter in the observable universe,</li>
+			        <li>The presence of CP violations in weak interactions,</li>
+			        <li>The stability of asymmetry over cosmological timescales.</li>
+			    </ul>
+			    <h4>Derivation from Core Postulates</h4>
+			    <p>
+			        Extended Postulate X (EP X) is derived from Core Postulates CP2 (Entropy-Driven Causality), CP3 (Projection Principle), 
+			        CP4 (Spectral Flow), and CP5 (Entropy-Coherent Stability). CP2 drives entropic perturbations, CP3 projects matter-antimatter 
+			        states, CP4 governs phase dynamics, and CP5 ensures stability of asymmetric configurations.
+			    </p>
+			    <p>
+			        The Meta-Lagrangian (Appendix A.3) includes CP-violating terms \( \mathcal{L}_{\text{CP}} \propto \bar{\psi} \gamma^5 \psi \), 
+			        where \( \gamma^5 \) introduces chirality. The projection operator \( \mathcal{P} \) (Appendix B) maps this to Meta-Space:
+			    </p>
+			    <p style="text-align: center">
+			        \( \mathcal{P}_{\text{CP}} = \mathcal{P} \left[ \int_\Omega \bar{\psi} \gamma^5 \psi \cdot \exp(i\theta) \, dV \right] \).
+			    </p>
+			    <p>
+			        CP4’s spectral flow introduces the phase shift \( \theta \), driven by entropic perturbations from CP2. These perturbations 
+			        arise from fluctuations in the entropy gradient \( \nabla_\tau S(x, \tau) \), causing non-zero CP-violating phases. CP5 
+			        ensures that the resulting asymmetry is stable by minimizing entropy production for matter-dominated configurations. 
+			        The integral over \( \Omega \) reflects CP3’s projection of chiral interactions, leading to baryon and lepton asymmetries.
+			    </p>
+			    <p>
+			        EP X builds on EP IX (Supersymmetry Projection) by introducing phase perturbations to symmetric pairings and supports 
+			        EP XI (Higgs Mechanism) by providing the entropic basis for mass stabilization. Interrelations are detailed in Section 3.15.
+			    </p>
 			</section>
 			<section>
-				<h4>Transition from CP Violation to the Higgs Mechanism in Meta-Space</h4>
-				<p>
-					The emergence of CP violations and phase shifts in Meta-Space implies that mass acquisition and electroweak 
-					symmetry breaking are not independent processes but projections stabilized through entropy gradients. 
-					This provides the necessary conditions for the Higgs Mechanism in Meta-Space, where mass emerges 
-					as a stable spectral alignment, driven by entropic coherence.
-				</p>
+			    <h4>Transition from CP Violation to the Higgs Mechanism in Meta-Space</h4>
+			    <p>
+			        The emergence of CP violations and phase shifts in Meta-Space implies that mass acquisition and electroweak 
+			        symmetry breaking are not independent processes but projections stabilized through entropy gradients. 
+			        This provides the necessary conditions for the Higgs Mechanism in Meta-Space, where mass emerges 
+			        as a stable spectral alignment, driven by entropic coherence.
+			    </p>
 			</section>
 			<section>
-				<h3>3.11 Extended Postulate XI – Higgs Mechanism in Meta-Space</h3>
-				<p>
-					The traditional Higgs mechanism describes mass generation through spontaneous symmetry breaking. In the 
-					Meta-Space Model, this process is reformulated as a thermodynamically driven projection where entropy gradients 
-					enforce mass stabilization without the need for classical field interactions.
-				</p>
-				<blockquote>
-					<p>
-						<strong>Extended Postulate XI – Higgs Mechanism in Meta-Space:</strong>  
-						Mass emerges through entropy-stabilized spectral projections in Meta-Space. This is expressed mathematically as:
-					</p>
-					<p style="text-align: center">
-						\( \mathcal{P}_{\text{Higgs}} = \int_\Omega \phi_i(\tau) \cdot \exp\left(-\frac{|x_i - x_j|^2}{\ell_H^2}\right) \, dV \)
-					</p>
-					<p>
-						where:
-					</p>
-					<ul>
-						<li>\( \phi_i(\tau) \) represents the mass-carrying spectral mode,</li>
-						<li>\( \ell_H \) is the characteristic projection length scale of mass generation,</li>
-						<li>\( \Omega \) is the entropy-stabilized interaction region,</li>
-						<li>\( dV \) is the volumetric element in the projection space.</li>
-					</ul>
-				</blockquote>
-				<p>
-					This mechanism ensures that masses are not fixed properties but entropy-coherent projections that 
-					adjust based on the stability of the entropic landscape.
-				</p>
-				<p>
-					This postulate provides:
-				</p>
-				<ul>
-					<li>A natural explanation for spontaneous symmetry breaking,</li>
-					<li>Entropy-driven stabilization of particle masses,</li>
-					<li>A mechanism for dynamic mass shifts under entropy perturbations.</li>
-				</ul>
+			    <h3>3.11 Extended Postulate XI – Higgs Mechanism in Meta-Space</h3>
+			    <p>
+			        The traditional Higgs mechanism describes mass generation through spontaneous symmetry breaking. In the 
+			        Meta-Space Model, this process is reformulated as a thermodynamically driven projection where entropy gradients 
+			        enforce mass stabilization without the need for classical field interactions.
+			    </p>
+			    <blockquote>
+			        <p>
+			            <strong>Extended Postulate XI – Higgs Mechanism in Meta-Space:</strong>  
+			            Mass emerges through entropy-stabilized spectral projections in Meta-Space. This is expressed mathematically as:
+			        </p>
+			        <p style="text-align: center">
+			            \( \mathcal{P}_{\text{Higgs}} = \int_\Omega \phi_i(\tau) \cdot \exp\left(-\frac{|x_i - x_j|^2}{\ell_H^2}\right) \, dV \)
+			        </p>
+			        <p>
+			            where:
+			        </p>
+			        <ul>
+			            <li>\( \phi_i(\tau) \) represents the mass-carrying spectral mode,</li>
+			            <li>\( \ell_H \) is the characteristic projection length scale of mass generation,</li>
+			            <li>\( \Omega \) is the entropy-stabilized interaction region,</li>
+			            <li>\( dV \) is the volumetric element in the projection space.</li>
+			        </ul>
+			    </blockquote>
+			    <p>
+			        This mechanism ensures that masses are not fixed properties but entropy-coherent projections that 
+			        adjust based on the stability of the entropic landscape.
+			    </p>
+			    <p>
+			        This postulate provides:
+			    </p>
+			    <ul>
+			        <li>A natural explanation for spontaneous symmetry breaking,</li>
+			        <li>Entropy-driven stabilization of particle masses,</li>
+			        <li>A mechanism for dynamic mass shifts under entropy perturbations.</li>
+			    </ul>
+			    <h4>Derivation from Core Postulates</h4>
+			    <p>
+			        Extended Postulate XI (EP XI) follows from CP1 (Geometrical Substrate), CP2 (Entropy-Driven Causality), 
+			        CP3 (Projection Principle), and CP7 (Thermodynamic Entropy Mapping). CP1 provides the Meta-Space geometry, 
+			        CP2 drives entropic stabilization, CP3 projects mass-carrying states, and CP7 maps thermodynamic properties 
+			        to entropy gradients.
+			    </p>
+			    <p>
+			        The Meta-Lagrangian (Appendix A.3) includes the Higgs term \( \mathcal{L}_{\text{Higgs}} \propto |\phi|^2 - \lambda |\phi|^4 \), 
+			        where \( \phi \) is the scalar field. The projection operator \( \mathcal{P} \) (Appendix B) yields:
+			    </p>
+			    <p style="text-align: center">
+			        \( \mathcal{P}_{\text{Higgs}} = \mathcal{P} \left[ \int_\Omega \phi_i(\tau) \cdot \exp\left(-\frac{|x_i - x_j|^2}{\ell_H^2}\right) \, dV \right] \).
+			    </p>
+			    <p>
+			        CP7 ensures that the Higgs field aligns with entropy gradients, stabilizing mass generation. The exponential term 
+			        \( \exp\left(-\frac{|x_i - x_j|^2}{\ell_H^2}\right) \) reflects CP2’s spatial coherence, with \( \ell_H \) as the 
+			        electroweak scale. CP3 projects \( \phi_i(\tau) \) as a mass-carrying mode, and CP1’s geometry supports the symmetry 
+			        breaking in \( S^3 \times CY_3 \times \mathbb{R}_\tau \). This reformulates spontaneous symmetry breaking as an 
+			        entropy-driven process.
+			    </p>
+			    <p>
+			        EP XI builds on EP X (CP Violation) by stabilizing masses in asymmetric configurations and supports EP XII 
+			        (Neutrino Oscillations) by providing the mass framework for flavor states. Interrelations are detailed in Section 3.15.
+			    </p>
 			</section>
 			<section>
-				<h4>Transition from the Higgs Mechanism to Neutrino Oscillations in Meta-Space</h4>
-				<p>
-					With mass acquisition explained as an entropy-driven projection, the model extends this stabilization to 
-					neutrinos. Neutrino oscillations are viewed as phase-differentiated projections in Meta-Space, where entropy 
-					gradients induce shifts between flavor states. This phenomenon is a direct consequence of the spectral flux 
-					stability established through the Higgs projection.
-				</p>
+			    <h4>Transition from the Higgs Mechanism to Neutrino Oscillations in Meta-Space</h4>
+			    <p>
+			        With mass acquisition explained as an entropy-driven projection, the model extends this stabilization to 
+			        neutrinos. Neutrino oscillations are viewed as phase-differentiated projections in Meta-Space, where entropy 
+			        gradients induce shifts between flavor states. This phenomenon is a direct consequence of the spectral flux 
+			        stability established through the Higgs projection.
+			    </p>
 			</section>
 			<section>
-				<h3>3.12 Extended Postulate XII – Neutrino Oscillations in Meta-Space</h3>
-				<p>
-					Neutrinos are unique in their ability to oscillate between different flavor states. In the Meta-Space Model, 
-					this oscillation is not purely quantum mechanical but emerges as a projectional realignment within the entropic 
-					landscape. The mass differences are expressions of entropy flux variations across flavor states.
-				</p>
-				<blockquote>
-					<p>
-						<strong>Extended Postulate XII – Neutrino Oscillations in Meta-Space:</strong>  
-						Neutrino flavor oscillations are stabilized through spectral realignment in Meta-Space, governed by:
-					</p>
-					<p style="text-align: center">
-						\( \mathcal{P}_{\text{neutrino}} = \int_\Omega \psi_\nu(\tau) \cdot \exp\left(-\frac{|x_i - x_j|^2}{\ell_N^2}\right) \, dV \)
-					</p>
-					<p>
-						where:
-					</p>
-					<ul>
-						<li>\( \psi_\nu(\tau) \) represents the neutrino spectral modes,</li>
-						<li>\( \ell_N \) is the neutrino oscillation coherence length in Meta-Space,</li>
-						<li>\( \Omega \) is the phase-stabilized region for oscillation dynamics,</li>
-						<li>\( dV \) represents the volumetric element of projection.</li>
-					</ul>
-				</blockquote>
-				<p>
-					Oscillations are entropy-aligned, with phase shifts reflecting changes in the entropic landscape. This provides 
-					a natural explanation for the observed mass differences and transition probabilities.
-				</p>
-				<p>
-					This postulate accounts for:
-				</p>
-				<ul>
-					<li>The flavor transitions of neutrinos over cosmic distances,</li>
-					<li>The entropic stability of oscillation patterns,</li>
-					<li>The link between mass differences and entropy gradients.</li>
-				</ul>
+			    <h3>3.12 Extended Postulate XII – Neutrino Oscillations in Meta-Space</h3>
+			    <p>
+			        Neutrinos are unique in their ability to oscillate between different flavor states. In the Meta-Space Model, 
+			        this oscillation is not purely quantum mechanical but emerges as a projectional realignment within the entropic 
+			        landscape. The mass differences are expressions of entropy flux variations across flavor states.
+			    </p>
+			    <blockquote>
+			        <p>
+			            <strong>Extended Postulate XII – Neutrino Oscillations in Meta-Space:</strong>  
+			            Neutrino flavor oscillations are stabilized through spectral realignment in Meta-Space, governed by:
+			        </p>
+			        <p style="text-align: center">
+			            \( \mathcal{P}_{\text{neutrino}} = \int_\Omega \psi_\nu(\tau) \cdot \exp\left(-\frac{|x_i - x_j|^2}{\ell_N^2}\right) \, dV \)
+			        </p>
+			        <p>
+			            where:
+			        </p>
+			        <ul>
+			            <li>\( \psi_\nu(\tau) \) represents the neutrino spectral modes,</li>
+			            <li>\( \ell_N \) is the neutrino oscillation coherence length in Meta-Space,</li>
+			            <li>\( \Omega \) is the phase-stabilized region for oscillation dynamics,</li>
+			            <li>\( dV \) represents the volumetric element of projection.</li>
+			        </ul>
+			    </blockquote>
+			    <p>
+			        Oscillations are entropy-aligned, with phase shifts reflecting changes in the entropic landscape. This provides 
+			        a natural explanation for the observed mass differences and transition probabilities.
+			    </p>
+			    <p>
+			        This postulate accounts for:
+			    </p>
+			    <ul>
+			        <li>The flavor transitions of neutrinos over cosmic distances,</li>
+			        <li>The entropic stability of oscillation patterns,</li>
+			        <li>The link between mass differences and entropy gradients.</li>
+			    </ul>
+			    <h4>Derivation from Core Postulates</h4>
+			    <p>
+			        Extended Postulate XII (EP XII) is derived from CP2 (Entropy-Driven Causality), CP3 (Projection Principle), 
+			        CP4 (Spectral Flow), and CP7 (Thermodynamic Entropy Mapping). CP2 drives entropic realignment, CP3 projects 
+			        neutrino states, CP4 governs phase oscillations, and CP7 maps mass differences to entropy gradients.
+			    </p>
+			    <p>
+			        The Meta-Lagrangian (Appendix A.3) includes neutrino terms \( \mathcal{L}_{\text{neutrino}} \propto \bar{\psi}_\nu (i\Gamma^\mu D_\mu - m_\nu[S])\psi_\nu \), 
+			        where \( m_\nu[S] \) is the entropy-dependent mass matrix. The projection operator \( \mathcal{P} \) (Appendix B) yields:
+			    </p>
+			    <p style="text-align: center">
+			        \( \mathcal{P}_{\text{neutrino}} = \mathcal{P} \left[ \int_\Omega \psi_\nu(\tau) \cdot \exp\left(-\frac{|x_i - x_j|^2}{\ell_N^2}\right) \, dV \right] \).
+			    </p>
+			    <p>
+			        CP4’s spectral flow induces flavor oscillations via phase shifts in \( \psi_\nu(\tau) \), driven by mass differences 
+			        from CP7. The exponential term \( \exp\left(-\frac{|x_i - x_j|^2}{\ell_N^2}\right) \) reflects CP2’s coherence length 
+			        \( \ell_N \), tied to oscillation scales. CP3 ensures that neutrino states are projections, and CP2 aligns oscillations 
+			        with entropic gradients, stabilizing flavor transitions.
+			    </p>
+			    <p>
+			        EP XII builds on EP XI (Higgs Mechanism) by incorporating neutrino masses and supports EP XIII (not shown) by 
+			        providing the framework for topological effects through phase dynamics. Interrelations are detailed in Section 3.15.
+			    </p>
 			</section>
 			<section>
-				<h4>Transition from Neutrino Oscillations to Topological Effects in Meta-Space</h4>
-				<p>
-					Neutrino oscillations introduce a phase-stable structure within Meta-Space, setting the foundation for 
-					the emergence of topological effects such as monopoles, Chern-Simons terms, and instantons. These effects 
-					are understood as <strong>topologically protected spectral configurations</strong> that stabilize field 
-					interactions under entropic realignment.
-				</p>
+			    <h4>Transition from Neutrino Oscillations to Topological Effects in Meta-Space</h4>
+			    <p>
+			        Neutrino oscillations introduce a phase-stable structure within Meta-Space, setting the foundation for 
+			        the emergence of topological effects such as monopoles, Chern-Simons terms, and instantons. These effects 
+			        are understood as <strong>topologically protected spectral configurations</strong> that stabilize field 
+			        interactions under entropic realignment.
+			    </p>
 			</section>
 			<section>
 			    <h3>3.13 Extended Postulate XIII – Topological Effects (Chern-Simons, Monopoles, Instantons)</h3>
@@ -1107,8 +1406,33 @@
 			        (\( p^+ \rightarrow e^+ + \pi^0 \)), where the decay amplitude is a direct consequence of τ-topological defect 
 			        propagation through spectral curvature.
 			    </p>
+			    <h4>Derivation from Core Postulates</h4>
+			    <p>
+			        Extended Postulate XIII (EP XIII) is derived from Core Postulates CP1 (Geometrical Substrate), CP2 (Entropy-Driven Causality), 
+			        CP3 (Projection Principle), and CP8 (Holographic Entropy Mapping). CP1 provides the Meta-Space geometry 
+			        \( \mathcal{M}_{\text{meta}} = S^3 \times CY_3 \times \mathbb{R}_\tau \), CP2 drives entropic stabilization, 
+			        CP3 projects topological structures, and CP8 enforces holographic constraints on gauge fields.
+			    </p>
+			    <p>
+			        The Meta-Lagrangian (Appendix A.3) includes topological terms such as \( \mathcal{L}_{\text{topo}} \propto F \wedge F \), 
+			        which contribute to the Chern-Simons term \( \theta = \int_M F \wedge F \). The projection operator \( \mathcal{P} \) 
+			        (Appendix B) maps these to Meta-Space:
+			    </p>
+			    <p style="text-align: center">
+			        \( \mathcal{P}_{\text{topo}} = \mathcal{P} \left[ \int_M \hat{A}(R) \wedge \text{ch}(E) + \frac{1}{2} \sum_\lambda \text{sign}(\lambda) + F \wedge F + \epsilon_{\mu\nu\rho\sigma} \partial^\nu \pi^\rho \cdot C^\sigma \right] \).
+			    </p>
+			    <p>
+			        CP8 ensures that topological invariants like the Atiyah-Singer index and η-invariants are preserved under holographic 
+			        projection, stabilizing anomalies. CP2 aligns these structures with entropy gradients, ensuring phase-locking and 
+			        suppressing redundancy. CP3 projects monopole currents \( J_{\text{mono}} \) and instanton amplitudes, while CP1’s 
+			        geometry supports non-trivial topologies. The lifetime \( \tau_{\text{life}} \propto \exp(\omega \cdot R_0) \) reflects 
+			        CP2’s entropic stabilization, and proton decay amplitudes arise from CP3’s projection of SU(5) defects.
+			    </p>
+			    <p>
+			        EP XIII builds on EP X (CP Violation) by incorporating topological phases and supports EP XIV (Holographic Projection) 
+			        by providing the topological framework for spacetime emergence. Interrelations are detailed in Section 3.15.
+			    </p>
 			</section>
-
 			<section>
 			    <h4>Transition from Topological Effects to Holographic Projection of Spacetime</h4>
 			    <p>
@@ -1191,6 +1515,32 @@
 			    <p>
 			        This postulate deepens the understanding of Meta-Space holography by unifying entropy flow, spectral binding, 
 			        and geometric emergence, thereby completing the formal logic of spacetime as an entropic surface phenomenon.
+			    </p>
+			    <h4>Derivation from Core Postulates</h4>
+			    <p>
+			        Extended Postulate XIV (EP XIV) is derived from Core Postulates CP1 (Geometrical Substrate), CP2 (Entropy-Driven Causality), 
+			        CP3 (Projection Principle), and CP8 (Holographic Entropy Mapping). CP1 defines the Meta-Space geometry, CP2 drives 
+			        entropic stabilization, CP3 projects spacetime, and CP8 establishes the holographic principle.
+			    </p>
+			    <p>
+			        The Meta-Lagrangian (Appendix A.3) includes a holographic term \( \mathcal{L}_{\text{holo}} \propto R + S_{\text{holo}} \), 
+			        where \( R \) is the scalar curvature and \( S_{\text{holo}} \) is the boundary entropy. The projection operator 
+			        \( \mathcal{P} \) (Appendix B) maps this to the holographic projection:
+			    </p>
+			    <p style="text-align: center">
+			        \( \pi_{\text{holo}} = \mathcal{P} \left[ \int_{\mathcal{M}_{\text{meta}}} \mathcal{L}_{\text{holo}} \, dV \right]: \mathcal{M}_4 \rightarrow \mathcal{M}_{\text{meta}} \).
+			    </p>
+			    <p>
+			        CP8’s holographic principle yields \( S_{\text{holo}} = \frac{A}{4} \), with \( A \) as the boundary area and 
+			        \( \ell_{\text{eff}} \) as the effective Planck length. CP2 ensures that entropy gradients stabilize the projection, 
+			        while CP3 maps the 4D spacetime \( \mathcal{M}_4 \) from Meta-Space. The inertial coherence terms 
+			        \( \rho_\varphi \), \( I_{\text{spec}} \), and \( \omega_{\text{res}} \) arise from CP1’s geometry and CP2’s entropic 
+			        dynamics, modeling phase-coherent resonances. This unifies spacetime emergence with entropic and holographic principles.
+			    </p>
+			    <p>
+			        EP XIV builds on EP VI (Dark Matter Projection) and EP XIII (Topological Effects) by extending holographic and 
+			        topological frameworks to spacetime. It completes the MSM by unifying all prior EPs under a holographic paradigm. 
+			        Interrelations are detailed in Section 3.15.
 			    </p>
 			</section>
 			<section>
