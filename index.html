@@ -4462,7 +4462,7 @@
         </p>
         <h4>10.6.3 Variational Optimization Strategy</h4>
         <p>
-          The inverse problem becomes an optimization problem over spectral coefficients \( \{c_{n\alpha k}\} \), minimizing a functional:
+          The inverse problem becomes an optimization over spectral coefficients \( \{c_{n\alpha k}\} \), minimizing a composite functional:
         </p>
         <p style="text-align: center;" class="mathjax">
           \[
@@ -4474,13 +4474,38 @@
         </p>
         <ul>
           <li>\( \Phi_{\text{proj}} \): projectional tension (cf. Section 10.3.2)</li>
-          <li>\( \Delta_{\text{CODATA}} \): empirical deviation of projected constants (e.g. \( |\alpha_{\text{proj}} - \alpha_{\text{obs}}| \))</li>
-          <li>\( \Omega_{\text{topo}} \): violation of topological admissibility (e.g., deviation from quantization)</li>
+          <li>\( \Delta_{\text{CODATA}} \): empirical deviation of projected constants (e.g., \( |\alpha_{\text{proj}} - \alpha_{\text{obs}}| \))</li>
+          <li>\( \Omega_{\text{topo}} \): violation of topological admissibility (e.g., deviation from quantization conditions)</li>
           <li>\( \lambda_i \): weighting parameters</li>
         </ul>
         <p>
-          A configuration \( S(x, y, \tau) \) is accepted when \( \mathcal{J}[S] \to \min \) within prescribed tolerances. 
-          No dynamical simulation is required — only entropic, topological, and computability constraints.
+          A configuration \( S(x, y, \tau) \) is considered admissible if \( \mathcal{J}[S] \rightarrow \min \) within defined tolerances. 
+          No dynamical evolution is needed — only evaluation of entropy, topology, and computability constraints.
+        </p>
+        <p>
+          <strong>Heuristic approach (not postulated):</strong> As a non-fundamental but structurally consistent extension, the following entropy field form may serve as a variational candidate:
+        </p>
+        <p style="text-align: center;" class="mathjax">
+          \[
+          S(x, y, \tau) = S_0 + \int_{\mathcal{M}_{\text{meta}}} \left[ \kappa_1 \cdot e^{-\frac{|x_i - x_j|^2}{\ell^2}} \cdot \nabla_\tau \phi + \kappa_2 \cdot \frac{\nabla_\mu \nabla_\nu \phi}{R_{\text{meta}}} \right] dV + \kappa_3 \cdot \oint_{\mathcal{C}} A_\mu dx^\mu
+          \]
+        </p>
+        <p>
+          Here, \( \phi(x,y,\tau) \) is a scalar potential over \( S^3 \times CY_3 \), and the integral terms encode gradient-locked coherence (EP1/P1), entropic curvature (CP4), and topological admissibility (CP8/P3). Constants \( \kappa_i \) are to be calibrated such that the projection reproduces known constants \( (\alpha, G, \hbar) \).
+        </p>
+        <p>
+          This functional form is <em>not a closed solution</em>, but a numerically actionable ansatz compatible with all postulate constraints. Its calibration and validation require simulation pipelines as outlined in Appendix D.3.
+        </p>
+        <p>
+          The projectional tension \( \Phi_{\text{proj}}[S] \) measures internal inconsistency under entropy variation, while 
+          \( \Delta_{\text{CODATA}}[S] \) encodes empirical deviation from observed constants. <br>
+          The topological term \( \Omega_{\text{topo}}[S] \) penalizes violations of quantization conditions such as 
+          \( \oint A_\mu dx^\mu \neq 2\pi n \), ensuring gauge and phase stability.
+        </p>
+        <p>
+          The weightings \( \lambda_i \) can be calibrated dynamically depending on the optimization target — e.g., stronger emphasis 
+          on spectral fidelity versus topological precision. This framework transforms the inverse field problem into a numerically tractable 
+          selection process over entropy-coherent configurations.
         </p>
         <h4>10.6.4 Interpretation and Physical Relevance</h4>
         <p>
@@ -4491,14 +4516,15 @@
         </p>
         <p>
           The MSM thereby provides a testable criterion for physical viability: not whether a configuration fits data post hoc, 
-          but whether it is <strong>selectable under entropy filtration and projects the observed constants</strong>.
+          but whether it is <strong>selectable under entropic, spectral, and topological filtration — and capable of structurally projecting the observed constants</strong>.
         </p>
         <h4>10.6.5 Summary</h4>
         <ul>
           <li>The inverse field problem seeks configurations \( S(x, y, \tau) \) that project real physics.</li>
           <li>A spectral parametrization combined with postulate-based filtering enables this selection.</li>
           <li>Variational principles guide the search for entropy fields reproducing constants like \( \alpha \) and \( G \).</li>
-          <li>The result is not a fitted model, but a structural derivation of the empirical world from entropic necessity.</li>
+          <li>The result is not a fitted model, but a structural derivation of empirical laws from first-principle entropic constraints.</li>
+          <li>Given the tightness of the constraints (CP1–CP8, EP, P), the number of fully projectable entropy fields is finite and estimated to lie in the range of \( 10^1 \) to \( 10^3 \) — a sharp filtration within the vast space of mathematically conceivable functions.</li>
         </ul>
       </section>
       <section>
