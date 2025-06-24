@@ -1,4 +1,4 @@
-# The Meta-Space Model (MSM) – A Structural Framework for Physical Reality
+# The 𝓜eta-Space Model (MSM) – A Structural Framework for Physical Reality
 
 **Live HTML version:** [https://tz-dev.github.io/The-Meta-Space-Model/](https://tz-dev.github.io/The-Meta-Space-Model/)
 
