@@ -44,7 +44,7 @@ This work targets theoretical physicists, philosophers of science, mathematician
 
 ## Usage and Contribution
 
-- The book is available as HTML and LaTeX source code and can be compiled locally into a website or PDF.  
+- The book is available as HTML only, LaTex will follow soon.  
 - Constructive contributions, corrections, and extensions are welcome via pull requests.  
 - For discussions, questions, or suggestions, please use the issue tracker.
 
