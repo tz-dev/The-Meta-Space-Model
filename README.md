@@ -64,4 +64,3 @@ For inquiries or collaborations, please contact the author via the GitHub profil
 
 **Live HTML version:** [https://tz-dev.github.io/The-Meta-Space-Model/](https://tz-dev.github.io/The-Meta-Space-Model/)
 
-*The Meta-Space Model — a new perspective on the foundation of reality.*
