@@ -59,6 +59,9 @@ code {
  h2, h3, h4 {
      scroll-margin-top: 110px !important;     
 }
+img {
+    margin: 15px auto;
+}
  blockquote {
      font-weight: normal;
      border: 2px solid black;
