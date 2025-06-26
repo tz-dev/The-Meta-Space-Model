@@ -290,6 +290,7 @@ img {
   .description-box {
     flex: 1; /* Beschreibung nimmt weniger Platz ein */
     padding: 10px;
+    margin: 10px;
     background-color: #eee; /* Leicht grauer Hintergrund */
     border-left: 1px solid #ccc; /* Trennung vom Diagramm */
     font-size: 0.9em;
