@@ -243,6 +243,79 @@ img {
  table tr:nth-child(even) {
      background: white !important;
 }
+  /* Container für Diagramm und Beschreibung */
+  .diagram-container {
+    display: flex;
+    flex-direction: row; /* Beschreibung rechts; für links 'row-reverse' verwenden */
+    align-items: stretch;
+    margin: 20px 0;
+    border: 1px solid #ccc; /* Sauberer Border */
+    border-radius: 5px;
+    background-color: #f9f9f9; /* Heller Hintergrund für Kontrast */
+    padding: 10px;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Diagramm-Box */
+  .diagram-box {
+    flex: 2; /* Diagramm nimmt mehr Platz ein */
+    padding: 10px;
+  }
+
+  .diagram-box figure {
+    margin: 0;
+    border: 1px solid #999; /* Subtiler Border um das Diagramm */
+    border-radius: 3px;
+    background-color: #fff;
+  }
+
+  .diagram-box figcaption {
+    background-color: #000; /* Schwarzer Hintergrund wie Tabellenkopf */
+    color: #fff; /* Weißer Text */
+    font-weight: bold;
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .diagram-box img, .diagram-box canvas, .diagram-box svg {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 10px auto;
+  }
+
+  /* Beschreibungskasten */
+  .description-box {
+    flex: 1; /* Beschreibung nimmt weniger Platz ein */
+    padding: 10px;
+    background-color: #eee; /* Leicht grauer Hintergrund */
+    border-left: 1px solid #ccc; /* Trennung vom Diagramm */
+    font-size: 0.9em;
+    line-height: 1.5;
+  }
+
+  .description-box h5 {
+    margin-top: 0;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .description-box p {
+    margin: 5px 0;
+  }
+
+  /* Responsive Design für kleinere Bildschirme */
+  @media (max-width: 768px) {
+    .diagram-container {
+      flex-direction: column; /* Stapeln bei kleinen Bildschirmen */
+    }
+    .description-box {
+      border-left: none;
+      border-top: 1px solid #ccc;
+    }
+  }
  footer {
      position: fixed;
      bottom: 0;
