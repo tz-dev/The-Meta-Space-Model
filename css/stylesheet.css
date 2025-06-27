@@ -28,6 +28,11 @@ code {
  #switch_css {
      margin-right: 20px;
 }
+
+ #switch_css img {
+     cursor: pointer !important;
+}
+
  nav {
      position: fixed;
      top: 80px;
