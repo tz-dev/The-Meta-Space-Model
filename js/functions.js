@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Ignorierte Container
+  // Containers to ignore
   const ignoreContainers = ["toc", "toc_static"];
 
-  // Funktion zur Überprüfung, ob ein Knoten in einem ignorierten Container ist
+  // Function to check if a node is inside an ignored container
   function isInsideIgnoredContainer(node) {
     while (node) {
       if (node.id && ignoreContainers.includes(node.id)) return true;
@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return false;
   }
 
-  // Textknoten durchlaufen und bearbeiten
+  // Traverse text nodes (not used for replacement currently)
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
   let node;
   while (node = walker.nextNode()) {
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let replaced = false;
     let html = node.textContent;
 
-    // Hier können Ersetzungen für den Textinhalt vorgenommen werden
+    // Placeholder for possible text content replacements
     if (replaced) {
       const span = document.createElement("span");
       span.innerHTML = html;
@@ -28,7 +28,20 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // TOC generieren
+  // Add "Figure #: " before each <figcaption> in small caps (excluding ignored containers)
+  const figcaptions = document.querySelectorAll("figcaption");
+  let figureCounter = 1;
+
+  figcaptions.forEach(figcaption => {
+    if (isInsideIgnoredContainer(figcaption)) return;
+
+    if (!figcaption.innerHTML.trim().startsWith("Figure")) {
+      const prefix = `<span style="font-variant: small-caps;">Figure ${figureCounter++}:</span> `;
+      figcaption.innerHTML = prefix + figcaption.innerHTML;
+    }
+  });
+
+  // Generate Table of Contents
   function generateTOC() {
     const tocContainer = document.getElementById("toc");
     const headings = document.querySelectorAll("h2, h3");
@@ -69,17 +82,17 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // TOC beim Laden der Seite generieren
+  // Generate TOC on page load
   generateTOC();
 
-  // Navigation: Aktiven Link setzen
+  // Navigation: Set active link
   const navLinks = document.querySelectorAll("nav a");
   navLinks.forEach(link => {
     link.addEventListener("click", function () {
-      // Alle aktiven Klassen entfernen
+      // Remove all active classes
       navLinks.forEach(l => l.classList.remove("active"));
 
-      // Aktuellen Link aktiv setzen
+      // Set current link as active
       this.classList.add("active");
     });
   });
