@@ -25,23 +25,31 @@ code {
      justify-content: center;
      z-index: 1000;
 }
+ #switch_css {
+     margin-right: 20px;
+}
  nav {
      position: fixed;
      top: 80px;
      left: 0px;
      width: 20%;
      bottom: 0;
-     padding: 10px 0 0 0 ;
+     padding: 0px 0 0 0 ;
      overflow-x: hidden;
      overflow-y: auto;
      display: block;
+}
 }
  nav h2 {
      margin-top: 0px;
      padding-top: 15px;
      padding-bottom: 4px;
      text-align: center;
-     background: #999;
+ }
+ nav h2 {
+    background: #555;
+    color: #fff;
+    padding: 3px 7px;
 }
  nav a {
      display: block;
