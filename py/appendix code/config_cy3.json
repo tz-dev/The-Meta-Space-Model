@@ -1,0 +1,14 @@
+{
+  "cy3_metric": "quintic",
+  "resolution": 200,
+  "complex_structure_moduli": {
+    "psi": 0.7,
+    "phi": 1.2
+  },
+  "constraints": [
+    {
+      "name": "CP8",
+      "weight": 1.0
+    }
+  ]
+}

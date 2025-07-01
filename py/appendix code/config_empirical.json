@@ -1,0 +1,10 @@
+{
+  "targets": {
+    "alpha_s": 0.118,
+    "m_h": 125.0
+  },
+  "thresholds": {
+    "alpha_s": 0.005,
+    "m_h": 0.5
+  }
+}

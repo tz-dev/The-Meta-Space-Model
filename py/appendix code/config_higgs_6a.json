@@ -1,0 +1,13 @@
+{
+  "m_h_target": 125.0,
+  "entropy_gradient_min": 0.01,
+  "entropy_gradient_quantile": 50,
+  "stability_threshold": 0.5,
+  "resolution": 200,
+  "complex_structure_moduli": { "psi": 0.7, "phi": 1.2 },
+
+  "auto_tune_lh": true,
+  "l_h_min": 0.5,
+  "l_h_max": 2.0,
+  "l_h_steps": 40
+}

@@ -1,0 +1,26 @@
+{
+  "m_h_target": 125.0,
+  "m_h_range": [120.0, 130.0],
+  "spectral_modes": {
+    "l_max": 7,
+    "m_max": 5
+  },
+  "entropy_gradient_min": 0.01,
+  "entropy_gradient_max": 10.0,
+  "s_min": 1.0,
+  "s_max": 100.0,
+  "scale_factor": 900.0,
+  "max_attempts": 5,
+  "iterations": 10000,
+  "constraints": [
+    {
+      "name": "CP2",
+      "weight": 1.0
+    },
+    {
+      "name": "CP6",
+      "weight": 1.0
+    }
+  ],
+  "stability_threshold": 0.5
+}

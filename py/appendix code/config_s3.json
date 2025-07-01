@@ -1,0 +1,7 @@
+{
+  "spectral_modes": {
+    "l_max": 6,
+    "m_max": 4
+  },
+  "resolution": 200
+}
