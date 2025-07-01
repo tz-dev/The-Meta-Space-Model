@@ -212,9 +212,9 @@ def write_results(I_mu_nu, stability, deviation, threshold):
 def main():
     """Main function to orchestrate gravitational tensor computation."""
     clear_screen()
-    print("=====================================")
-    print("     Meta-Space Model: Gravitational Tensor Computation")
-    print("=====================================")
+    print("==========================================================")
+    print("    Meta-Space Model: Gravitational Tensor Computation    ")
+    print("==========================================================")
     
     # Load configuration
     cfg = load_config()
