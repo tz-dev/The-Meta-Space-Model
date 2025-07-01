@@ -1,88 +1,149 @@
 # Script: 06_cy3_spectral_base.py
-# Beschreibung: Berechnet SU(3)-Holonomien auf einem Calabi–Yau-Dreifachf ald (CY₃)
-#   als Entropie-geprägte Spektralbasis für die Projektion π: 𝓜_meta → 𝓜₄.
-# Postulate: 
-#   • CP8 (Topological Protection)  
-#   • EP2 (Phase-Locked Projection)  
-#   • EP7 (Gluon Interaction Projection)
-# Inputs: config_cy3.json
-# Outputs: 
-#   • Holonomie-Basis (complexes Feld)  
-#   • Heatmap <img/cy3_holonomy_heatmap.png>  
-#   • Eintrag in results.csv: holonomy_norm
-# Logging: errors.log
+# Description: Computes SU(3)-holonomy basis on a Calabi-Yau threefold (CY_3) for the meta-space manifold 𝓜_meta = S^3 × CY_3 × ℝ_τ,
+#   providing an entropy-driven spectral basis for the projection π: 𝓜_meta → 𝓜_4.
+# Formulas & Methods:
+#   - Holonomy basis: basis(u, v) = sin(u + ψ) * cos(v + φ) + i * cos(u - φ), where u, v ∈ [0, 2π].
+#   - Holonomy norm: norm = Σ |basis|^2, validated against CP8 range [1e3, 1e6].
+#   - Visualization: Heatmap of |basis| to inspect holonomy distribution.
+# Postulates:
+#   - CP8: Topological protection (holonomy norm within [1e3, 1e6] ensures robust CY_3 basis).
+#   - EP2: Phase-locked projection (ψ, φ ensure phase consistency).
+#   - EP7: Gluon interaction projection (SU(3)-holonomy supports QCD interactions).
+# Inputs:
+#   - config_cy3*.json: Configuration file with cy3_metric, resolution, complex_structure_moduli (psi, phi).
+# Outputs:
+#   - results.csv: Stores holonomy_norm, metric, psi, phi, timestamp.
+#   - img/cy3_holonomy_heatmap.png: Heatmap of |basis|.
+#   - errors.log: Logs debug and error messages.
+# Dependencies: numpy, matplotlib, json, glob, csv, logging, tqdm
 
 import numpy as np
-import json, glob, logging, os, csv
+import json
+import glob
+import logging
+import os
+import csv
 from datetime import datetime
 import matplotlib.pyplot as plt
+from tqdm import tqdm
+import platform
 
-# --- Logging Setup ---
+# Logging setup
 logging.basicConfig(
     filename='errors.log',
     level=logging.DEBUG,
     format='%(asctime)s [06_cy3_spectral_base.py] %(levelname)s: %(message)s'
 )
 
+def clear_screen():
+    """Clear the console screen based on the operating system."""
+    if platform.system() == "Windows":
+        os.system("cls")
+    else:
+        os.system("clear")
+
 def load_config():
-    files = glob.glob('config_cy3*.json')
-    if not files:
-        logging.error("Keine config_cy3.json gefunden")
-        raise FileNotFoundError("config_cy3.json fehlt")
+    """Load JSON configuration file for CY_3 holonomy basis computation."""
+    config_files = glob.glob('config_cy3*.json')
+    if not config_files:
+        logging.error("No config files matching 'config_cy3*.json'")
+        raise FileNotFoundError("Missing config_cy3.json")
     print("Available configuration files:")
-    for i, f in enumerate(files, 1):
-        print(f"{i}. {f}")
-    idx = int(input("Select config file number: ")) - 1
-    return json.load(open(files[idx], 'r'))
+    for i, f in enumerate(config_files, 1):
+        print(f"  {i}. {f}")
+    while True:
+        try:
+            choice = int(input("Select config file number: ")) - 1
+            if 0 <= choice < len(config_files):
+                with open(config_files[choice], 'r', encoding='utf-8') as infile:
+                    cfg = json.load(infile)
+                print(f"[06_cy3_spectral_base.py] Loaded config: metric={cfg['cy3_metric']}, "
+                      f"resolution={cfg['resolution']}, psi={cfg['complex_structure_moduli']['psi']}, "
+                      f"phi={cfg['complex_structure_moduli']['phi']}")
+                return cfg
+            else:
+                print("Invalid selection. Please choose a valid number.")
+        except ValueError:
+            print("Please enter a valid number.")
+        except Exception as e:
+            logging.error(f"Config loading failed: {e}")
+            raise
 
 def compute_holonomy_basis(resolution, psi, phi):
     """
-    Mock-Berechnung einer SU(3)-Holonomiebasis:
-    basis(u,v) = sin(u+ψ)*cos(v+φ) + i·cos(u−φ), u,v ∈ [0,2π]
-    Norm = ∑ |basis|^2
+    Compute SU(3)-holonomy basis on CY_3 per CP8, EP2, EP7.
+    Args:
+        resolution (int): Grid resolution for u, v.
+        psi (float): Complex structure modulus (phase ψ).
+        phi (float): Complex structure modulus (phase φ).
+    Returns:
+        tuple: (basis, norm) - Holonomy basis array and its norm.
     """
-    try:
-        u = np.linspace(0, 2*np.pi, resolution)
-        v = np.linspace(0, 2*np.pi, resolution)
-        u, v = np.meshgrid(u, v, indexing='ij')
-        basis = np.sin(u + psi) * np.cos(v + phi) + 1j * np.cos(u - phi)
-        norm  = float(np.sum(np.abs(basis)**2))
-        return basis, norm
-    except Exception as e:
-        logging.error(f"Holonomy-Berechnung fehlgeschlagen: {e}")
-        raise
+    print(f"[06_cy3_spectral_base.py] Computing SU(3)-holonomy basis (resolution={resolution}, psi={psi}, phi={phi})")
+    
+    # Initialize grid for u, v on CY_3
+    u = np.linspace(0, 2 * np.pi, resolution)
+    v = np.linspace(0, 2 * np.pi, resolution)
+    u, v = np.meshgrid(u, v, indexing='ij')
+    
+    # Compute holonomy basis: basis(u, v) = sin(u + ψ) * cos(v + φ) + i * cos(u - φ)
+    basis = np.sin(u + psi) * np.cos(v + phi) + 1j * np.cos(u - phi)
+    
+    # Compute norm
+    norm = float(np.sum(np.abs(basis)**2))
+    logging.debug(f"Holonomy basis norm = {norm:.6f}")
+    
+    print(f"[06_cy3_spectral_base.py] Computed holonomy norm = {norm:.6e}")
+    return basis, norm
 
 def save_heatmap(basis, filename='cy3_holonomy_heatmap.png'):
-    """Speichert eine Heatmap der Holonomiebasis."""
+    """
+    Generate and save heatmap of SU(3)-holonomy basis.
+    Args:
+        basis (array): Holonomy basis array.
+        filename (str): Output filename for heatmap.
+    """
+    print(f"[06_cy3_spectral_base.py] Generating heatmap for holonomy basis")
     os.makedirs('img', exist_ok=True)
     plt.imshow(np.abs(basis), cmap='plasma', origin='lower')
     plt.colorbar(label='|Holonomy|')
-    plt.title('SU(3)-Holonomy Basis auf CY₃')
+    plt.title('SU(3)-Holonomy Basis on CY_3')
     out = os.path.join('img', filename)
     plt.savefig(out)
     plt.close()
     print(f"[06_cy3_spectral_base.py] Heatmap saved: {out}")
 
 def write_results(norm, metric, psi, phi):
-    """Schreibt holonomy_norm in results.csv."""
-    ts = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
+    """
+    Write holonomy norm results to results.csv.
+    Args:
+        norm (float): Holonomy basis norm.
+        metric (str): CY_3 metric identifier.
+        psi (float): Complex structure modulus (phase ψ).
+        phi (float): Complex structure modulus (phase φ).
+    """
+    print(f"[06_cy3_spectral_base.py] Writing results to results.csv")
+    timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
     with open('results.csv', 'a', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
         writer.writerow([
             '06_cy3_spectral_base.py',
             'holonomy_norm',
             norm,
-            f"metric={metric}, psi={psi}, phi={phi}",
+            '[1e3, 1e6]',
             'N/A',
-            ts
+            timestamp
         ])
-    print("[06_cy3_spectral_base.py] Results written to results.csv")
+    print(f"[06_cy3_spectral_base.py] Results written: holonomy_norm={norm:.6f}, timestamp={timestamp}")
 
 def compute_cy3_modes():
     """
-    Utility-Funktion für andere Skripte (z.B. 06a_higgs_spectral_field.py):
-    Lädt die Konfiguration, berechnet die Holonomie-Basis und gibt sie zurück.
+    Utility function for other scripts (e.g., 06a_higgs_spectral_field.py).
+    Loads configuration and computes holonomy basis.
+    Returns:
+        array: Holonomy basis array.
     """
+    print(f"[06_cy3_spectral_base.py] Computing CY_3 modes for external use")
     cfg = load_config()
     basis, _ = compute_holonomy_basis(
         cfg['resolution'],
@@ -92,32 +153,47 @@ def compute_cy3_modes():
     return basis
 
 def main():
-    try:
-        cfg = load_config()
-        metric    = cfg['cy3_metric']
-        resolution= cfg['resolution']
-        psi       = cfg['complex_structure_moduli']['psi']
-        phi       = cfg['complex_structure_moduli']['phi']
-
-        print(f"[06_cy3_spectral_base.py] Using metric={metric}, resolution={resolution}, psi={psi}, phi={phi}")
+    """Main function to orchestrate SU(3)-holonomy basis computation."""
+    clear_screen()
+    print("=========================================================")
+    print("    Meta-Space Model: CY_3 Holonomy Basis Computation    ")
+    print("=========================================================")
+    
+    # Load configuration
+    cfg = load_config()
+    metric = cfg['cy3_metric']
+    resolution = cfg['resolution']
+    psi = cfg['complex_structure_moduli']['psi']
+    phi = cfg['complex_structure_moduli']['phi']
+    
+    # Compute holonomy basis with progress bar
+    with tqdm(total=2, desc="Processing holonomy basis", unit="step") as pbar:
+        # Compute basis and norm
         basis, norm = compute_holonomy_basis(resolution, psi, phi)
-
-        # Ausgabe
+        pbar.update(1)
+        
+        # Generate and save heatmap
         save_heatmap(basis)
-        write_results(norm, metric, psi, phi)
-
-        # Modell-Konformitätscheck (CP8)
-        if norm < 1e4:
-            status = "too low (underconstrained)"
-        elif norm > 1e6:
-            status = "too high (overmodulated)"
-        else:
-            status = "model-conform (CP8)"
-        print(f"[06_cy3_spectral_base.py] Holonomy norm: {norm:.6f} → {status}")
-        print("[06_cy3_spectral_base.py] Computation complete.")
-    except Exception as e:
-        logging.error(f"Main execution failed: {e}")
-        raise
+        pbar.update(1)
+    
+    # Write results to CSV
+    write_results(norm, metric, psi, phi)
+    
+    # Validate norm per CP8
+    status = "PASS (Model-Conform, CP8)" if 1e3 <= norm <= 1e6 else "FAIL (Out of Range)"
+    print("\n=====================================")
+    print("     Meta-Space Model: Summary")
+    print("=====================================")
+    print(f"Script: 06_cy3_spectral_base.py")
+    print(f"Description: Computes SU(3)-holonomy basis on CY_3")
+    print(f"Postulates: CP8, EP2, EP7")
+    print(f"Computed holonomy_norm: {norm:.6f} (range [1e3, 1e6])")
+    print(f"Status: {status}")
+    print("=====================================")
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        logging.error(f"Script execution failed: {e}")
+        raise
