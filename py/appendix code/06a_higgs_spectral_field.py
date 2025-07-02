@@ -44,6 +44,7 @@ from datetime import datetime
 from tqdm import tqdm
 import importlib.util
 import platform
+import sys, io
 
 # Dynamic import of 06_cy3_spectral_base.py
 here = os.path.dirname(__file__)
@@ -70,31 +71,17 @@ def clear_screen():
         os.system("clear")
 
 def load_config():
-    """Load JSON configuration file for Higgs field simulation."""
-    config_files = glob.glob('config_higgs_6a*.json')
-    if not config_files:
-        logging.error("No config files matching 'config_higgs_6a*.json'")
-        raise FileNotFoundError("Missing config_higgs_6a.json")
-    print("Available configuration files:")
-    for i, f in enumerate(config_files, 1):
-        print(f"  {i}. {f}")
-    while True:
-        try:
-            choice = int(input("Select config file number: ")) - 1
-            if 0 <= choice < len(config_files):
-                with open(config_files[choice], 'r', encoding='utf-8') as infile:
-                    cfg = json.load(infile)
-                print(f"[06a_higgs_spectral_field.py] Loaded config: m_h_target={cfg['m_h_target']}, "
-                      f"resolution={cfg['resolution']}, psi={cfg['complex_structure_moduli']['psi']}, "
-                      f"phi={cfg['complex_structure_moduli']['phi']}, auto_tune_lh={cfg.get('auto_tune_lh', False)}")
-                return cfg
-            else:
-                print("Invalid selection. Please choose a valid number.")
-        except ValueError:
-            print("Please enter a valid number.")
-        except Exception as e:
-            logging.error(f"Config loading failed: {e}")
-            raise
+    """Load fixed JSON configuration file for Higgs field simulation."""
+    config_path = 'config_higgs_6a.json'
+    if not os.path.exists(config_path):
+        logging.error(f"Missing fixed config file: {config_path}")
+        raise FileNotFoundError(f"Missing {config_path}")
+    with open(config_path, 'r', encoding='utf-8') as infile:
+        cfg = json.load(infile)
+    print(f"[06a_higgs_spectral_field.py] Loaded fixed config: m_h_target={cfg['m_h_target']}, "
+          f"resolution={cfg['resolution']}, psi={cfg['complex_structure_moduli']['psi']}, "
+          f"phi={cfg['complex_structure_moduli']['phi']}, auto_tune_lh={cfg.get('auto_tune_lh', False)}")
+    return cfg
 
 def simulate(m_h_target, q, epsilon_min, l_h, resolution, psi_mod, phi_mod):
     """

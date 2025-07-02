@@ -37,6 +37,8 @@ from datetime import datetime
 from tqdm import tqdm
 import scipy.special
 import platform
+import sys, io
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 # Logging setup
 logging.basicConfig(
@@ -53,30 +55,16 @@ def clear_screen():
         os.system("clear")
 
 def load_config():
-    """Load JSON configuration file for Higgs field simulation."""
-    config_files = glob.glob('config_higgs*.json')
-    if not config_files:
-        logging.error("No config files matching 'config_higgs*.json'")
-        raise FileNotFoundError("Missing config_higgs.json")
-    print("Available configuration files:")
-    for i, file in enumerate(config_files, 1):
-        print(f"{i}. {file}")
-    while True:
-        try:
-            choice = int(input("Select config file number: ")) - 1
-            if 0 <= choice < len(config_files):
-                with open(config_files[choice], 'r', encoding='utf-8') as infile:
-                    cfg = json.load(infile)
-                print(f"[03_higgs_spectral_field.py] Loaded config: l_max={cfg['spectral_modes']['l_max']}, "
-                      f"m_max={cfg['spectral_modes']['m_max']}, m_h_target={cfg['m_h_target']}")
-                return cfg
-            else:
-                print("Invalid selection. Please choose a valid number.")
-        except ValueError:
-            print("Please enter a valid number.")
-        except Exception as e:
-            logging.error(f"Config loading failed: {e}")
-            raise
+    """Load fixed JSON configuration file for Higgs field simulation."""
+    config_path = 'config_higgs.json'
+    if not os.path.exists(config_path):
+        logging.error(f"Missing fixed config file: {config_path}")
+        raise FileNotFoundError(f"Missing {config_path}")
+    with open(config_path, 'r', encoding='utf-8') as infile:
+        cfg = json.load(infile)
+    print(f"[03_higgs_spectral_field.py] Loaded fixed config: l_max={cfg['spectral_modes']['l_max']}, "
+          f"m_max={cfg['spectral_modes']['m_max']}, m_h_target={cfg['m_h_target']}")
+    return cfg
 
 def simulate_higgs_field(config):
     """

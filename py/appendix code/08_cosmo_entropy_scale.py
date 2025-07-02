@@ -31,6 +31,8 @@ import csv
 from datetime import datetime
 from tqdm import tqdm
 import platform
+import sys, io
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 # Logging setup
 logging.basicConfig(
@@ -47,30 +49,16 @@ def clear_screen():
         os.system("clear")
 
 def load_config():
-    """Load JSON configuration file for cosmological entropy scaling."""
-    config_files = glob.glob('config_cosmo*.json')
-    if not config_files:
-        logging.error("No config files matching 'config_cosmo*.json'")
-        raise FileNotFoundError("Missing config_cosmo.json")
-    print("Available configuration files:")
-    for i, f in enumerate(config_files, 1):
-        print(f"  {i}. {f}")
-    while True:
-        try:
-            choice = int(input("Select config file number: ")) - 1
-            if 0 <= choice < len(config_files):
-                with open(config_files[choice], 'r', encoding='utf-8') as infile:
-                    cfg = json.load(infile)
-                print(f"[08_cosmo_entropy_scale.py] Loaded config: omega_dm_target={cfg['omega_dm_target']}, "
-                      f"threshold={cfg['entropy_gradient_threshold']}")
-                return cfg
-            else:
-                print("Invalid selection. Please choose a valid number.")
-        except ValueError:
-            print("Please enter a valid number.")
-        except Exception as e:
-            logging.error(f"Config loading failed: {e}")
-            raise
+    """Load fixed JSON configuration file for cosmological entropy scaling."""
+    config_path = 'config_cosmo.json'
+    if not os.path.exists(config_path):
+        logging.error(f"Missing fixed config file: {config_path}")
+        raise FileNotFoundError(f"Missing {config_path}")
+    with open(config_path, 'r', encoding='utf-8') as infile:
+        cfg = json.load(infile)
+    print(f"[08_cosmo_entropy_scale.py] Loaded fixed config: omega_dm_target={cfg['omega_dm_target']}, "
+          f"threshold={cfg['entropy_gradient_threshold']}")
+    return cfg
 
 def save_heatmap(data, fname='cosmo_heatmap.png'):
     """

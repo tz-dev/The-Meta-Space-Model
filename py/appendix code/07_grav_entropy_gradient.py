@@ -31,6 +31,8 @@ from datetime import datetime
 from scipy.ndimage import gaussian_filter
 from tqdm import tqdm
 import platform
+import sys, io
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 # Logging setup
 logging.basicConfig(
@@ -47,30 +49,16 @@ def clear_screen():
         os.system("clear")
 
 def load_config():
-    """Load JSON configuration file for gravitational tensor computation."""
-    config_files = glob.glob('config_grav*.json')
-    if not config_files:
-        logging.error("No config files matching 'config_grav*.json'")
-        raise FileNotFoundError("Missing config_grav.json")
-    print("Available configuration files:")
-    for i, file in enumerate(config_files, 1):
-        print(f"  {i}. {file}")
-    while True:
-        try:
-            choice = int(input("Select config file number: ")) - 1
-            if 0 <= choice < len(config_files):
-                with open(config_files[choice], 'r', encoding='utf-8') as infile:
-                    cfg = json.load(infile)
-                print(f"[07_grav_entropy_gradient.py] Loaded config: shape={cfg['tensor_shape']}, "
-                      f"threshold={cfg['entropy_gradient_threshold']}, sigma={cfg.get('gaussian_sigma', 1.6)}")
-                return cfg
-            else:
-                print("Invalid selection. Please choose a valid number.")
-        except ValueError:
-            print("Please enter a valid number.")
-        except Exception as e:
-            logging.error(f"Config loading failed: {e}")
-            raise
+    """Load fixed JSON configuration file for gravitational tensor computation."""
+    config_path = 'config_grav.json'
+    if not os.path.exists(config_path):
+        logging.error(f"Missing fixed config file: {config_path}")
+        raise FileNotFoundError(f"Missing {config_path}")
+    with open(config_path, 'r', encoding='utf-8') as infile:
+        cfg = json.load(infile)
+    print(f"[07_grav_entropy_gradient.py] Loaded fixed config: shape={cfg['tensor_shape']}, "
+          f"threshold={cfg['entropy_gradient_threshold']}, sigma={cfg.get('gaussian_sigma', 1.6)}")
+    return cfg
 
 def load_y_lm_norm():
     """

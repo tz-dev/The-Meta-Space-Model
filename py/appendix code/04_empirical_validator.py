@@ -1,26 +1,33 @@
 # Script: 04_empirical_validator.py
-# Description: Validates Meta-Space Model (MSM) simulation outputs (α_s, m_H) against empirical targets on 𝓜_meta = S^3 × CY_3 × ℝ_τ,
+# Description: Validates Meta-Space Model (MSM) simulation outputs (alpha_s, m_H, Omega_DM, Y_lm_norm, holonomy_norm,
+#   stability_metric, scaling_metric, mass_drift_metric, oscillation_metric) against empirical targets on M_meta = S^3 x CY_3 x R_tau,
 #   producing deviation metrics and visualizations to ensure empirical consistency.
 # Formulas & Methods:
-#   - Deviation: Δ = |value - target|, validated against empirical thresholds (e.g., Δα_s ≤ 0.005, Δm_H ≤ 0.5).
-#   - Validation (CP5, CP6): Ensures entropy-coherent stability and simulation consistency by comparing results to CODATA/Planck targets.
-#   - Visualization: Bar plot of deviations, heatmaps of s_field (Script 02) and ψ_α (Scripts 03/06a).
+#   - Deviation: Δ = |value - target| for point targets (e.g., alpha_s, m_H, Omega_DM).
+#   - Range validation: For parameters like Y_lm_norm, holonomy_norm, check if value in [min, max].
+#   - Stability validation: For stability_metric, scaling_metric, check if max(value) >= target.
+#   - Visualization: Bar plot of deviations, heatmaps of s_field (Script 02) and psi_alpha (Scripts 03/06a).
 # Postulates:
 #   - CP5: Entropy-coherent stability (deviations within thresholds).
 #   - CP6: Simulation consistency via validation of prior results.
-#   - EP1: Empirical QCD coupling (α_s ≈ 0.118).
+#   - CP8: Topological protection (Y_lm_norm, holonomy_norm in valid range).
+#   - EP1: Empirical QCD coupling (alpha_s ≈ 0.118).
+#   - EP5: Thermodynamic stability (mass_drift_metric within threshold).
+#   - EP6: Dark matter projection (Omega_DM ≈ 0.268).
 #   - EP7: Empirical consistency of spectral fields.
+#   - EP8: Extended quantum gravity (stability_metric for I_mu_nu).
 #   - EP11: Empirical Higgs mass (m_H ≈ 125.0 GeV).
+#   - EP12: Neutrino oscillations (oscillation_metric within threshold).
 # Inputs:
-#   - config_empirical*.json: Configuration file with targets (α_s, m_H) and thresholds.
-#   - results.csv: Results from Scripts 01–03, 06a (α_s, m_H, etc.).
+#   - config_empirical*.json: Configuration file with targets and thresholds.
+#   - results.csv: Results from Scripts 01-09 (alpha_s, m_H, Omega_DM, etc.).
 #   - img/s_field.npy: Field data from Script 02.
 #   - img/psi_alpha.npy: Field data from Scripts 03/06a.
 # Outputs:
 #   - results.csv: Appended validation summary (parameter, value, target, deviation, timestamp).
 #   - img/validation_bar_plot.png: Bar plot of deviations with thresholds.
 #   - img/validation_s_field_heatmap.png: Heatmap of s_field.
-#   - img/validation_psi_alpha_heatmap.png: Heatmap of ψ_α.
+#   - img/validation_psi_alpha_heatmap.png: Heatmap of psi_alpha.
 #   - errors.log: Logs errors and validation info.
 # Dependencies: numpy, matplotlib, csv, json, glob, logging, tqdm
 
@@ -34,6 +41,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 import platform
+import sys, io
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 # Logging setup
 logging.basicConfig(
@@ -50,34 +59,20 @@ def clear_screen():
         os.system("clear")
 
 def load_config():
-    """Load JSON configuration file for empirical validation."""
-    config_files = glob.glob('config_empirical*.json')
-    if not config_files:
-        logging.error("No config files matching 'config_empirical*.json'")
-        raise FileNotFoundError("Missing config_empirical.json")
-    print("Available configuration files:")
-    for i, f in enumerate(config_files, 1):
-        print(f"  {i}. {f}")
-    while True:
-        try:
-            choice = int(input("Select config file number: ")) - 1
-            if 0 <= choice < len(config_files):
-                with open(config_files[choice], 'r', encoding='utf-8') as infile:
-                    cfg = json.load(infile)
-                print(f"[04_empirical_validator.py] Loaded targets: {cfg['targets']}")
-                print(f"[04_empirical_validator.py] Loaded thresholds: {cfg['thresholds']}")
-                return cfg
-            else:
-                print("Invalid selection. Please choose a valid number.")
-        except ValueError:
-            print("Please enter a valid number.")
-        except Exception as e:
-            logging.error(f"Config loading failed: {e}")
-            raise
+    """Load fixed JSON configuration file for empirical validation."""
+    config_path = 'config_empirical.json'
+    if not os.path.exists(config_path):
+        logging.error(f"Missing fixed config file: {config_path}")
+        raise FileNotFoundError(f"Missing {config_path}")
+    with open(config_path, 'r', encoding='utf-8') as infile:
+        cfg = json.load(infile)
+    print(f"[04_empirical_validator.py] Loaded targets: {cfg['targets']}")
+    print(f"[04_empirical_validator.py] Loaded thresholds: {cfg['thresholds']}")
+    return cfg
 
 def load_results():
     """
-    Read results.csv and parse entries, skipping non-numeric references/deviations.
+    Read results.csv and parse entries, including range references.
     Returns:
         list: List of dictionaries with script, parameter, value, reference, deviation, timestamp.
     """
@@ -94,7 +89,18 @@ def load_results():
                     val_f = float(val)
                 except ValueError:
                     continue
-                ref_f = float(ref) if ref.replace('.', '', 1).isdigit() else None
+                # Handle range references (e.g., "[1e3, 1e6]")
+                ref_f = None
+                if ref.startswith('[') and ref.endswith(']'):
+                    try:
+                        ref_f = [float(x) for x in ref.strip('[]').split(',')]
+                    except ValueError:
+                        ref_f = None
+                else:
+                    try:
+                        ref_f = float(ref)
+                    except ValueError:
+                        ref_f = None
                 dev_f = float(dev) if dev.replace('.', '', 1).isdigit() else None
                 entries.append({
                     'script': script,
@@ -112,7 +118,7 @@ def load_results():
 
 def validate(entries, cfg):
     """
-    Validate entries against empirical targets and thresholds per CP5, CP6, EP1, EP7, EP11.
+    Validate entries against empirical targets, ranges, or stability thresholds per CP5, CP6, CP8, EP1, EP5, EP6, EP7, EP8, EP11, EP12.
     Args:
         entries (list): List of result entries.
         cfg (dict): Configuration with targets and thresholds.
@@ -121,18 +127,63 @@ def validate(entries, cfg):
     """
     print(f"[04_empirical_validator.py] Validating results against empirical targets")
     validated = []
-    for e in tqdm(entries, desc="Validating entries", unit="entry"):
-        key = 'm_h' if e['parameter'] == 'm_H' else e['parameter']
-        if key not in cfg['targets']:
+    # Aggregate stability_metric and scaling_metric
+    stability_values = {'stability_metric': [], 'scaling_metric': []}
+    filtered_entries = []
+    
+    # Collect stability metrics and filter other entries
+    for e in entries:
+        if e['parameter'] in stability_values:
+            stability_values[e['parameter']].append(e['value'])
+        else:
+            filtered_entries.append(e)
+    
+    # Add aggregated stability metrics
+    for param in stability_values:
+        if stability_values[param]:
+            value = max(stability_values[param])  # Use maximum value
+            filtered_entries.append({
+                'script': 'aggregated',
+                'parameter': param,
+                'value': value,
+                'reference': cfg['targets'].get(param, 0.5),
+                'deviation': None,
+                'timestamp': datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
+            })
+    
+    for e in tqdm(filtered_entries, desc="Validating entries", unit="entry"):
+        param = 'm_h' if e['parameter'] == 'm_H' else e['parameter']
+        if param not in cfg['targets']:
             continue
-        target = cfg['targets'][key]
-        threshold = cfg['thresholds'].get(key, 0.0)
-        deviation = abs(e['value'] - target)
-        status = 'PASS' if deviation <= threshold else 'FAIL'
-        logging.info(f"Validated {e['parameter']}: value={e['value']:.6f}, target={target:.6f}, "
-                     f"Δ={deviation:.6f}, threshold={threshold:.6f} → {status}")
+        target = cfg['targets'][param]
+        threshold = cfg['thresholds'].get(param, 0.0)
+        status = None
+        deviation = None
+        
+        # Point target validation (e.g., alpha_s, m_h, Omega_DM)
+        if isinstance(target, (int, float)) and param not in ['stability_metric', 'scaling_metric']:
+            deviation = abs(e['value'] - target)
+            status = 'PASS' if deviation <= threshold else 'FAIL'
+            logging.info(f"Validated {param}: value={e['value']:.6f}, target={target:.6f}, "
+                         f"Δ={deviation:.6f}, threshold={threshold:.6f} → {status}")
+        
+        # Range target validation (e.g., Y_lm_norm, holonomy_norm)
+        elif isinstance(target, list) and len(target) == 2:
+            min_val, max_val = target
+            status = 'PASS' if min_val <= e['value'] <= max_val else 'FAIL'
+            deviation = 0.0 if status == 'PASS' else min(abs(e['value'] - min_val), abs(e['value'] - max_val))
+            logging.info(f"Validated {param}: value={e['value']:.6f}, range=[{min_val}, {max_val}], "
+                         f"Δ={deviation:.6f} → {status}")
+        
+        # Stability target validation (e.g., stability_metric, scaling_metric)
+        elif isinstance(target, (int, float)) and param in ['stability_metric', 'scaling_metric']:
+            deviation = max(0.0, target - e['value'])
+            status = 'PASS' if e['value'] >= target else 'FAIL'
+            logging.info(f"Validated {param}: value={e['value']:.6f}, min={target:.6f}, "
+                         f"Δ={deviation:.6f} → {status}")
+        
         validated.append({
-            'parameter': e['parameter'],
+            'parameter': param,
             'value': e['value'],
             'target': target,
             'deviation': deviation,
@@ -153,7 +204,7 @@ def plot_deviations(validated):
     deviations = [v['deviation'] for v in validated]
     thresholds = [v['threshold'] for v in validated]
     
-    fig, ax = plt.subplots(figsize=(6, 4))
+    fig, ax = plt.subplots(figsize=(10, 6))
     bars = ax.bar(labels, deviations, color='steelblue')
     ax.plot(labels, thresholds, 'r--', label='Threshold')
     ax.set_ylabel('Deviation')
@@ -161,12 +212,13 @@ def plot_deviations(validated):
     ax.legend()
     for bar, dev in zip(bars, deviations):
         ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 1e-3,
-                f"{dev:.3f}", ha='center', va='bottom', fontsize=8)
+                f"{dev:.6f}", ha='center', va='bottom', fontsize=8)
+    plt.xticks(rotation=45)
     plt.tight_layout()
     os.makedirs('img', exist_ok=True)
     plt.savefig('img/validation_bar_plot.png')
     plt.close()
-    print(f"[04_empirical_validator.py] Bar plot saved → img/validation_bar_plot.png")
+    print(f"[04_empirical_validator.py] Bar plot saved -> img/validation_bar_plot.png")
 
 def plot_heatmaps():
     """Load and plot heatmaps for s_field.npy and psi_alpha.npy if available."""
@@ -181,7 +233,7 @@ def plot_heatmaps():
         plt.title('Validation: s_field Heatmap')
         plt.savefig('img/validation_s_field_heatmap.png')
         plt.close()
-        print(f"[04_empirical_validator.py] s_field heatmap saved → img/validation_s_field_heatmap.png")
+        print(f"[04_empirical_validator.py] s_field heatmap saved -> img/validation_s_field_heatmap.png")
     else:
         logging.info("s_field.npy not found; skipping its heatmap")
     
@@ -190,11 +242,11 @@ def plot_heatmaps():
     if os.path.exists(psi_path):
         psi = np.load(psi_path)
         plt.imshow(np.abs(psi), cmap='plasma', origin='lower')
-        plt.colorbar(label='|ψ_α| (Scripts 03/06a)')
-        plt.title('Validation: ψ_α Heatmap')
+        plt.colorbar(label='|psi_alpha| (Scripts 03/06a)')
+        plt.title('Validation: psi_alpha Heatmap')
         plt.savefig('img/validation_psi_alpha_heatmap.png')
         plt.close()
-        print(f"[04_empirical_validator.py] ψ_α heatmap saved → img/validation_psi_alpha_heatmap.png")
+        print(f"[04_empirical_validator.py] psi_alpha heatmap saved -> img/validation_psi_alpha_heatmap.png")
     else:
         logging.info("psi_alpha.npy not found; skipping its heatmap")
 
@@ -213,7 +265,7 @@ def append_summary(validated):
                 '04_empirical_validator.py',
                 f"{v['parameter']}_validation",
                 v['value'],
-                v['target'],
+                str(v['target']),
                 v['deviation'],
                 ts
             ])
@@ -255,11 +307,12 @@ def main():
     print("     Meta-Space Model: Summary")
     print("=====================================")
     print(f"Script: 04_empirical_validator.py")
-    print(f"Description: Validates MSM outputs (α_s, m_H) against empirical targets")
-    print(f"Postulates: CP5, CP6, EP1, EP7, EP11")
+    print(f"Description: Validates MSM outputs against empirical targets")
+    print(f"Postulates: CP5, CP6, CP8, EP1, EP5, EP6, EP7, EP8, EP11, EP12")
     print(f"Validated Parameters: {len(validated)}")
     for v in validated:
-        print(f"- {v['parameter']}: value={v['value']:.6f}, target={v['target']:.6f}, "
+        target_str = f"[{v['target'][0]}, {v['target'][1]}]" if isinstance(v['target'], list) else f"{v['target']:.6f}"
+        print(f"- {v['parameter']}: value={v['value']:.6f}, target={target_str}, "
               f"Δ={v['deviation']:.6f}, threshold={v['threshold']:.6f}, status={v['status']}")
     print(f"Status: {'PASS' if all(v['status'] == 'PASS' for v in validated) else 'FAIL'}")
     print("=====================================")

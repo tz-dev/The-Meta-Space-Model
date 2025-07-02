@@ -43,6 +43,8 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 from tqdm import tqdm
 import platform
+import sys, io
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 # Logging setup
 logging.basicConfig(
@@ -59,28 +61,17 @@ def clear_screen():
         os.system("clear")
 
 def load_config():
-    """Load JSON configuration file for Monte Carlo validation."""
-    config_files = glob.glob('config_monte_carlo*.json')
-    if not config_files:
-        logging.error("No config files matching 'config_monte_carlo*.json'")
-        raise FileNotFoundError("Missing config_monte_carlo.json")
-    print("Available configuration files:")
-    for i, f in enumerate(config_files, 1):
-        print(f"{i}. {f}")
-    while True:
-        try:
-            choice = int(input("Select config file number: ")) - 1
-            if 0 <= choice < len(config_files):
-                with open(config_files[choice], 'r', encoding='utf-8') as infile:
-                    cfg = json.load(infile)
-                print(f"[02_monte_carlo_validator.py] Loaded config: M_Z={cfg.get('energy_scale')}, "
-                      f"m_H={cfg.get('higgs_mass')}, α_target={cfg.get('alpha_s_target')}, "
-                      f"ranges={cfg.get('alpha_s_range')},{cfg.get('m_h_range')}")
-                return cfg
-            else:
-                print("Invalid selection. Please choose a valid number.")
-        except ValueError:
-            print("Please enter a valid number.")
+    """Load fixed JSON configuration file for Monte Carlo validation."""
+    config_path = 'config_monte_carlo.json'
+    if not os.path.exists(config_path):
+        logging.error(f"Missing fixed config file: {config_path}")
+        raise FileNotFoundError(f"Missing {config_path}")
+    with open(config_path, 'r', encoding='utf-8') as infile:
+        cfg = json.load(infile)
+    print(f"[02_monte_carlo_validator.py] Loaded fixed config: M_Z={cfg.get('energy_scale')}, "
+          f"m_H={cfg.get('higgs_mass')}, α_target={cfg.get('alpha_s_target')}, "
+          f"ranges={cfg.get('alpha_s_range')},{cfg.get('m_h_range')}")
+    return cfg
 
 def compute_field_config(m_z, m_h_target, l_max, m_max, s_min):
     """

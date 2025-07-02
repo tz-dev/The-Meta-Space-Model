@@ -38,6 +38,8 @@ from datetime import datetime
 import glob
 from tqdm import tqdm
 import platform
+import sys, io
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 # Logging setup
 logging.basicConfig(
@@ -54,27 +56,16 @@ def clear_screen():
         os.system("clear")
 
 def load_config():
-    """Load JSON configuration file for QCD spectral field computation."""
-    config_files = glob.glob('config_qcd*.json')
-    if not config_files:
-        logging.error("No config files matching 'config_qcd*.json'")
-        raise FileNotFoundError("Missing config_qcd.json")
-    print("Available configuration files:")
-    for i, f in enumerate(config_files, 1):
-        print(f"{i}. {f}")
-    while True:
-        try:
-            choice = int(input("Select config file number: ")) - 1
-            if 0 <= choice < len(config_files):
-                with open(config_files[choice], 'r', encoding='utf-8') as infile:
-                    cfg = json.load(infile)
-                print(f"[01_qcd_spectral_field.py] Loaded config: energy_scale={cfg.get('energy_scale')}, "
-                      f"l_max={cfg['spectral_modes']['l_max']}, m_max={cfg['spectral_modes']['m_max']}")
-                return cfg
-            else:
-                print("Invalid selection. Please choose a valid number.")
-        except ValueError:
-            print("Please enter a valid number.")
+    """Load fixed JSON configuration file for QCD spectral field computation."""
+    config_path = 'config_qcd.json'
+    if not os.path.exists(config_path):
+        logging.error(f"Missing fixed config file: {config_path}")
+        raise FileNotFoundError(f"Missing {config_path}")
+    with open(config_path, 'r', encoding='utf-8') as infile:
+        cfg = json.load(infile)
+    print(f"[01_qcd_spectral_field.py] Loaded fixed config: energy_scale={cfg.get('energy_scale')}, "
+          f"l_max={cfg['spectral_modes']['l_max']}, m_max={cfg['spectral_modes']['m_max']}")
+    return cfg
 
 def compute_spectral_density(m_z, l_max, m_max):
     """
