@@ -169,6 +169,7 @@ document.addEventListener("DOMContentLoaded", function () {
       background-color: #222;
     }
     .diagram-box figure {
+      background-color: #333;
       border: 1px solid #666;
     }
     .diagram-box figcaption {
