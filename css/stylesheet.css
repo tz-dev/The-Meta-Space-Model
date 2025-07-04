@@ -256,36 +256,62 @@ img {
  table tr:nth-child(even) {
      background: white !important;
 }
-  /* Container für Diagramm und Beschreibung */
+ table.csv {
+    border-collapse: collapse;
+    width: 100%;
+    font-family: monospace;
+    font-size: 14px;
+  }
+
+ table.csv th, table.csv td {
+    border: 1px solid #ccc !important;
+    padding: 6px 10px;
+    text-align: left;
+    white-space: nowrap;
+    color: black !important
+  }
+
+ table.csv th {
+    background-color: #d2d2d2 !important;
+    font-weight: bold !important;
+ }
+
+ table.csv tr:nth-child(even) {
+    background-color: #fafafa !important;
+  }
+
+ table.csv tr:hover {
+    background-color: #f1f1f1 !important;
+  }
+
   .diagram-container {
     display: flex;
-    flex-direction: row; /* Beschreibung rechts; für links 'row-reverse' verwenden */
+    flex-direction: row;
     align-items: stretch;
     margin: 20px 0;
-    border: 1px solid #ccc; /* Sauberer Border */
+    border: 1px solid #ccc;
     border-radius: 5px;
-    background-color: #f9f9f9; /* Heller Hintergrund für Kontrast */
+    background-color: #f9f9f9;
     padding: 10px;
     max-width: 100%;
     box-sizing: border-box;
   }
 
-  /* Diagramm-Box */
   .diagram-box {
-    flex: 2; /* Diagramm nimmt mehr Platz ein */
+    flex: 2; 
     padding: 10px;
   }
 
   .diagram-box figure {
     margin: 0;
-    border: 1px solid #999; /* Subtiler Border um das Diagramm */
+    border: 1px solid #999;
     border-radius: 3px;
     background-color: #fff;
   }
 
   .diagram-box figcaption {
-    background-color: #000; /* Schwarzer Hintergrund wie Tabellenkopf */
-    color: #fff; /* Weißer Text */
+    background-color: #000; 
+    color: #fff; 
     font-weight: bold;
     padding: 8px;
     text-align: center;
@@ -299,13 +325,12 @@ img {
     margin: 10px auto;
   }
 
-  /* Beschreibungskasten */
   .description-box {
-    flex: 1; /* Beschreibung nimmt weniger Platz ein */
+    flex: 1;
     padding: 10px;
     margin: 10px;
-    background-color: #eee; /* Leicht grauer Hintergrund */
-    border-left: 1px solid #ccc; /* Trennung vom Diagramm */
+    background-color: #eee; 
+    border-left: 1px solid #ccc;
     line-height: 1.5;
   }
 
@@ -319,10 +344,9 @@ img {
     margin: 5px 0;
   }
 
-  /* Responsive Design für kleinere Bildschirme */
   @media (max-width: 768px) {
     .diagram-container {
-      flex-direction: column; /* Stapeln bei kleinen Bildschirmen */
+      flex-direction: column;
     }
     .description-box {
       border-left: none;
