@@ -214,6 +214,33 @@ document.addEventListener("DOMContentLoaded", function () {
         color: #ddd;
         padding: 3px 7px;
     }
+    table.csv {
+        border-collapse: collapse;
+        width: 100%;
+        font-family: monospace;
+        font-size: 14px;
+      }
+
+    table.csv th, table.csv td {
+        border: 1px solid #ccc !important;
+        padding: 6px 10px;
+        text-align: left;
+        white-space: nowrap;
+        color: white !important
+      }
+
+    table.csv th {
+        background-color: #000 !important;
+        font-weight: bold !important;
+     }
+
+    table.csv tr:nth-child(even) {
+        background-color: #333 !important;
+      }
+
+    table.csv tr:hover {
+        background-color: #555 !important;
+      }
   `;
 
   // Toggle dark mode
