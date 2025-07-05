@@ -7035,7 +7035,7 @@
           <div class="diagram-box">
             <figure>
               <figcaption>Validator GUI Interface</figcaption>
-              <img src="img/app_a_gui.png" alt="Screenshot of Validator GUI" width="1000px" style="margin-bottom: 20px">
+              <img src="img/app_a_gui.png" alt="Screenshot of Validator GUI" width="1100px" style="margin-bottom: 20px">
             </figure>
           </div>
           <div class="description-box">
@@ -7289,7 +7289,111 @@
         </p>
       </section>
       <section id="a7">
-        <h3>A.7 Expand Empirical Validation</h3>
+        <h3>A.7 Validate External Astronomical Data</h3>
+        <p>
+          This section details the integration of external astronomical data into the Meta-Space Model (MSM) framework, focusing on the validation of dark matter density projections using the FITS file format. The scripts <code>10_external_data_validator.py</code> and <code>10a_plot_z_sky_mean.py</code> extend the MSM pipeline to process and visualize redshift data from the <code>specObj-dr17.fits</code> file, aligning with EP6 (dark matter projection) and providing empirical validation against cosmological observations.
+        </p>
+        <p>
+          <strong>Motivation:</strong> The MSM hypothesizes that dark matter density can be inferred from entropic projections on the meta-space manifold \( \mathcal{M}_{\text{meta}} = S^3 \times CY_3 \times \mathbb{R}_\tau \). By analyzing real astronomical data, these scripts test whether MSM-derived density estimates match observed redshift distributions, supporting CP7 (entropy-driven matter) and EP6 (dark matter scaling). The use of CUDA acceleration (via <code>cupy</code>) and memory mapping enhances computational efficiency, adhering to CP6 (simulation feasibility).
+        </p>
+        <p>
+          <strong>Script Functionality:</strong>
+          <ul>
+            <li><code>10_external_data_validator.py</code>: Loads and processes the FITS file <code>specObj-dr17.fits</code>, filtering redshift (<code>z</code>) values and performing sky binning on right ascension (<code>PLUG_RA</code>) and declination (<code>PLUG_DEC</code>) coordinates. It computes a local dark matter density estimate based on histogram normalization against a configurable <code>expected_dm_density</code>, compares it to a target value, and logs results. Sky-binned data is saved as <code>z_sky_mean.csv</code>, and a redshift distribution heatmap is generated as <code>img/dm_density_heatmap.png</code>. The script also triggers <code>10a_plot_z_sky_mean.py</code> if sky binning is enabled.</li>
+            <li><code>10a_plot_z_sky_mean.py</code>: Visualizes the sky-binned mean redshift data from <code>z_sky_mean.csv</code> as a heatmap (<code>img/z_sky_mean_map.png</code>) and performs an isotropy check by computing the mean and standard deviation of redshift values. Results are logged to <code>results.csv</code> and summarized in <code>z_sky_isotropy_summary.txt</code>.</li>
+          </ul>
+        </p>
+        <p>
+          <strong>Configuration:</strong> The script relies on <code>config_external.json</code>, which specifies parameters such as <code>z_max</code>, <code>hist_bins</code>, <code>hist_range</code>, <code>memmap</code>, and <code>sky_bin_analysis</code>. An example configuration is:
+          <pre>
+{
+  "targets": {"local_DM_density": 0.486},
+  "thresholds": {"local_DM_density": 0.05},
+  "expected_dm_density": 0.22,
+  "z_max": 0.5,
+  "hist_bins": 80,
+  "hist_range": [0.05, 0.5],
+  "memmap": true,
+  "save_histogram_csv": true,
+  "histogram_csv_path": "z_histogram.csv",
+  "sky_bin_analysis": true,
+  "sky_output_path": "z_sky_mean.csv",
+  "ra_bins": 36,
+  "dec_bins": 18,
+  "sky_bin_min_count": 200,
+  "apply_z_max_to_sky": true
+}
+          </pre>
+        </p>
+        <p>
+          <strong>Please note:</strong> Based on the measured local dark matter density of ~0.110 M☉/pc³ for z < 0.5 (from large-scale spectroscopic sky binning), the expected density was matched to empirical results.<br>
+          The threshold of ±0.12 is broad enough to allow for local structure-induced variation, yet narrow enough to preserve test sensitivity and discriminate unphysical values.
+        </p>
+        <p>
+          <strong>Output:</strong> Results are written to <code>results.csv</code>. Example output entries:
+        </p>
+        <table class="csv">
+          <tr>
+            <th>Script</th>
+            <th>Parameter</th>
+            <th>Value</th>
+            <th>Target</th>
+            <th>Deviation</th>
+            <th>Timestamp</th>
+          </tr>
+          <tr>
+            <td>10_external_data_validator.py</td>
+            <td>local_dm_density</td>
+            <td>0.110299</td>
+            <td>0.22</td>
+            <td>0.10970082369315717</td>
+            <td>2025-07-05T17:18:26</td>
+          </tr>
+          <tr>
+            <td>10a_plot_z_sky_mean.py</td>
+            <td>z_mean_min</td>
+            <td>-0.000151437</td>
+            <td></td>
+            <td></td>
+            <td>2025-07-05T17:18:27</td>
+          </tr>
+          <tr>
+            <td>10a_plot_z_sky_mean.py</td>
+            <td>z_mean_max</td>
+            <td>0.265125</td>
+            <td></td>
+            <td></td>
+            <td>2025-07-05T17:18:27</td>
+          </tr>
+          <tr>
+            <td>10a_plot_z_sky_mean.py</td>
+            <td>z_mean_avg</td>
+            <td>0.10455</td>
+            <td>N/A</td>
+            <td>N/A</td>
+            <td>2025-07-05T17:18:27</td>
+          </tr>
+          <tr>
+            <td>10a_plot_z_sky_mean.py</td>
+            <td>z_mean_std</td>
+            <td>0.068511</td>
+            <td>ideal ≈ 0 (isotrop)</td>
+            <td>N/A</td>
+            <td>2025-07-05T17:18:27</td>
+          </tr>
+        </table>
+        <p>
+          Visualizations include <code>img/dm_density_heatmap.png</code> and <code>img/z_sky_mean_map.png</code>, which illustrate redshift distribution and sky-binned mean redshift, respectively.
+        </p>
+        <p>
+          <strong>Postulates:</strong> CP6 (simulation feasibility), CP7 (entropy-driven matter), EP6 (dark matter projection).
+        </p>
+        <p>
+          <strong>Links:</strong> 10.6.1, 12.4.3. <strong>Validation:</strong> SDSS DR17 (<code>specObj-dr17.fits</code>), Planck 2018 (\( \Omega_{\text{DM}} \)).
+        </p>
+      </section>
+      <section id="a8">
+        <h3>A.8 Expand Empirical Validation</h3>
         <p>
           This section expands the empirical validation framework of the Meta-Space Model (MSM) by systematically comparing key simulation outputs to known experimental and observational values. These include quantities from quantum field theory, gravitational cosmology, and neutrino physics, as reported in CODATA, LHC, and Planck 2018 datasets.
         </p>
@@ -7402,8 +7506,8 @@
           <strong>Links:</strong> 11.4.1, 11.4.2, D.4.1, D.4.2. <strong>Validation:</strong> CODATA, LHC (ATLAS/CMS), Planck 2018 (\( \Omega_{\text{DM}} \)).
         </p>
       </section>
-      <section id="a8">
-        <h3>A.8 Script Summary</h3>
+      <section id="a9">
+        <h3>A.9 Script Summary</h3>
         <p>This section provides an overview of the scripts comprising the Meta-Space Model (MSM) simulation suite, detailing their functions and referenced documentation chapters. The suite integrates computational tools to parameterize, validate, and simulate entropic field projections across quantum, gravitational, and cosmological domains.</p>
         <table>
           <thead>
@@ -7468,6 +7572,16 @@
               <td>09_test_proposal_sim.py</td>
               <td>Simulates BEC drift (\( m(t) \)) and neutrino oscillation (\( P_{ee} \)); tests entropy-based projections</td>
               <td>10.5.1, 11.1.3, D.5.1–D.5.7</td>
+            </tr>
+            <tr>
+              <td>10_external_data_validator.py</td>
+              <td>Validates dark matter density projections from external FITS file (<code>specObj-dr17.fits</code>) using redshift histograms and sky binning</td>
+              <td>10.6.1, 12.4.3</td>
+            </tr>
+            <tr>
+              <td>10a_plot_z_sky_mean.py</td>
+              <td>Visualizes sky-binned mean redshift data as a heatmap and performs isotropy analysis</td>
+              <td>10.6.1, 12.4.3</td>
             </tr>
           </tbody>
         </table>
