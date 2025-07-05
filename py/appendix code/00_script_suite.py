@@ -31,7 +31,6 @@ SCRIPTS = [
     "04_empirical_validator.py",
     "05_s3_spectral_base.py",
     "06_cy3_spectral_base.py",
-    "06a_higgs_spectral_field.py",
     "07_grav_entropy_gradient.py",
     "08_cosmo_entropy_scale.py",
     "09_test_proposal_sim.py",
@@ -45,7 +44,6 @@ CONFIG_MAP = {
     "04_empirical": "config_empirical.json",
     "05_s3": "config_s3.json",
     "06_cy3": "config_cy3.json",
-    "06a_higgs": "config_higgs_6a.json",
     "07_grav": "config_grav.json",
     "08_cosmo": "config_cosmo.json",
     "09_test": "config_test.json",
@@ -324,7 +322,7 @@ def is_script_enabled(index):
 def create_gui():
     root = tk.Tk()
     root.title("MSM Script Suite")
-    root.geometry("1350x700")
+    root.geometry("1400x700")
 
     button_frame = tk.Frame(root)
     button_frame.pack(side=tk.LEFT, fill=tk.Y, padx=10, pady=10)
@@ -378,6 +376,7 @@ def create_gui():
     tk.Button(control_frame, text="Output", command=lambda: switch_view("Output", output_text)).pack(side=tk.LEFT, padx=5)
     tk.Button(control_frame, text="Code", command=lambda: switch_view("Code", output_text)).pack(side=tk.LEFT, padx=5)
     tk.Button(control_frame, text="Config", command=lambda: switch_view("Config", output_text)).pack(side=tk.LEFT, padx=5)
+    tk.Label(control_frame, text="PLEASE NOTE: '04_empirical_validator.py' can be run again after scripts 05-09 to validate new calculated values.", font=("Arial", 10)).pack(side=tk.LEFT, padx=5)
     tk.Button(control_frame, text="A+", command=lambda: adjust_font(output_text, 1)).pack(side=tk.RIGHT, padx=5)
     tk.Button(control_frame, text="A -", command=lambda: adjust_font(output_text, -1)).pack(side=tk.RIGHT, padx=5)
 
