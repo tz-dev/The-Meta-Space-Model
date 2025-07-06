@@ -130,7 +130,7 @@ def simulate_bec_drift(alpha_s, freq, time_steps, y_lm_norm):
 
 def simulate_neutrino_osc(config, runs, y_lm_norm):
     """
-    Simulate neutrino oscillations per EP12.
+    Simulate neutrino oscillations per EP12 using entropic phase gradient.
     Args:
         config (dict): Configuration dictionary with neutrino parameters.
         runs (int): Number of simulation runs.
@@ -142,16 +142,15 @@ def simulate_neutrino_osc(config, runs, y_lm_norm):
     nu = config['neutrino']
     L = np.linspace(nu['L_min'], nu['L_max'], nu['num_points'])
     E = nu['energy']
-    delta_m2 = nu['delta_m2']
-    theta_0 = nu['theta']
+    theta_12 = nu['theta_12']
     l_N = nu['l_N']
-    theta_variation = nu['theta_variation']
+    delta_grad_S21 = nu['delta_grad_S21']
     
     patterns = []
     for _ in tqdm(range(runs), desc="Running neutrino simulations", unit="run"):
-        theta = theta_0 * (1 + theta_variation * np.random.randn())
-        P_ee = 1 - (np.sin(2 * theta)**2) * np.sin(1.27 * delta_m2 * L / E)**2
-        P_ee *= (y_lm_norm / 1e9) * np.exp(-L**2 / l_N**2)
+        theta = theta_12 * (1 + nu['theta_variation'] * np.random.randn())
+        P_ee = 1 - (np.sin(2 * theta)**2) * np.sin((delta_grad_S21 * L) / (4 * l_N))**2
+        P_ee *= (y_lm_norm / 1e9) * np.exp(-L**2 / l_N**2)  # MSM-specific scaling
         patterns.append(P_ee)
     
     patterns = np.array(patterns)

@@ -31,7 +31,7 @@ SCRIPTS = [
     "04_empirical_validator.py",
     "05_s3_spectral_base.py",
     "06_cy3_spectral_base.py",
-    "07_grav_entropy_gradient.py",
+    "07_gravity_curvature_analysis.py",
     "08_cosmo_entropy_scale.py",
     "09_test_proposal_sim.py",
     "10_external_data_validator.py"

@@ -7,7 +7,7 @@
   },
   "entropy_gradient_min": 0.01,
   "entropy_gradient_max": 10.0,
-  "s_min": 1.0,
+  "s_min": 3.0,
   "s_max": 100.0,
   "scale_factor": 900.0,
   "max_attempts": 5,

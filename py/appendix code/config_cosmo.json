@@ -1,4 +1,5 @@
 {
   "omega_dm_target": 0.27,
-  "entropy_gradient_threshold": 0.01
+  "entropy_gradient_threshold": 0.01,
+  "l_d": 1.0
 }

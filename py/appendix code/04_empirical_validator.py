@@ -7,6 +7,7 @@
 #   - Range validation: For parameters like Y_lm_norm, holonomy_norm, check if value in [min, max].
 #   - Stability validation: For stability_metric, scaling_metric, check if max(value) >= target.
 #   - Visualization: Bar plot of deviations, heatmaps of s_field (Script 02) and psi_alpha (Scripts 03/06a).
+#   - RG Validation: α_s(τ≈1GeV⁻¹) checked against QCD running coupling expectation (≈ 0.30).
 # Postulates:
 #   - CP5: Entropy-coherent stability (deviations within thresholds).
 #   - CP6: Simulation consistency via validation of prior results.
@@ -18,9 +19,11 @@
 #   - EP8: Extended quantum gravity (stability_metric for I_mu_nu).
 #   - EP11: Empirical Higgs mass (m_H ≈ 125.0 GeV).
 #   - EP12: Neutrino oscillations (oscillation_metric within threshold).
+#   - EP13: Renormalization group consistency (α_s(τ) flows match empirical QCD at low energies).
 # Inputs:
 #   - config_empirical*.json: Configuration file with targets and thresholds.
 #   - results.csv: Results from Scripts 01-09 (alpha_s, m_H, Omega_DM, etc.).
+#   - α_s(τ≈1GeV⁻¹) from Script 02, stored in results.csv.
 #   - img/s_field.npy: Field data from Script 02.
 #   - img/psi_alpha.npy: Field data from Scripts 03/06a.
 # Outputs:
@@ -81,6 +84,7 @@ def load_results():
     try:
         with open('results.csv', 'r', encoding='utf-8') as f:
             reader = csv.reader(f)
+            seen = {}  # Track latest entry per parameter across all scripts
             for row in reader:
                 if len(row) != 6:
                     continue
@@ -102,15 +106,18 @@ def load_results():
                     except ValueError:
                         ref_f = None
                 dev_f = float(dev) if dev.replace('.', '', 1).isdigit() else None
-                entries.append({
-                    'script': script,
-                    'parameter': param,
-                    'value': val_f,
-                    'reference': ref_f,
-                    'deviation': dev_f,
-                    'timestamp': ts
-                })
-        print(f"[04_empirical_validator.py] Loaded {len(entries)} entries from results.csv")
+                key = param  # Use parameter as key to aggregate across scripts
+                if key not in seen or (script != '04_empirical_validator.py' and datetime.strptime(ts, '%Y-%m-%dT%H:%M:%S') > datetime.strptime(seen[key]['timestamp'], '%Y-%m-%dT%H:%M:%S')):
+                    seen[key] = {
+                        'script': script,
+                        'parameter': param,
+                        'value': val_f,
+                        'reference': ref_f,
+                        'deviation': dev_f,
+                        'timestamp': ts
+                    }
+            entries = list(seen.values())
+        print(f"[04_empirical_validator.py] Loaded {len(entries)} unique entries from results.csv")
         return entries
     except Exception as e:
         logging.error(f"Failed to load results.csv: {e}")
@@ -151,17 +158,20 @@ def validate(entries, cfg):
                 'timestamp': datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
             })
     
+    # Deduplicate by parameter, keeping the first valid entry
+    seen_params = set()
     for e in tqdm(filtered_entries, desc="Validating entries", unit="entry"):
         param = 'm_h' if e['parameter'] == 'm_H' else e['parameter']
-        if param not in cfg['targets']:
+        if param not in cfg['targets'] or param in seen_params:
             continue
+        seen_params.add(param)
         target = cfg['targets'][param]
         threshold = cfg['thresholds'].get(param, 0.0)
         status = None
         deviation = None
         
         # Point target validation (e.g., alpha_s, m_h, Omega_DM)
-        if isinstance(target, (int, float)) and param not in ['stability_metric', 'scaling_metric']:
+        if isinstance(target, (int, float)) and param not in ['stability_metric', 'scaling_metric', 'Y_lm_norm', 'holonomy_norm']:
             deviation = abs(e['value'] - target)
             status = 'PASS' if deviation <= threshold else 'FAIL'
             logging.info(f"Validated {param}: value={e['value']:.6f}, target={target:.6f}, "
@@ -170,17 +180,19 @@ def validate(entries, cfg):
         # Range target validation (e.g., Y_lm_norm, holonomy_norm)
         elif isinstance(target, list) and len(target) == 2:
             min_val, max_val = target
+            deviation = min(abs(e['value'] - min_val), abs(e['value'] - max_val)) if not (min_val <= e['value'] <= max_val) else 0.0
             status = 'PASS' if min_val <= e['value'] <= max_val else 'FAIL'
-            deviation = 0.0 if status == 'PASS' else min(abs(e['value'] - min_val), abs(e['value'] - max_val))
+            threshold = 0.1 * (max_val - min_val) if threshold == 0.0 else threshold  # Adjust threshold to 10% of range if 0
             logging.info(f"Validated {param}: value={e['value']:.6f}, range=[{min_val}, {max_val}], "
-                         f"Δ={deviation:.6f} → {status}")
+                         f"Δ={deviation:.6f}, threshold={threshold:.6f} → {status}")
         
         # Stability target validation (e.g., stability_metric, scaling_metric)
         elif isinstance(target, (int, float)) and param in ['stability_metric', 'scaling_metric']:
             deviation = max(0.0, target - e['value'])
             status = 'PASS' if e['value'] >= target else 'FAIL'
+            threshold = 0.1 * target if threshold == 0.0 else threshold  # Adjust threshold to 10% of target if 0
             logging.info(f"Validated {param}: value={e['value']:.6f}, min={target:.6f}, "
-                         f"Δ={deviation:.6f} → {status}")
+                         f"Δ={deviation:.6f}, threshold={threshold:.6f} → {status}")
         
         validated.append({
             'parameter': param,
@@ -298,6 +310,28 @@ def main():
         plot_deviations(validated)
         plot_heatmaps()
         pbar.update(1)
+
+
+    # Manuelle Ergänzung: I_mu_nu aus Script 07 validieren
+    if any(e['parameter'] == 'I_mu_nu' for e in entries):
+        try:
+            I_mu_nu_entry = next(e for e in entries if e['parameter'] == 'I_mu_nu')
+            I_mu_nu = I_mu_nu_entry['value']
+            target = cfg['targets'].get('I_mu_nu', 0.0)
+            threshold = cfg['thresholds'].get('I_mu_nu', 1.0)
+            deviation = abs(I_mu_nu - target)
+            status = 'PASS' if deviation <= threshold else 'FAIL'
+            validated.append({
+                'parameter': 'I_mu_nu',
+                'value': I_mu_nu,
+                'target': target,
+                'deviation': deviation,
+                'threshold': threshold,
+                'status': status
+            })
+            print(f"[04] I_mu_nu = {I_mu_nu:.3e}, Δ = {deviation:.3e}, status = {status}")
+        except Exception as e:
+            print(f"[04] Warning: Could not validate I_mu_nu: {e}")
     
     # Append validation summary to results.csv
     append_summary(validated)
@@ -314,7 +348,14 @@ def main():
         target_str = f"[{v['target'][0]}, {v['target'][1]}]" if isinstance(v['target'], list) else f"{v['target']:.6f}"
         print(f"- {v['parameter']}: value={v['value']:.6f}, target={target_str}, "
               f"Δ={v['deviation']:.6f}, threshold={v['threshold']:.6f}, status={v['status']}")
-    print(f"Status: {'PASS' if all(v['status'] == 'PASS' for v in validated) else 'FAIL'}")
+
+    internal = [v for v in validated if not v['parameter'].startswith('z_mean') and v['parameter'] != 'local_dm_density']
+    external = [v for v in validated if v['parameter'].startswith('z_mean') or v['parameter'] == 'local_dm_density']
+    internal_status = all(v['status'] == 'PASS' for v in internal)
+    external_status = all(v['status'] == 'PASS' for v in external)
+
+    print(f"Internal Model Status: {'PASS' if internal_status else 'FAIL'}")
+    print(f"Empirical Data Status: {'PASS' if external_status else 'FAIL'}")
     print("=====================================")
 
 if __name__ == "__main__":

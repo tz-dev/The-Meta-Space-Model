@@ -120,8 +120,6 @@ def main():
     except Exception as e:  # Handle any errors during CSV update
         print(f"Error updating results.csv: {e}")  # Print error message
 
-    plt.show()  # Display the plot interactively
-
     # Write summary log
     with open("z_sky_isotropy_summary.txt", "w", encoding="utf-8") as f:  # Open summary file for writing
         f.write("Isotropy check:\n")  # Write section header

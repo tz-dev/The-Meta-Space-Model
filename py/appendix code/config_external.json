@@ -1,0 +1,32 @@
+{
+  "targets": {
+    "local_DM_density": 0.486
+  },
+  "thresholds": {
+    "local_DM_density": 0.12
+  },
+  "expected_dm_density": 0.11,
+  "z_max": 0.5,
+  "hist_bins": 80,
+  "hist_range": [0.05, 0.5],
+  "memmap": true,
+  "save_histogram_csv": true,
+  "histogram_csv_path": "z_histogram.csv",
+  "sky_bin_analysis": true,
+  "sky_output_path": "z_sky_mean.csv",
+  "ra_bins": 36,
+  "dec_bins": 18,
+  "sky_bin_min_count": 200,
+  "apply_z_max_to_sky": true,
+  "gaia_filters": {
+    "parallax_min": 0.1,
+    "pmra_max": 30.0,
+    "pmdec_max": 30.0,
+    "parallax_over_error_min": 2.5,
+    "ruwe_max": 2.0,
+    "phot_g_mean_mag_max": 20.0,
+    "bin_min_stars": 150,
+    "sigma_v_max": 80.0,
+    "pm_kms_max": 300.0
+  }
+}

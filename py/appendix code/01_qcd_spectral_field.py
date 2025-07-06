@@ -174,6 +174,7 @@ def plot_heatmap(y_lm, filename):
     plt.title('QCD Spectral Field on S^3')
     plt.savefig(f'img/{filename}')
     plt.close()
+    plt.show()
     print(f"[01_qcd_spectral_field.py] Heatmap saved: img/{filename}")
 
 def write_results(alpha_s, r_pi):

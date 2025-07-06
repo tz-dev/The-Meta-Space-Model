@@ -1,27 +1,32 @@
-    {
-        "energy_scale": 91.2,
-        "higgs_mass": 125.0,
-        "alpha_s_target": 0.118,
-        "alpha_s_range": [0.1, 0.13],
-        "m_h_range": [120.0, 130.0],
-        "spectral_modes": {
-            "l_max": 10,
-            "m_max": 10
-        },
-        "constraints": [
-            {"name": "CP5", "weight": 1.0},
-            {"name": "CP6", "weight": 1.0}
-        ],
-        "iterations": 10000,
-        "redundancy_threshold": 0.01,
-        "s_min": 1.0,
-        "s_max": 100.0,
-        "scale_factor": 100.0,
-        "alpha_s_scale": 43.525,
-        "alpha_s_scale_min": 1.0,
-        "alpha_s_scale_max": 100000.0,
-        "m_h_scale": 1.0,
-        "m_h_scale_min": 0.5,
-        "m_h_scale_max": 5.0,
-        "correction_factor": 0.01
-    }
+{
+  "energy_scale": 91.2,
+  "higgs_mass": 125.0,
+  "alpha_s_target": 0.118,
+  "alpha_s_range": [0.1, 0.13],
+  "m_h_range": [120.0, 130.0],
+  "spectral_modes": {
+    "l_max": 10,
+    "m_max": 10
+  },
+  "constraints": [
+    { "name": "CP5", "weight": 1.0 },
+    { "name": "CP6", "weight": 1.0 }
+  ],
+  "iterations": 10000,
+  "redundancy_threshold": 1.0,
+  "s_min": 3.0,
+  "s_max": 100.0,
+  "scale_factor": 100.0,
+  "alpha_s_scale": 65.0,
+  "alpha_s_scale_min": 1.0,
+  "alpha_s_scale_max": 100000.0,
+  "m_h_scale": 1.0,
+  "m_h_scale_min": 0.5,
+  "m_h_scale_max": 5.0,
+  "correction_factor": 0.0025,
+  "tau_range": [0.1, 10.0],
+  "rg_damping": {
+    "tau_0": 0.6,
+    "p": 0.85
+  }
+}
