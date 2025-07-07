@@ -15,8 +15,8 @@
 #   - results.csv: α_s (Script 01), Y_lm_norm (Script 05).
 # Outputs:
 #   - results.csv: Stores mass_drift_metric, oscillation_metric, timestamp.
-#   - img/test_heatmap_bec.png: Plot of S_thermo for BEC drift.
-#   - img/test_heatmap_osc.png: Plot of P_ee for neutrino oscillations.
+#   - img/09_test_heatmap_bec.png: Plot of S_thermo for BEC drift.
+#   - img/09_test_heatmap_osc.png: Plot of P_ee for neutrino oscillations.
 #   - errors.log: Logs errors.
 # References:
 #   - BEC: PhysRevLett.126.173403 (2021)
@@ -222,7 +222,7 @@ def main():
         # Simulate BEC mass drift
         print(f"[09_test_proposal_sim.py] Simulating BEC drift (α_s={alpha_s:.3f}, freq={freq}, T={time_steps})")
         bec_mass, mass_metric, S_thermo = simulate_bec_drift(alpha_s, freq, time_steps, y_lm_norm)
-        save_heatmap(S_thermo, 'test_heatmap_bec.png', 'Time Step', 'S_thermo', 'BEC Entropic Drift Pattern')
+        save_heatmap(S_thermo, '09_test_heatmap_bec.png', 'Time Step', 'S_thermo', 'BEC Entropic Drift Pattern')
         status_mass = "PASS" if mass_metric <= mass_threshold else "FAIL"
         print(f"[09_test_proposal_sim.py] mass_drift_metric = {mass_metric:.6f} "
               f"(threshold {mass_threshold:.6f}) → {status_mass}")
@@ -231,7 +231,7 @@ def main():
         # Simulate neutrino oscillations
         print(f"[09_test_proposal_sim.py] Simulating neutrino oscillations (runs={runs})")
         L, osc_pattern, osc_metric = simulate_neutrino_osc(config, runs, y_lm_norm)
-        save_heatmap(osc_pattern, 'test_heatmap_osc.png', 'L Index', 'P_ee', 'Neutrino Survival Probability')
+        save_heatmap(osc_pattern, '09_test_heatmap_osc.png', 'L Index', 'P_ee', 'Neutrino Survival Probability')
         status_osc = "PASS" if osc_metric <= osc_threshold else "FAIL"
         print(f"[09_test_proposal_sim.py] oscillation_metric = {osc_metric:.6f} "
               f"(threshold {osc_threshold:.6f}) → {status_osc}")
@@ -252,6 +252,7 @@ def main():
     print(f"BEC Mass Drift Metric: {mass_metric:.6f} (threshold {mass_threshold:.6f}, status: {status_mass})")
     print(f"Neutrino Oscillation Metric: {osc_metric:.6f} (threshold {osc_threshold:.6f}, status: {status_osc})")
     print(f"Status: {'PASS' if status_mass == 'PASS' and status_osc == 'PASS' else 'FAIL'}")
+    print(f"Plots: 09_test_heatmap_bec.png, 09_test_heatmap_osc.png")
     print("=====================================")
 
 if __name__ == "__main__":

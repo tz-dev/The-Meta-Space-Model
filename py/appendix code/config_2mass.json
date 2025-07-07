@@ -1,0 +1,7 @@
+{
+    "expected_source_density": 200.0,
+    "thresholds": {"local_source_density": 100.0},
+    "ra_bins": 36,
+    "dec_bins": 18,
+    "min_count": 200
+}

@@ -13,7 +13,7 @@
 #   - config_cy3*.json: Configuration file with cy3_metric, resolution, complex_structure_moduli (psi, phi).
 # Outputs:
 #   - results.csv: Stores holonomy_norm, metric, psi, phi, timestamp.
-#   - img/cy3_holonomy_heatmap.png: Heatmap of |basis|.
+#   - img/06_cy3_holonomy_heatmap.png: Heatmap of |basis|.
 #   - errors.log: Logs debug and error messages.
 # Dependencies: numpy, matplotlib, json, glob, csv, logging, tqdm
 
@@ -84,7 +84,7 @@ def compute_holonomy_basis(resolution, psi, phi):
     print(f"[06_cy3_spectral_base.py] Computed holonomy norm = {norm:.6e}")
     return basis, norm
 
-def save_heatmap(basis, filename='cy3_holonomy_heatmap.png'):
+def save_heatmap(basis, filename='06_cy3_holonomy_heatmap.png'):
     """
     Generate and save heatmap of SU(3)-holonomy basis.
     Args:
@@ -177,6 +177,7 @@ def main():
     print(f"Postulates: CP8, EP2, EP7")
     print(f"Computed holonomy_norm: {norm:.6f} (range [1e3, 1e6])")
     print(f"Status: {status}")
+    print(f"Plot: 06_cy3_holonomy_heatmap.png")
     print("=====================================")
 
 if __name__ == "__main__":

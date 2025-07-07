@@ -11,7 +11,7 @@
 #   - config_s3*.json: Configuration file with spectral_modes (l_max, m_max), resolution.
 # Outputs:
 #   - results.csv: Stores Y_lm_norm, l_max, m_max, timestamp.
-#   - img/s3_spectral_heatmap.png: Heatmap of |Y_lm|.
+#   - img/05_s3_spectral_heatmap.png: Heatmap of |Y_lm|.
 #   - errors.log: Logs debug and error messages.
 # Dependencies: numpy, matplotlib, scipy.special, json, glob, csv, logging, tqdm
 
@@ -144,7 +144,7 @@ def main():
         pbar.update(1)
         
         # Generate and save heatmap
-        save_heatmap(Y, 's3_spectral_heatmap.png')
+        save_heatmap(Y, '05_s3_spectral_heatmap.png')
         pbar.update(1)
     
     # Write results to CSV
@@ -160,6 +160,7 @@ def main():
     print(f"Postulates: CP8")
     print(f"Computed Y_lm_norm: {norm:.6f} (range [1e3, 1e6])")
     print(f"Status: {status}")
+    print(f"Plot: 05_s3_spectral_heatmap.png")
     print("=====================================")
 
 if __name__ == "__main__":

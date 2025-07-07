@@ -205,7 +205,7 @@ def main():
         pbar.update(1)
         
         # Generate and save heatmap
-        save_heatmap(psi_alpha, 'higgs_field_heatmap.png')
+        save_heatmap(psi_alpha, '03_higgs_field_heatmap.png')
         pbar.update(1)
     
     # Validate stability per CP6
@@ -225,6 +225,7 @@ def main():
     print(f"Computed m_H: {m_h:.4f} GeV (target {config['m_h_target']:.4f} GeV, Δ={deviation:.4f})")
     print(f"Stability Metric: {stability_metric:.4f} (threshold {stability_threshold}, Δ={abs(stability_metric - 0.5):.4f})")
     print(f"Status: {status}")
+    print(f"Plot: 03_higgs_spectral_field.png")
     print("=====================================")
     
 if __name__ == "__main__":

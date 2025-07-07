@@ -19,7 +19,7 @@
 #   - results.csv: Historical data from other scripts.
 # Outputs:
 #   - results.csv: Stores Ω_DM, scaling_metric, deviation, timestamp.
-#   - img/cosmo_heatmap.png: Heatmap of |∇_τ S_scaled|.
+#   - img/08_cosmo_heatmap.png: Heatmap of |∇_τ S_scaled|.
 #   - errors.log: Logs errors.
 # Dependencies: numpy, matplotlib, json, glob, csv, logging, tqdm
 
@@ -76,7 +76,7 @@ def load_csv_data():
                     data[script][param] = float(row[2]) if row[2] and row[2].replace('.', '').replace('-', '').replace('e', '').isdigit() else row[2]
     return data
 
-def save_heatmap(data, fname='cosmo_heatmap.png'):
+def save_heatmap(data, fname='08_cosmo_heatmap.png'):
     """
     Generate and save heatmap of scaled entropic gradient |∇_τ S_scaled|.
     Args:
@@ -179,6 +179,7 @@ def main():
     print(f"Scaling Metric: {scale_metric:.4f} (threshold {thresh:.4f})")
     print(f"Dark Matter Length Scale (ℓ_D adjusted): {l_d_adjusted}")
     print(f"Status: {status}")
+    print(f"Plots: 08_cosmo_heatmap.png")
     print("=====================================")
 
 if __name__ == "__main__":

@@ -12,7 +12,10 @@
     "alpha_s_tau_1gev": 0.30,
     "I_mu_nu_target": 0.0,
     "z_mean_avg": 0.0,
-    "z_mean_std": 0.0
+    "z_mean_std": 0.0,
+    "alpha_s_tau_rg": 0.30,
+    "local_source_density": 200.0,
+    "rho_crit_ratio": 1.0
   },
   "thresholds": {
     "alpha_s": 0.005,
@@ -26,6 +29,9 @@
     "alpha_s_tau_1gev": 0.05,
     "I_mu_nu_threshold": 1.0,
     "z_mean_avg": 0.1,
-    "z_mean_std": 0.1
+    "z_mean_std": 0.1,
+    "alpha_s_tau_rg": 0.05,
+    "local_source_density": 100.0,
+    "rho_crit_ratio": 0.12
   }
 }

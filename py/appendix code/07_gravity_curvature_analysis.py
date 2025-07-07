@@ -1,7 +1,26 @@
 # Script: 07_gravity_curvature_analysis.py
-# Description: Combines gravitational tensor estimation via entropic gradients
-#   and curvature estimation via Laplacian of S(x, y, tau) on M_meta = S^3 x CY_3 x R_tau.
-#   Consolidates Scripts 07 and 07a for unified curvature validation in MSM.
+# Description: Unified curvature and gravitational tensor estimation for the Meta-Space Model (MSM).
+#              Combines entropic gradient-based tensor evaluation with Laplacian-based curvature extraction 
+#              over the manifold M_meta = S³ × CY₃ × ℝ_τ. Integrates and replaces prior Scripts 07 and 07a.
+# Author: MSM Enhancement
+# Date: 2025-07-07
+# Version: 2.0
+# Inputs:
+#     - config_grav.json: Contains entropy tensor synthesis parameters (shape, σ, threshold, etc.).
+#     - config_empirical.json: Provides empirical target/threshold for I_μν validation.
+#     - results.csv: Used to extract Y_lm_norm and to store new validation metrics.
+#     - img/s_field.npy: Numpy array of scalar field S(x, y, τ) from spectral base scripts.
+# Outputs:
+#     - img/07_grav_field_heatmap.png: Heatmap of the best-fit gravitational tensor |I_μν|.
+#     - results.csv: Appended with stability and curvature validation metrics.
+#     - Terminal summary and logging output.
+# Dependencies:
+#     - numpy, matplotlib, scipy.ndimage: Numerical & visualization.
+#     - json, csv, datetime, os, platform, logging: I/O and system utilities.
+#     - tqdm: Optional, progress bars for batch tensor generation.
+# Purpose:
+#     - Establish entropic-tensor-based gravitational proxy on emergent S³ × CY₃ × ℝ_τ.
+#     - Validate geometric stability (grad S), curvature coherence (Laplacian S), and compatibility with empirical data (I_μν).
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -123,7 +142,7 @@ def compute_entropy_gradient_tensor(cfg):
     plt.imshow(np.abs(best_tensor), cmap='cividis', origin='lower')
     plt.colorbar(label='|I_mu_nu|')
     plt.title('Gravitational Field Tensor I_mu_nu')
-    plt.savefig('img/grav_field_heatmap.png')
+    plt.savefig('img/07_grav_field_heatmap.png')
     plt.close()
 
     print(f"[Gravity] Stability = {best_stability:.4f}, Deviation = {best_deviation:.6f}, Threshold = {threshold:.4f}")
@@ -147,6 +166,7 @@ def main():
     print("Postulates: CP1–3, CP6, EP8")
     print(f"Stability Metric: {stability:.4f} (Target ≥ 0.5)")
     print(f"Curvature Estimate I_mu_nu = {I_mu_nu:.3e}")
+    print(f"Plots: 07_grav_field_heatmap.png")
     print("=====================================")
 
 if __name__ == "__main__":

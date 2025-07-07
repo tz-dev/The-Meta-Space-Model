@@ -24,6 +24,7 @@ logging.basicConfig(
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
+# Globale Definitionen
 SCRIPTS = [
     "01_qcd_spectral_field.py",
     "02_monte_carlo_validator.py",
@@ -34,8 +35,50 @@ SCRIPTS = [
     "07_gravity_curvature_analysis.py",
     "08_cosmo_entropy_scale.py",
     "09_test_proposal_sim.py",
-    "10_external_data_validator.py"
+    "10_external_data_validator.py",
+    "11_2mass_psc_validator.py",
+    "12_meta_test_validator.py"
 ]
+
+ALL_SCRIPTS = [
+    "01_qcd_spectral_field.py",
+    "02_monte_carlo_validator.py",
+    "03_higgs_spectral_field.py",
+    "04_empirical_validator.py",
+    "05_s3_spectral_base.py",
+    "06_cy3_spectral_base.py",
+    "07_gravity_curvature_analysis.py",
+    "08_cosmo_entropy_scale.py",
+    "09_test_proposal_sim.py",
+    "10_external_data_validator.py",
+    "10a_plot_z_sky_mean.py",
+    "10b_neutrino_analysis.py",
+    "10c_rg_entropy_flow.py",
+    "10d_entropy_map.py",
+    "10e_parameter_scan.py",
+    "11_2mass_psc_validator.py",
+    "12_meta_test_validator.py"
+]
+
+SCRIPT_WEIGHTS = {
+    "01_qcd_spectral_field.py": 1,
+    "02_monte_carlo_validator.py": 2,
+    "03_higgs_spectral_field.py": 3,
+    "04_empirical_validator.py": 4,
+    "05_s3_spectral_base.py": 5,
+    "06_cy3_spectral_base.py": 6,
+    "07_gravity_curvature_analysis.py": 7,
+    "08_cosmo_entropy_scale.py": 8,
+    "09_test_proposal_sim.py": 9,
+    "10_external_data_validator.py": 10,
+    "10a_plot_z_sky_mean.py": 11,
+    "10b_neutrino_analysis.py": 12,
+    "10c_rg_entropy_flow.py": 13,
+    "10d_entropy_map.py": 14,
+    "10e_parameter_scan.py": 15,
+    "11_2mass_psc_validator.py": 16,
+    "12_meta_test_validator.py": 17
+}
 
 CONFIG_MAP = {
     "01_qcd": "config_qcd.json",
@@ -47,7 +90,9 @@ CONFIG_MAP = {
     "07_grav": "config_grav.json",
     "08_cosmo": "config_cosmo.json",
     "09_test": "config_test.json",
-    "10_external": "config_external.json"
+    "10_external": "config_external.json",
+    "11_2mass": "config_2mass.json",
+    "12_meta" : "12_meta_test_validator.py"
 }
 
 REQUIRED_PACKAGES = sorted(set([
@@ -106,19 +151,7 @@ def run_script(script_name, output_widget, progress_bar, buttons):
                 rows = list(csv.reader(f))
             # Filter out rows for the current script
             filtered = [row for row in rows if script_name not in row[0]]
-            # Sort remaining rows by script name (case-insensitive, respecting SCRIPTS order)
-            def sort_key(row):
-                if not row or len(row) == 0:
-                    return (len(SCRIPTS), '')
-                script_name = row[0].lower()
-                try:
-                    for i, script in enumerate(SCRIPTS):
-                        if script.lower().startswith(script_name):
-                            return (i, script_name)
-                    return (len(SCRIPTS), script_name)
-                except:
-                    return (len(SCRIPTS), script_name)
-            filtered.sort(key=sort_key)
+            filtered.sort(key=sort_key)  # Sort using the global sort_key
             with open("results.csv", "w", newline='', encoding="utf-8") as f:
                 writer = csv.writer(f)
                 writer.writerows(filtered)
@@ -194,6 +227,28 @@ def run_script(script_name, output_widget, progress_bar, buttons):
 
     threading.Thread(target=task, daemon=True).start()
 
+def sort_key(row):
+    global SCRIPT_WEIGHTS, ALL_SCRIPTS
+    
+    if not row or len(row) == 0:
+        return (999, '', 999, 0)  # Push invalid to end with default weight
+    
+    name = row[0].lower()
+    try:
+        prefix = name.split("_")[0]  # e.g., '10a', '10', '11'
+        digits = ''.join(filter(str.isdigit, prefix))  # Extract digits (e.g., '10')
+        letters = ''.join(filter(str.isalpha, prefix))  # Extract letters (e.g., 'a' from '10a')
+        num = int(digits) if digits else 999
+        # Use letters directly for alphabetical sorting, empty string for no subscript
+        letter_sort = letters if letters else ''
+        # Fallback to ALL_SCRIPTS index only for unknown scripts or duplicates
+        sub_idx = ALL_SCRIPTS.index(name) if name in ALL_SCRIPTS else float('inf')
+        # Use weight from SCRIPT_WEIGHTS, default to 0 for unknown scripts
+        weight = SCRIPT_WEIGHTS.get(name, 0)
+        return (num, letter_sort, sub_idx, weight)
+    except:
+        return (999, '', float('inf'), 0)  # Fallback for errors with default weight
+
 def show_results(output_widget):
     fixed_headers = ['script', 'parameter', 'value', 'target', 'deviation', 'timestamp']
     try:
@@ -213,31 +268,20 @@ def show_results(output_widget):
         if not data:
             raise ValueError("CSV is empty")
         
-        # Validate header
+        # Validate and clean header
         header = data[0]
         if header != fixed_headers:
             logging.warning(f"Invalid header in results.csv: {header}. Expected: {fixed_headers}")
-            # Do not overwrite file to avoid data loss; assume other functions maintain header
-            header = fixed_headers  # Use fixed_headers for display
+            data[0] = fixed_headers  # Replace invalid header with fixed_headers
         
-        # Filter valid rows (must have at least as many columns as header)
-        rows = [row for row in data[1:] if row and len(row) >= len(fixed_headers)]
+        # Filter valid rows and remove empty lines or duplicate headers
+        rows = []
+        for row in data[1:]:
+            if row and len(row) >= len(fixed_headers) and row != fixed_headers:
+                rows.append(row)
         logging.info(f"Read {len(data)-1} rows from results.csv, {len(rows)} valid after filtering")
         
-        # Sort rows by first column (script name), respecting SCRIPTS order
-        def sort_key(row):
-            if not row or len(row) == 0:
-                return (len(SCRIPTS), '')  # Push invalid rows to the end
-            script_name = row[0].lower()
-            try:
-                # Find index of script_name in SCRIPTS for stable ordering
-                for i, script in enumerate(SCRIPTS):
-                    if script.lower().startswith(script_name):
-                        return (i, script_name)
-                return (len(SCRIPTS), script_name)  # Unknown scripts to the end
-            except:
-                return (len(SCRIPTS), script_name)  # Fallback for errors
-        
+        # Sort rows by first column (script name) using the same sort_key
         rows.sort(key=sort_key)
         
         # Generate table without duplicating header in last line
@@ -322,7 +366,15 @@ def is_script_enabled(index):
 def create_gui():
     root = tk.Tk()
     root.title("MSM Script Suite")
-    root.geometry("1400x700")
+    # Center the window on the screen
+    root.update_idletasks()
+    screen_width = root.winfo_screenwidth()
+    screen_height = root.winfo_screenheight()
+    window_width = 1500
+    window_height = 800
+    position_x = (screen_width // 2) - (window_width // 2)
+    position_y = (screen_height // 2) - (window_height // 2)
+    root.geometry(f"{window_width}x{window_height}+{position_x}+{position_y}")
 
     button_frame = tk.Frame(root)
     button_frame.pack(side=tk.LEFT, fill=tk.Y, padx=10, pady=10)
@@ -347,6 +399,39 @@ def create_gui():
         height=OUTPUT_HEIGHT
     )
     output_text.pack(fill=tk.BOTH, expand=True)
+
+    output_text.configure(state='normal')
+    output_text.insert(tk.END,
+        "\n\n\n\n                                     __  __   ____    __  __     ____                  _           _       ____            _   _          \n"
+        "                                    |  \\/  | / ___|  |  \\/  |   / ___|    ___   _ __  (_)  _ __   | |_    / ___|   _   _  (_) | |_    ___ \n"
+        "                                    | |\\/| | \\___ \\  | |\\/| |   \\___ \\   / __| | '__| | | | '_ \\  | __|   \\___ \\  | | | | | | | __|  / _ \\\n"
+        "                                    | |  | |  ___) | | |  | |    ___) | | (__  | |    | | | |_) | | |_     ___) | | |_| | | | | |_  |  __/\n"
+        "                                    |_|  |_| |____/  |_|  |_|   |____/   \\___| |_|    |_| | .__/   \\__|   |____/   \\__,_| |_|  \\__|  \\___|\n"
+        "                                                                                          |_|                                                \n\n"
+        "                                    Welcome to the MSM Script Suite!\n\n"
+        "                                    This application provides a graphical interface to run and manage the Meta-Space Model (MSM) simulation scripts.\n\n"
+        "                                    FEATURES:\n\n"
+        "                                    - Run scripts 01 to 12 sequentially based on results.csv.\n"
+        "                                    - View real-time output, code, and JSON configuration in the text area.\n"
+        "                                    - Install required packages or open the image folder with dedicated buttons.\n"
+        "                                    - Check the progress bar to track script execution and package installation.\n"
+        "                                    - Adjust font size with A+ and A- buttons.\n\n"
+        "                                    INSTRUCTIONS:\n\n"
+        "                                    - Click a script button to run it (enabled ONLY after the previous script succeeds).\n"
+        "                                    - Click 'Show results.csv' to check or 'Reset results.csv' to clear calculated values.\n"
+        "                                    - Check plotted diagrams by clicking the 'Open Image Folder' button.\n\n"
+        "                                    EXTERNAL DATA REQUIREMENTS:\n\n"
+        "                                    - For script 10 ('10_external_data_validator.py'), download the SDSS spectral catalog:\n"
+        "                                      https://data.sdss.org/sas/dr17/sdss/spectro/redux/specObj-dr17.fits\n"
+        "                                      → Place the file in the script directory before execution.\n\n"
+        "                                    - For script 11 ('11_2mass_psc_validator.py'), download 2MASS All-Sky PSC archive files from:\n"
+        "                                      https://irsa.ipac.caltech.edu/2MASS/download/allsky/\n"
+        "                                      → Unpack any number of downloaded tiles into the script directory.\n\n"
+        "                                    PLEASE NOTE: '04_empirical_validator.py' can be rerun after scripts 05–11 for validation."
+    )
+    output_text.configure(state='disabled')
+
+    CONTENT["Output"] = output_text.get('1.0', tk.END)
 
     progress_bar = ttk.Progressbar(output_frame, length=400, mode='determinate')
     progress_bar.pack(fill=tk.X, pady=(5, 10))
@@ -376,7 +461,7 @@ def create_gui():
     tk.Button(control_frame, text="Output", command=lambda: switch_view("Output", output_text)).pack(side=tk.LEFT, padx=5)
     tk.Button(control_frame, text="Code", command=lambda: switch_view("Code", output_text)).pack(side=tk.LEFT, padx=5)
     tk.Button(control_frame, text="Config", command=lambda: switch_view("Config", output_text)).pack(side=tk.LEFT, padx=5)
-    tk.Label(control_frame, text="PLEASE NOTE: '04_empirical_validator.py' can be run again after scripts 05-09 to validate new calculated values.", font=("Arial", 10)).pack(side=tk.LEFT, padx=5)
+    tk.Label(control_frame, text="PLEASE NOTE: '04_empirical_validator.py' can be rerun after scripts 05–11 for validation.", font=("Arial", 10)).pack(side=tk.LEFT, padx=5)
     tk.Button(control_frame, text="A+", command=lambda: adjust_font(output_text, 1)).pack(side=tk.RIGHT, padx=5)
     tk.Button(control_frame, text="A -", command=lambda: adjust_font(output_text, -1)).pack(side=tk.RIGHT, padx=5)
 

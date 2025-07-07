@@ -1,11 +1,12 @@
 {
   "targets": {
-    "local_DM_density": 0.486
+    "local_DM_density": 0.11
   },
   "thresholds": {
     "local_DM_density": 0.12
   },
   "expected_dm_density": 0.11,
+  "Omega_DM": 0.268,
   "z_max": 0.5,
   "hist_bins": 80,
   "hist_range": [0.05, 0.5],
@@ -28,5 +29,7 @@
     "bin_min_stars": 150,
     "sigma_v_max": 80.0,
     "pm_kms_max": 300.0
-  }
+  },
+  "density_threshold_base": 0.7,
+  "oscillation_metric": 0.05
 }

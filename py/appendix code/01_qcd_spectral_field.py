@@ -231,7 +231,7 @@ def main():
         pbar.update(1)
 
     # Generate and save heatmap
-    plot_heatmap(y_lm, 'qcd_spectral_heatmap.png')
+    plot_heatmap(y_lm, '01_qcd_spectral_heatmap.png')
     
     # Write results to CSV
     write_results(alpha_s, r_pi)
@@ -247,6 +247,7 @@ def main():
     print(f"Computed α_s: {alpha_s:.6f} (target {alpha_s_target:.6f}, Δ={deviation:.6f})")
     print(f"Computed R_π: {r_pi:.6f} (threshold {config['redundancy_threshold']})")
     print(f"Status: {'PASS' if deviation < 0.005 and r_pi < config['redundancy_threshold'] else 'FAIL'}")
+    print(f"Plots: 01_qcd_spectral_heatmap.png")
     print("=====================================")
 
 if __name__ == "__main__":

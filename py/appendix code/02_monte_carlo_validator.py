@@ -24,7 +24,7 @@
 #     alpha_s_range, m_h_range, constraints, redundancy_threshold, s_min, spectral_modes (l_max, m_max).
 # Outputs:
 #   - results.csv: Logs α_s, m_H, R_π, α_s(τ≈1 GeV⁻¹), deviations, timestamp.
-#   - img/monte_carlo_heatmap.png: Heatmap of |S(x,τ)|.
+#   - img/02_monte_carlo_heatmap.png: Heatmap of |S(x,τ)| and 02_alpha_s_tau.png.
 #   - img/s_field.npy: Raw field data.
 #   - errors.log: Logs execution errors and validation issues.
 
@@ -235,9 +235,9 @@ def plot_heatmap(field, alpha_s, m_h):
     plt.colorbar(label='|S(x,τ)|')
     plt.title(f'Monte-Carlo Field Config (α_s={alpha_s:.3f}, m_H={m_h:.1f} GeV)')
     os.makedirs('img', exist_ok=True)
-    plt.savefig('img/monte_carlo_heatmap.png')
+    plt.savefig('img/02_monte_carlo_heatmap.png')
     plt.close()
-    print(f"[02_monte_carlo_validator.py] Heatmap saved → img/monte_carlo_heatmap.png")
+    print(f"[02_monte_carlo_validator.py] Heatmap saved → img/02_monte_carlo_heatmap.png")
 
 def plot_alpha_s_tau(tau, alpha_s_tau):
     """
@@ -252,9 +252,9 @@ def plot_alpha_s_tau(tau, alpha_s_tau):
     plt.title(r"Renormalization Group Flow: $\alpha_s(\tau)$")
     plt.legend()
     os.makedirs('img', exist_ok=True)
-    plt.savefig('img/alpha_s_tau.png')
+    plt.savefig('img/02_alpha_s_tau.png')
     plt.close()
-    print(f"[02_monte_carlo_validator.py] RG plot saved → img/alpha_s_tau.png")
+    print(f"[02_monte_carlo_validator.py] RG plot saved → img/02_alpha_s_tau.png")
 
 def write_results(alpha_s, m_h, r_pi, alpha_target, m_h_target, alpha_s_tau, tau):
     """
@@ -334,7 +334,7 @@ def main():
     print(f"Computed R_π: {r_pi:.6f} (threshold {threshold})")
     print(f"Computed α_s(τ≈1 GeV⁻¹): {alpha_s_tau[np.argmin(np.abs(tau - 1.0))]:.6f} (target 0.30, Δ={abs(alpha_s_tau[np.argmin(np.abs(tau - 1.0))] - 0.30):.6f})")
     print(f"Status: {'PASS' if abs(alpha_s - alpha_target) < 0.005 and abs(m_h - m_h_target) < 0.5 and r_pi < threshold and abs(alpha_s_tau[np.argmin(np.abs(tau - 1.0))] - 0.30) < 0.05 else 'FAIL'}")
-    print(f"Plots: monte_carlo_heatmap.png, alpha_s_tau.png")
+    print(f"Plots: 02_monte_carlo_heatmap.png, 02_alpha_s_tau.png")
     print("=====================================")
 
 if __name__ == "__main__":

@@ -28,9 +28,9 @@
 #   - img/psi_alpha.npy: Field data from Scripts 03/06a.
 # Outputs:
 #   - results.csv: Appended validation summary (parameter, value, target, deviation, timestamp).
-#   - img/validation_bar_plot.png: Bar plot of deviations with thresholds.
-#   - img/validation_s_field_heatmap.png: Heatmap of s_field.
-#   - img/validation_psi_alpha_heatmap.png: Heatmap of psi_alpha.
+#   - img/04_validation_bar_plot.png: Bar plot of deviations with thresholds.
+#   - img/04_validation_s_field_heatmap.png: Heatmap of s_field.
+#   - img/04_validation_psi_alpha_heatmap.png: Heatmap of psi_alpha.
 #   - errors.log: Logs errors and validation info.
 # Dependencies: numpy, matplotlib, csv, json, glob, logging, tqdm
 
@@ -228,9 +228,9 @@ def plot_deviations(validated):
     plt.xticks(rotation=45)
     plt.tight_layout()
     os.makedirs('img', exist_ok=True)
-    plt.savefig('img/validation_bar_plot.png')
+    plt.savefig('img/04_validation_bar_plot.png')
     plt.close()
-    print(f"[04_empirical_validator.py] Bar plot saved -> img/validation_bar_plot.png")
+    print(f"[04_empirical_validator.py] Bar plot saved -> img/04_validation_bar_plot.png")
 
 def plot_heatmaps():
     """Load and plot heatmaps for s_field.npy and psi_alpha.npy if available."""
@@ -243,9 +243,9 @@ def plot_heatmaps():
         plt.imshow(np.abs(s_field), cmap='viridis', origin='lower')
         plt.colorbar(label='|s_field| (Script 02)')
         plt.title('Validation: s_field Heatmap')
-        plt.savefig('img/validation_s_field_heatmap.png')
+        plt.savefig('img/04_validation_s_field_heatmap.png')
         plt.close()
-        print(f"[04_empirical_validator.py] s_field heatmap saved -> img/validation_s_field_heatmap.png")
+        print(f"[04_empirical_validator.py] s_field heatmap saved -> img/04_validation_s_field_heatmap.png")
     else:
         logging.info("s_field.npy not found; skipping its heatmap")
     
@@ -256,9 +256,9 @@ def plot_heatmaps():
         plt.imshow(np.abs(psi), cmap='plasma', origin='lower')
         plt.colorbar(label='|psi_alpha| (Scripts 03/06a)')
         plt.title('Validation: psi_alpha Heatmap')
-        plt.savefig('img/validation_psi_alpha_heatmap.png')
+        plt.savefig('img/04_validation_psi_alpha_heatmap.png')
         plt.close()
-        print(f"[04_empirical_validator.py] psi_alpha heatmap saved -> img/validation_psi_alpha_heatmap.png")
+        print(f"[04_empirical_validator.py] psi_alpha heatmap saved -> img/04_validation_psi_alpha_heatmap.png")
     else:
         logging.info("psi_alpha.npy not found; skipping its heatmap")
 
@@ -311,7 +311,6 @@ def main():
         plot_heatmaps()
         pbar.update(1)
 
-
     # Manuelle Ergänzung: I_mu_nu aus Script 07 validieren
     if any(e['parameter'] == 'I_mu_nu' for e in entries):
         try:
@@ -349,13 +348,15 @@ def main():
         print(f"- {v['parameter']}: value={v['value']:.6f}, target={target_str}, "
               f"Δ={v['deviation']:.6f}, threshold={v['threshold']:.6f}, status={v['status']}")
 
-    internal = [v for v in validated if not v['parameter'].startswith('z_mean') and v['parameter'] != 'local_dm_density']
-    external = [v for v in validated if v['parameter'].startswith('z_mean') or v['parameter'] == 'local_dm_density']
+    # Classify parameters as internal or external based on script origin
+    internal = [v for v in validated if not any(e['script'].startswith('10') for e in entries if e['parameter'] == v['parameter'])]
+    external = [v for v in validated if any(e['script'].startswith('10') for e in entries if e['parameter'] == v['parameter'])]
     internal_status = all(v['status'] == 'PASS' for v in internal)
     external_status = all(v['status'] == 'PASS' for v in external)
 
     print(f"Internal Model Status: {'PASS' if internal_status else 'FAIL'}")
     print(f"Empirical Data Status: {'PASS' if external_status else 'FAIL'}")
+    print(f"Plots: 04_validation_bar_plot.png, 04_validation_s_field_heatmap.png, 04_validation_psi_alpha_heatmap.png")
     print("=====================================")
 
 if __name__ == "__main__":
