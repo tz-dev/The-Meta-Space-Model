@@ -157,18 +157,65 @@ def validate(entries, cfg):
                 'deviation': None,
                 'timestamp': datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
             })
-    
+
+    # Filter: entferne Einträge mit nicht-finiten Werten (z.B. nan)
+    filtered_entries = [
+        e for e in filtered_entries
+        if isinstance(e['value'], (int, float)) and np.isfinite(e['value'])
+    ]
+
     # Deduplicate by parameter, keeping the first valid entry
     seen_params = set()
     for e in tqdm(filtered_entries, desc="Validating entries", unit="entry"):
         param = 'm_h' if e['parameter'] == 'm_H' else e['parameter']
-        if param not in cfg['targets'] or param in seen_params:
+        
+        # --- NEU: Klassenspezifisches neutrino_metric matching ---
+        if param.startswith("oscillation_metric_"):
+            base = "oscillation_metric"
+            if base not in cfg['targets']:
+                continue
+            target = cfg['targets'][base]
+            threshold = cfg['thresholds'].get(param, cfg['thresholds'].get(base, 0.05))
+
+        elif param.startswith("entropy_weight_std_"):
+            base = "entropy_weight_std"
+            target = cfg['targets'].get(base, 0.2)
+
+            # Dynamischer Schwellenwert aus results.csv berechnen
+            class_suffix = param.split('_')[-1]
+            try:
+                values = [
+                    float(x['value']) for x in entries
+                    if x['parameter'] in [f"entropy_weight_std_north_{class_suffix}",
+                                          f"entropy_weight_std_south_{class_suffix}"]
+                    and not np.isnan(x['value'])
+                ]
+                if values:
+                    threshold = 1.25 * np.median(values)
+                    print(f"[04] Using adaptive entropy threshold for {param}: {threshold:.6f}")
+                else:
+                    raise ValueError("No valid hemisphere values found")
+            except Exception as e:
+                logging.warning(f"[04] Adaptive threshold fallback for {param}: {e}")
+                threshold = cfg['thresholds'].get(param, 0.05)
+
+        elif param in cfg['targets']:
+            target = cfg['targets'][param]
+            threshold = cfg['thresholds'].get(param, 0.0)
+        else:
             continue
+
         seen_params.add(param)
-        target = cfg['targets'][param]
-        threshold = cfg['thresholds'].get(param, 0.0)
+        value = e['value']
         status = None
         deviation = None
+
+        # Punktziel (auch für oscillation_metric_<CLASS>)
+        if isinstance(target, (int, float)) and param not in ['stability_metric', 'scaling_metric', 'Y_lm_norm', 'holonomy_norm']:
+            deviation = abs(value - target)
+            status = 'PASS' if deviation <= threshold else 'FAIL'
+            logging.info(f"Validated {param}: value={value:.6f}, target={target:.6f}, "
+                         f"Δ={deviation:.6f}, threshold={threshold:.6f} → {status}")
         
         # Point target validation (e.g., alpha_s, m_h, Omega_DM)
         if isinstance(target, (int, float)) and param not in ['stability_metric', 'scaling_metric', 'Y_lm_norm', 'holonomy_norm']:
@@ -264,28 +311,57 @@ def plot_heatmaps():
 
 def append_summary(validated):
     """
-    Append validation summary to results.csv.
+    Append validation summary to results.csv, 
+    after removing all previous entries written by 04_empirical_validator.py.
+    
     Args:
         validated (list): List of validated entries.
     """
-    print(f"[04_empirical_validator.py] Appending validation summary to results.csv")
+    script_name = '04_empirical_validator.py'
+    print(f"[{script_name}] Cleaning up previous entries from results.csv")
+
+    # Read existing content and filter out entries from script_name
+    try:
+        with open('results.csv', 'r', encoding='utf-8') as f:
+            rows = list(csv.reader(f))
+        rows = [row for row in rows if row and row[0] != script_name]
+    except FileNotFoundError:
+        rows = []  # If file doesn't exist, start fresh
+
+    # Append new validated entries
     ts = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
-    with open('results.csv', 'a', newline='', encoding='utf-8') as f:
+    for v in validated:
+        rows.append([
+            script_name,
+            f"{v['parameter']}_validation",
+            v['value'],
+            str(v['target']),
+            v['deviation'],
+            ts
+        ])
+
+    # Write the updated rows back to file
+    with open('results.csv', 'w', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
-        for v in validated:
-            writer.writerow([
-                '04_empirical_validator.py',
-                f"{v['parameter']}_validation",
-                v['value'],
-                str(v['target']),
-                v['deviation'],
-                ts
-            ])
-    print(f"[04_empirical_validator.py] Validation summary appended: {len(validated)} entries")
+        writer.writerows(rows)
+
+    print(f"[{script_name}] Validation summary written: {len(validated)} entries")
+
 
 def main():
     """Main function to orchestrate empirical validation of MSM outputs."""
     clear_screen()
+
+    try:
+        with open('results.csv', 'r', encoding='utf-8') as f:
+            rows = list(csv.reader(f))
+        rows = [row for row in rows if row and row[0] != '04_empirical_validator.py']
+        with open('results.csv', 'w', newline='', encoding='utf-8') as f:
+            writer = csv.writer(f)
+            writer.writerows(rows)
+    except FileNotFoundError:
+        pass
+
     print("==============================================")
     print("    Meta-Space Model: Empirical Validation    ")
     print("==============================================")

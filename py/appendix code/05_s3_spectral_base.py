@@ -121,6 +121,17 @@ def write_results(norm, l_max, m_max):
 
 def main():
     """Main function to orchestrate S^3 spectral basis computation."""
+
+    try:
+        with open('results.csv', 'r', encoding='utf-8') as f:
+            rows = list(csv.reader(f))
+        rows = [row for row in rows if row and row[0] != '05_s3_spectral_heatmap.py']
+        with open('results.csv', 'w', newline='', encoding='utf-8') as f:
+            writer = csv.writer(f)
+            writer.writerows(rows)
+    except FileNotFoundError:
+        pass
+
     clear_screen()
     print("========================================================")
     print("    Meta-Space Model: S^3 Spectral Basis Computation    ")

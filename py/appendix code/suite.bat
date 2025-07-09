@@ -1,4 +1,5 @@
 @echo off
+cls
 setlocal EnableDelayedExpansion
 
 :: Check if Python is installed

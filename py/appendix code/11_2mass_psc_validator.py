@@ -135,6 +135,17 @@ def run_analysis():
     Executes the main analysis pipeline for 2MASS PSC file validation.
     Processes source data, performs sky binning, generates visualizations, and estimates structural consistency.
     """
+
+    try:
+        with open('results.csv', 'r', encoding='utf-8') as f:
+            rows = list(csv.reader(f))
+        rows = [row for row in rows if row and row[0] != '11_2mass_psc_validator.py']
+        with open('results.csv', 'w', newline='', encoding='utf-8') as f:
+            writer = csv.writer(f)
+            writer.writerows(rows)
+    except FileNotFoundError:
+        pass
+
     config = load_config()  # Load configuration settings
     ra_bins = config.get("ra_bins", 36)  # Get number of RA bins, default 36
     dec_bins = config.get("dec_bins", 18)  # Get number of DEC bins, default 18
@@ -191,11 +202,22 @@ def run_analysis():
         if valid_densities:
             update_status(f"Source Density Map: min={np.min(valid_densities):.3f}, max={np.max(valid_densities):.3f}")
 
-        output_path = "z_sky_mean.csv"
+        # Umrechnung von mean_density → mean_z (modellbasiert)
+        # Annahme aus index.html: rho_expected ≈ 0.22 sources/arcmin² ↔ z ≈ 1.0
+        rho_expected = 0.22
+        output_path = "z_sky_mean_2mass.csv"
         with open(output_path, 'w', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
-            writer.writerow(['ra_min', 'ra_max', 'dec_min', 'dec_max', 'count', 'mean_density'])
-            writer.writerows(results)
+            writer.writerow(['ra_min', 'ra_max', 'dec_min', 'dec_max', 'count', 'mean_z', 'mean_density'])
+            for row in results:
+                ra_min, ra_max, dec_min, dec_max, count, mean_density = row
+                if mean_density and not np.isnan(mean_density):
+                    mean_z = mean_density / rho_expected
+                else:
+                    mean_z = ""
+                    mean_density = ""
+                writer.writerow([ra_min, ra_max, dec_min, dec_max, count, mean_z, mean_density])
+
         update_status(f"Sky binning results saved to: {output_path}")
 
     except Exception as e:
@@ -259,13 +281,22 @@ def run_analysis():
     plt.close()
     update_status("Heatmap saved to: img/11_source_density_heatmap.png")
 
-    # Run visualization scripts
-    #if os.path.exists("z_sky_mean.csv"):
-        #run_visualization_script("10a_plot_z_sky_mean.py")
-        #run_visualization_script("10b_neutrino_analysis.py")
-        #run_visualization_script("10c_rg_entropy_flow.py")
+    # Optional: 10a–10e auf z_sky_mean_2mass.csv anwenden
+    if os.path.exists("z_sky_mean_2mass.csv"):
+        for script in [
+            "10a_plot_z_sky_mean.py",
+            "10b_neutrino_analysis.py",
+            "10c_rg_entropy_flow.py",
+            "10d_entropy_map.py",
+            "10e_parameter_scan.py"
+        ]:
+            try:
+                subprocess.run([sys.executable, script, "z_sky_mean_2mass.csv"], check=True)
+                update_status(f"Executed {script} on 2MASS data.")
+            except Exception as e:
+                update_status(f"Warning: Failed to run {script} on 2MASS: {e}")
 
-    #update_status("2MASS PSC analysis completed.")
+    update_status("2MASS PSC analysis completed.")
 
 # Function to perform sky binning analysis
 def perform_sky_bin_analysis(ra_vals, dec_vals, ra_bins, dec_bins, output_path, min_count=200, use_cuda=False):

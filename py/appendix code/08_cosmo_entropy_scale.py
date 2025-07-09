@@ -124,6 +124,17 @@ def write_results(omega_dm, scale_metric, deviation, cfg, l_d_adjusted):
 
 def main():
     """Main function to orchestrate cosmological entropy scaling."""
+
+    try:
+        with open('results.csv', 'r', encoding='utf-8') as f:
+            rows = list(csv.reader(f))
+        rows = [row for row in rows if row and row[0] != '08_cosmo_entropy_scale.py']
+        with open('results.csv', 'w', newline='', encoding='utf-8') as f:
+            writer = csv.writer(f)
+            writer.writerows(rows)
+    except FileNotFoundError:
+        pass
+
     clear_screen()
     print("======================================================")
     print("    Meta-Space Model: Cosmological Entropy Scaling    ")

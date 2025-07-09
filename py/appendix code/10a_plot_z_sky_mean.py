@@ -8,11 +8,28 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+import sys
 from datetime import datetime
 import csv
 
 def main():
-    df = pd.read_csv("z_sky_mean.csv")
+    # Optional: CSV-Dateiname via Argument übergeben
+    input_file = "z_sky_mean.csv"
+
+    if len(sys.argv) > 1:
+        input_file = sys.argv[1]
+
+    class_tag = ""
+    if "galaxy" in input_file.lower():
+        class_tag = "_galaxy"
+    elif "qso" in input_file.lower():
+        class_tag = "_qso"
+
+    if not os.path.exists(input_file):
+        print(f"[10a] Input file {input_file} not found. Aborting.")
+        return
+
+    df = pd.read_csv(input_file)
 
     ra_vals = sorted(set(df["ra_min"]))
     dec_vals = sorted(set(df["dec_min"]))
@@ -39,6 +56,36 @@ def main():
     z_std_north = np.std(z_north) if len(z_north) > 0 else np.nan
     z_mean_south = np.mean(z_south) if len(z_south) > 0 else np.nan
     z_std_south = np.std(z_south) if len(z_south) > 0 else np.nan
+
+    # Welch-Test Nord vs. Süd
+    from scipy.stats import ttest_ind
+    ttest_pval = np.nan
+    z_mean_delta = np.nan
+    if len(z_north) > 1 and len(z_south) > 1:
+        ttest_res = ttest_ind(z_north, z_south, equal_var=False, nan_policy='omit')
+        ttest_pval = ttest_res.pvalue
+        z_mean_delta = z_mean_north - z_mean_south
+        print(f"  Welch-Test Δμ = {z_mean_delta:.6f}, p = {ttest_pval:.3e}")
+
+    # Visualisierung: Δz̄(N–S) über RA
+    delta_z_by_ra = []
+    for ra_bin in ra_vals:
+        z_n = df[(df["ra_min"] == ra_bin) & (df["dec_min"] > 0)]["mean_z"].dropna()
+        z_s = df[(df["ra_min"] == ra_bin) & (df["dec_min"] < 0)]["mean_z"].dropna()
+        if len(z_n) > 0 and len(z_s) > 0:
+            delta = np.mean(z_n) - np.mean(z_s)
+            delta_z_by_ra.append((ra_bin, delta))
+
+    if delta_z_by_ra:
+        ras, deltas = zip(*delta_z_by_ra)
+        plt.figure(figsize=(10, 4))
+        plt.plot(ras, deltas, marker='o')
+        plt.axhline(0, color='gray', linestyle='--')
+        plt.xlabel('Right Ascension [°]')
+        plt.ylabel('Δz̄ (North – South)')
+        plt.title('Hemisphere Redshift Asymmetry by RA')
+        plt.tight_layout()
+        plt.savefig(f"img/10a_z_delta_ns_by_ra{class_tag}.png")
 
     print(f"Isotropy check:")
     print(f"  z̄ min  = {z_min:.3f}")
@@ -76,42 +123,36 @@ def main():
     except Exception as e:
         print(f"Warning: Could not create 'img' directory: {e}")
 
-    plt.savefig("img/10a_z_sky_mean_map.png")
+    plt.savefig(f"img/10a_z_sky_mean_map{class_tag}.png")
 
     # Update results.csv
     results_path = "results.csv"
     script_id = "10a_plot_z_sky_mean.py"
     try:
-        rows = []
-        if os.path.exists(results_path):
-            with open(results_path, "r", encoding="utf-8") as f:
-                reader = csv.reader(f)
-                rows = list(reader)
-            header, *data_rows = rows
-            data_rows = [row for row in data_rows if row[0] != script_id]
-        else:
-            header = ["script", "parameter", "value", "target", "deviation", "timestamp"]
-            data_rows = []
-
+        # Erstelle neue Einträge
         timestamp = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+        suffix = class_tag.upper().replace("_", "")  # "GALAXY" or "QSO"
+
         new_rows = [
-            [script_id, "z_mean_min", z_min, "", "", timestamp],
-            [script_id, "z_mean_max", z_max, "", "", timestamp],
-            [script_id, "z_mean_avg", z_mean, "N/A", "N/A", timestamp],
-            [script_id, "z_mean_std", z_std, "ideal ≈ 0 (isotrop)", "N/A", timestamp],
-            [script_id, "z_mean_north", z_mean_north, "", "", timestamp],
-            [script_id, "z_mean_south", z_mean_south, "", "", timestamp],
-            [script_id, "z_std_north", z_std_north, "", "", timestamp],
-            [script_id, "z_std_south", z_std_south, "", "", timestamp],
+            [script_id, f"z_mean_min_{suffix}", z_min, "", "", timestamp],
+            [script_id, f"z_mean_max_{suffix}", z_max, "", "", timestamp],
+            [script_id, f"z_mean_avg_{suffix}", z_mean, "N/A", "N/A", timestamp],
+            [script_id, f"z_mean_std_{suffix}", z_std, "ideal ≈ 0 (isotrop)", "N/A", timestamp],
+            [script_id, f"z_mean_north_{suffix}", z_mean_north, "", "", timestamp],
+            [script_id, f"z_mean_south_{suffix}", z_mean_south, "", "", timestamp],
+            [script_id, f"z_std_north_{suffix}", z_std_north, "", "", timestamp],
+            [script_id, f"z_std_south_{suffix}", z_std_south, "", "", timestamp],
+            [script_id, f"z_mean_delta_ns_{suffix}", z_mean_delta, "0", abs(z_mean_delta), timestamp],
+            [script_id, f"z_mean_ttest_pval_{suffix}", ttest_pval, "", "", timestamp],
         ]
 
-        with open(results_path, "w", newline="", encoding="utf-8") as f:
+        # Schreibe nur neue Einträge im Append-Modus
+        with open(results_path, "a", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
-            writer.writerow(header)
-            writer.writerows(data_rows + new_rows)
-
+            writer.writerows(new_rows)
+        print(f"[10a] Appended {len(new_rows)} new rows to {results_path}.")
     except Exception as e:
-        print(f"Error updating results.csv: {e}")
+        print(f"[10a] Error updating results.csv: {e}")
 
     # Summary log
     with open("z_sky_isotropy_summary.txt", "w", encoding="utf-8") as f:

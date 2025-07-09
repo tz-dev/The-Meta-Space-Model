@@ -1,38 +1,45 @@
-# Script: 10d_entropy_map.py
-# Description: Generates a 2D entropy-weighted map across RA×DEC sky bins.
-#              Entropy weights are computed from the deviation of mean redshift (z̄)
-#              in each bin relative to the global z̄ distribution. Visualizes spatial coherence
-#              in the cosmological signal via projection-informed entropy structure.
+# Script: 10e_parameter_scan.py
+# Description: Scans neutrino oscillation parameter space (Δm², θ) by computing the
+#              projection-weighted std(P_ee) across redshift-based baselines (z̄ → L).
+#              Results are saved class-wise (GALAXY, QSO, etc.).
 # Author: MSM Enhancement
-# Date: 2025-07-07
-# Version: 1.0
-# Inputs:
-#     - z_sky_mean.csv: Contains RA/DEC bin boundaries and mean redshift per bin.
+# Date: 2025-07-08
+# Version: 1.2
+# Inputs: z_sky_mean_<class>.csv (e.g., z_sky_mean_galaxy.csv)
 # Outputs:
-#     - img/10d_z_entropy_weight_map.png: RA×DEC entropy heatmap for MSM spatial coherence analysis.
-# Dependencies:
-#     - pandas: Data ingestion.
-#     - numpy: Statistical computation.
-#     - matplotlib: Visualization.
-#     - os: Filesystem I/O.
+#     - img/10e_oscillation_scan_heatmap_<class>.png
+#     - results.csv: Appends "oscillation_scan_min_<CLASS>" metric
 # Purpose:
-#     - Evaluate projection-consistent entropy deviations across the sky map.
-#     - Provide an intuitive tool for detecting large-scale anisotropies or systematic distortions.
-#     - Support 10b/10e validation pipeline by offering complementary spatial diagnostics.
+#     - Support EP9, EP12 analysis by constraining oscillation parameters from spatial coherence
 
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
+import csv
+from datetime import datetime
+import sys
 
 def P_ee(L, E, dm2, theta):
     delta = 1.267 * dm2 * L / E
     return 1 - np.sin(2 * theta)**2 * np.sin(delta)**2
 
-def main():
-    df = pd.read_csv("z_sky_mean.csv").dropna(subset=["mean_z"])
-    H0 = 70
-    c = 3e5
+def main(input_csv="z_sky_mean.csv"):
+    if not os.path.exists(input_csv):
+        print(f"[10e] Input file {input_csv} not found. Skipping.")
+        return
+
+    class_name = os.path.basename(input_csv).replace("z_sky_mean_", "").replace(".csv", "").upper()
+    output_plot = f"img/10e_oscillation_scan_heatmap_{class_name.lower()}.png"
+
+    df = pd.read_csv(input_csv).dropna(subset=["mean_z"])
+    if len(df) < 30:
+        print(f"[10e] Warning: Only {len(df)} valid sky bins for {class_name}. Skipping.")
+        return
+
+    print(f"[10e] Loaded {len(df)} bins from {input_csv}. Running parameter scan for {class_name}...")
+    H0 = 70  # km/s/Mpc
+    c = 3e5  # km/s
     df["L_km"] = (c / H0) * df["mean_z"] * 1e6 * 3.086e13
 
     E = 5.0  # MeV
@@ -45,6 +52,7 @@ def main():
             P = P_ee(df["L_km"], E, dm2, theta)
             metric_grid[i, j] = np.std(P)
 
+    # Plot
     plt.figure(figsize=(10, 6))
     im = plt.imshow(
         metric_grid,
@@ -52,44 +60,52 @@ def main():
         aspect="auto",
         cmap="plasma",
         interpolation="none",
-        origin="lower",
-        vmin=-80,
-        vmax=80
+        origin="lower"
     )
     plt.colorbar(im, label="Oscillation Std Dev")
     plt.xlabel("Mixing Angle θ [rad]")
     plt.ylabel("Δm² [eV²]")
-    plt.title("Parameter Scan: Neutrino Oscillation Std Dev")
+    plt.title(f"Parameter Scan: Neutrino Oscillation (CLASS = {class_name})")
     plt.tight_layout()
 
     os.makedirs("img", exist_ok=True)
-    plt.savefig("img/10e_oscillation_scan_heatmap.png")
-    print("Saved parameter scan heatmap to img/10e_oscillation_scan_heatmap.png")
+    plt.savefig(output_plot)
+    plt.close()
+    print(f"[10e] Saved parameter scan heatmap to {output_plot}")
 
-    os.makedirs("img", exist_ok=True)
-    plt.savefig("img/10e_oscillation_scan_heatmap.png")
-
-    # Save best result to results.csv
+    # Best-Fit
     std_min = np.min(metric_grid)
     idx = np.unravel_index(np.argmin(metric_grid), metric_grid.shape)
     best_dm2 = dm2_vals[idx[0]]
     best_theta = theta_vals[idx[1]]
-    from datetime import datetime
     timestamp = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
 
-    with open("results.csv", "a", newline='', encoding='utf-8') as f:
-        import csv
-        writer = csv.writer(f)
-        writer.writerow([
-            "10e_parameter_scan.py",
-            "oscillation_scan_min",
-            std_min,
+    # Ergebnis in results.csv
+    script_id = "10e_parameter_scan.py"
+    param_name = f"oscillation_scan_min_{class_name}"
+    results_path = "results.csv"
+    timestamp = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+
+    try:
+        new_row = [
+            script_id,
+            param_name,
+            f"{std_min:.7f}",
             f"Δm²={best_dm2:.2e}, θ={best_theta:.3f}",
             "",
             timestamp
-        ])
+        ]
 
-    print("Saved parameter scan heatmap to img/10e_oscillation_scan_heatmap.png")
+        with open(results_path, "a", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            # Schreibe Header nur, wenn die Datei leer ist
+            if not os.path.exists(results_path) or os.path.getsize(results_path) == 0:
+                header = ["script", "parameter", "value", "target", "deviation", "timestamp"]
+                writer.writerow(header)
+            writer.writerows([new_row])
+        print(f"[10e] Appended 1 new row to {results_path}.")
+    except Exception as e:
+        print(f"[10e] Error writing to results.csv: {e}")
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1] if len(sys.argv) > 1 else "z_sky_mean.csv")

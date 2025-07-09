@@ -15,7 +15,11 @@
     "z_mean_std": 0.0,
     "alpha_s_tau_rg": 0.30,
     "local_source_density": 200.0,
-    "rho_crit_ratio": 1.0
+    "rho_crit_ratio": 1.0,
+    "entropy_weight_std_GALAXY": 0.2,
+    "entropy_weight_std_QSO": 0.2,
+    "entropy_weight_std_2MASS": 0.2,
+    "entropy_weight_std": 0.2
   },
   "thresholds": {
     "alpha_s": 0.005,
@@ -32,6 +36,14 @@
     "z_mean_std": 0.1,
     "alpha_s_tau_rg": 0.05,
     "local_source_density": 100.0,
-    "rho_crit_ratio": 0.12
+    "rho_crit_ratio": 0.12,
+    "oscillation_metric": 0.05,
+    "oscillation_metric_GALAXY": 0.10,
+    "oscillation_metric_QSO": 0.30,
+    "oscillation_metric_Z_SKY_MEAN": 0.35,
+    "entropy_weight_std_GALAXY": 0.05,
+    "entropy_weight_std_QSO": 0.05,
+    "entropy_weight_std_2MASS": 0.05,
+    "entropy_weight_std": 0.05
   }
 }

@@ -278,6 +278,17 @@ def write_results(alpha_s, m_h, r_pi, alpha_target, m_h_target, alpha_s_tau, tau
 def main():
     """Main function to orchestrate Monte Carlo validation of QCD and Higgs fields."""
     global config
+
+    try:
+        with open('results.csv', 'r', encoding='utf-8') as f:
+            rows = list(csv.reader(f))
+        rows = [row for row in rows if row and row[0] != '02_monte_carlo_validator.py']
+        with open('results.csv', 'w', newline='', encoding='utf-8') as f:
+            writer = csv.writer(f)
+            writer.writerows(rows)
+    except FileNotFoundError:
+        pass
+
     clear_screen()
     print("================================================")
     print("    Meta-Space Model: Monte Carlo Validation    ")

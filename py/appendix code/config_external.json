@@ -1,35 +1,39 @@
 {
-  "targets": {
-    "local_DM_density": 0.11
-  },
-  "thresholds": {
-    "local_DM_density": 0.12
-  },
-  "expected_dm_density": 0.11,
-  "Omega_DM": 0.268,
-  "z_max": 0.5,
-  "hist_bins": 80,
-  "hist_range": [0.05, 0.5],
-  "memmap": true,
-  "save_histogram_csv": true,
-  "histogram_csv_path": "z_histogram.csv",
-  "sky_bin_analysis": true,
-  "sky_output_path": "z_sky_mean.csv",
-  "ra_bins": 36,
-  "dec_bins": 18,
-  "sky_bin_min_count": 200,
-  "apply_z_max_to_sky": true,
-  "gaia_filters": {
-    "parallax_min": 0.1,
-    "pmra_max": 30.0,
-    "pmdec_max": 30.0,
-    "parallax_over_error_min": 2.5,
-    "ruwe_max": 2.0,
-    "phot_g_mean_mag_max": 20.0,
-    "bin_min_stars": 150,
-    "sigma_v_max": 80.0,
-    "pm_kms_max": 300.0
-  },
-  "density_threshold_base": 0.7,
-  "oscillation_metric": 0.05
+    "targets": {
+        "local_DM_density": 0.11
+    },
+    "thresholds": {
+        "local_DM_density": 0.12,
+        "oscillation_metric_GALAXY": 0.10,
+        "oscillation_metric_QSO": 0.30,
+        "oscillation_metric_Z_SKY_MEAN": 0.35
+    },
+    "z_filtering": {
+        "enable_dbscan": true,
+        "eps": 0.003,
+        "min_samples": 20,
+        "enable_sigma_clip": true,
+        "sigma_threshold": 3.0
+    },
+    "neutrino_energy_scan_mev": [3.0, 5.0, 7.0, 10.0],
+    "neutrino_params": {
+      "GALAXY": { "dm2": 7.5e-5, "theta": 0.58 },
+      "QSO":    { "dm2": 2.4e-3, "theta": 0.65 }
+    },
+    "expected_dm_density": 0.11,
+    "z_max": 0.1,
+    "hist_bins": 100,
+    "hist_range": [0.0, 0.1],
+    "memmap": false,
+    "sky_bin_analysis": true,
+    "ra_bins": 36,
+    "dec_bins": 18,
+    "sky_bin_min_count": 200,
+    "enabled_classes": ["GALAXY", "QSO"],
+    "save_histogram_csv": true,
+    "density_threshold_base": 0.12,
+    "adaptive_density_threshold": true,
+    "adaptive_density_epsilon": 0.0001,
+    "Omega_DM": 0.268,
+    "apply_z_max_to_sky": true
 }

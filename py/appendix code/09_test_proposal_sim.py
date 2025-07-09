@@ -203,6 +203,17 @@ def write_results(mass_metric, osc_metric):
 
 def main():
     """Main function to orchestrate empirical test simulations."""
+
+    try:
+        with open('results.csv', 'r', encoding='utf-8') as f:
+            rows = list(csv.reader(f))
+        rows = [row for row in rows if row and row[0] != '09_test_proposal_sim.py']
+        with open('results.csv', 'w', newline='', encoding='utf-8') as f:
+            writer = csv.writer(f)
+            writer.writerows(rows)
+    except FileNotFoundError:
+        pass
+
     clear_screen()
     print("====================================================")
     print("    Meta-Space Model: Empirical Test Simulations    ")

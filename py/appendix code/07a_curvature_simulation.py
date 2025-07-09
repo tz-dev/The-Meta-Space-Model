@@ -55,6 +55,17 @@ def compute_laplacian(S):
     return lap
 
 def main():
+
+    try:
+        with open('results.csv', 'r', encoding='utf-8') as f:
+            rows = list(csv.reader(f))
+        rows = [row for row in rows if row and row[0] != '07a_curvature_simulation.py']
+        with open('results.csv', 'w', newline='', encoding='utf-8') as f:
+            writer = csv.writer(f)
+            writer.writerows(rows)
+    except FileNotFoundError:
+        pass
+
     print("=======================================================")
     print("   Meta-Space Model: Curvature Estimation (I_{μν})   ")
     print("=======================================================")

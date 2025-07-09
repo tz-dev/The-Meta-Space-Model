@@ -180,6 +180,17 @@ def write_results(m_h, stability, deviation):
 def main():
     """Main function to orchestrate Higgs field simulation."""
     global config
+
+    try:
+        with open('results.csv', 'r', encoding='utf-8') as f:
+            rows = list(csv.reader(f))
+        rows = [row for row in rows if row and row[0] != '03_higgs_spectral_field.py']
+        with open('results.csv', 'w', newline='', encoding='utf-8') as f:
+            writer = csv.writer(f)
+            writer.writerows(rows)
+    except FileNotFoundError:
+        pass
+        
     clear_screen()
     print("================================================")
     print("    Meta-Space Model: Higgs Field Simulation    ")

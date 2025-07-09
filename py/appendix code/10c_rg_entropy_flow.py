@@ -6,7 +6,7 @@
 #              and compares against the expected low-energy limit \( \alpha_s(1~\mathrm{GeV}^{-1}) \approx 0.30 \).
 # Author: MSM Enhancement
 # Date: 2025-07-07
-# Version: 1.2
+# Version: 1.3
 # Inputs:
 #     - z_sky_mean.csv: CSV file containing binned mean redshift or density per sky region.
 #     - config_external.json: External configuration with RG parameters.
@@ -43,6 +43,16 @@ def compute_alpha_s(tau, config):
         result[~np.isfinite(result)] = np.nan
     return result
 
+def load_empirical_alpha_s_tau():
+    try:
+        with open("results.csv", "r", encoding="utf-8") as f:
+            for row in csv.reader(f):
+                if row[1].strip() in ("alpha_s_tau_1gev", "alpha_s_tau_1gev_validation"):
+                    return float(row[2])
+    except Exception as e:
+        print(f"[10c] Warning: Could not load empirical α_s(τ=1GeV⁻¹): {e}")
+    return None
+
 def analyze_rg_flow(input_csv="z_sky_mean.csv", output_summary="rg_flow_summary.txt"):
     print("========================================================")
     print("         Meta-Space Model: RG Entropy Flow Analysis     ")
@@ -52,6 +62,12 @@ def analyze_rg_flow(input_csv="z_sky_mean.csv", output_summary="rg_flow_summary.
     if not os.path.exists(input_csv):
         print(f"[10c] Input file {input_csv} not found. Aborting.")
         return
+
+    class_name = os.path.basename(input_csv).replace("z_sky_mean_", "").replace(".csv", "").upper()
+    param_name = f"alpha_s_tau_rg_{class_name}"
+    output_summary = f"rg_flow_summary_{class_name.lower()}.txt"
+    flow_plot_path = f"img/10c_alpha_s_rg_flow_{class_name.lower()}.png"
+    hist_plot_path = f"img/10c_alpha_s_hist_{class_name.lower()}.png"
 
     config = load_config()
     df = pd.read_csv(input_csv)
@@ -65,15 +81,17 @@ def analyze_rg_flow(input_csv="z_sky_mean.csv", output_summary="rg_flow_summary.
     df = df[df["tau"].between(0.01, 1000)]
 
     df["alpha_s"] = compute_alpha_s(df["tau"], config)
-    df = df[df["alpha_s"].between(0, 1.5)]  # optional filter
+    df = df[df["alpha_s"].between(0, 1.5)]
 
     print(f"[10c] Loaded {len(df)} filtered sky bins with valid tau range.")
 
     tau_target = 1.0
     alpha_s_target = 0.30
     idx_closest = (df["tau"] - tau_target).abs().idxmin()
+    
     alpha_s_at_tau = df.loc[idx_closest, "alpha_s"]
     deviation = abs(alpha_s_at_tau - alpha_s_target)
+    alpha_s_empirical = load_empirical_alpha_s_tau()
 
     print("\n=====================================")
     print("     Meta-Space Model: Summary")
@@ -88,42 +106,31 @@ def analyze_rg_flow(input_csv="z_sky_mean.csv", output_summary="rg_flow_summary.
     print(f"Plot: 10c_alpha_s_rg_flow.png")
     print("=====================================\n")
 
-    # write to results.csv
+    # Ergebnisse in results.csv speichern
     results_path = "results.csv"
     script_id = "10c_rg_entropy_flow.py"
     timestamp = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
     try:
-        rows = []
-        if os.path.exists(results_path):
-            with open(results_path, "r", encoding="utf-8") as f:
-                reader = csv.reader(f)
-                rows = list(reader)
-            if "script" in rows[0]:
-                header, *data_rows = rows
-            else:
-                header = ["script", "parameter", "value", "target", "deviation", "timestamp"]
-                data_rows = rows
-            data_rows = [row for row in data_rows if row[0] != script_id]
-        else:
-            header = ["script", "parameter", "value", "target", "deviation", "timestamp"]
-            data_rows = []
+        new_row = [script_id, param_name, alpha_s_at_tau, alpha_s_target, deviation, timestamp]
 
-        new_row = [script_id, "alpha_s_tau_rg", alpha_s_at_tau, alpha_s_target, deviation, timestamp]
-
-        with open(results_path, "w", newline="", encoding="utf-8") as f:
+        with open(results_path, "a", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
-            writer.writerow(header)
-            writer.writerows(data_rows + [new_row])
-        print(f"[10c] Appended results to {results_path}.")
+            # Schreibe Header nur, wenn die Datei leer ist
+            if not os.path.exists(results_path) or os.path.getsize(results_path) == 0:
+                header = ["script", "parameter", "value", "target", "deviation", "timestamp"]
+                writer.writerow(header)
+            writer.writerows([new_row])
+        print(f"[10c] Appended 1 new row to {results_path}.")
     except Exception as e:
         print(f"[10c] Error writing to results.csv: {e}")
 
-    # Plots
     os.makedirs("img", exist_ok=True)
 
     plt.figure(figsize=(10, 6))
     plt.plot(df["tau"], df["alpha_s"], 'o', alpha=0.6, label=r"$\alpha_s(\tau)$ from $z$-bins")
     plt.axhline(alpha_s_target, color='r', linestyle='--', label=f"Target αₛ(1) = {alpha_s_target:.2f}")
+    if alpha_s_empirical:
+        plt.axhline(alpha_s_empirical, color='g', linestyle=':', label=f"Empirical αₛ(1) = {alpha_s_empirical:.2f}")
     plt.xlabel(r"$\tau$ (1/ln(1+ρ)) [GeV$^{-1}$]")
     plt.ylabel(r"$\alpha_s(\tau)$")
     plt.title(r"RG Coupling Flow $\alpha_s(\tau)$")
@@ -131,8 +138,8 @@ def analyze_rg_flow(input_csv="z_sky_mean.csv", output_summary="rg_flow_summary.
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
-    plt.savefig("img/10c_alpha_s_rg_flow.png")
-    print("[10c] Flow plot saved -> img/10c_alpha_s_rg_flow.png")
+    plt.savefig(flow_plot_path)
+    print(f"[10c] Flow plot saved -> {flow_plot_path}")
 
     plt.figure(figsize=(8, 5))
     plt.hist(df["alpha_s"].dropna(), bins=50, color="navy", alpha=0.7)
@@ -140,8 +147,8 @@ def analyze_rg_flow(input_csv="z_sky_mean.csv", output_summary="rg_flow_summary.
     plt.ylabel("Count")
     plt.title("Distribution of RG Coupling Values")
     plt.tight_layout()
-    plt.savefig("img/10c_alpha_s_hist.png")
-    print("[10c] Histogram saved -> img/10c_alpha_s_hist.png")
+    plt.savefig(hist_plot_path)
+    print(f"[10c] Histogram saved -> {hist_plot_path}")
 
     with open(output_summary, "w", encoding="utf-8") as f:
         f.write("Renormalization Group Flow Summary\n")
@@ -155,4 +162,6 @@ def analyze_rg_flow(input_csv="z_sky_mean.csv", output_summary="rg_flow_summary.
     print("[10c] RG flow analysis complete.")
 
 if __name__ == "__main__":
-    analyze_rg_flow()
+    import sys
+    input_arg = sys.argv[1] if len(sys.argv) > 1 else "z_sky_mean.csv"
+    analyze_rg_flow(input_arg)

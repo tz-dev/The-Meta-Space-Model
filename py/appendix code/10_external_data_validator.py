@@ -153,82 +153,48 @@ def run_analysis():
 
             if len(hdul) > 1 and hasattr(hdul[1], 'data'):
                 data = hdul[1].data
-                update_status(f"Loaded {len(data)} rows from HDU 1.")
+                class_filter = config.get("enabled_classes", ["GALAXY"])  # Default: GALAXY
+                if isinstance(class_filter, str):
+                    class_filter = [class_filter]
 
-                z_values = cp.array(data['z']) if cuda_available else data['z']
-                with tqdm(total=len(z_values), desc="Processing z-values") as pbar:
-                    valid_z = z_values[~cp.isnan(z_values)] if cuda_available else z_values[~np.isnan(z_values)]
-                    pbar.update(int(len(z_values) - len(valid_z)))
-                    valid_z = valid_z[valid_z < z_max]
-                    pbar.update(int(len(valid_z)))
-                    valid_z = valid_z.get() if cuda_available else valid_z
-                    del z_values
-
-                if len(valid_z) < 1000:
-                    update_status("Warning: Insufficient valid redshift data (<1000 points).")
+                # Überprüfen der CLASS-Spalte
+                try:
+                    class_values = data['CLASS']
+                    unique_classes = np.unique([x.decode('utf-8') if isinstance(x, bytes) else x for x in class_values])
+                    update_status(f"Available CLASS values: {', '.join(unique_classes)}")
+                except Exception as e:
+                    update_status(f"Error accessing CLASS column: {e}")
+                    logging.error(f"Error accessing CLASS column: {e}")
                     return
 
-                # Sky binning section
-                if config.get("sky_bin_analysis", True):
-                    try:
-                        ra_vals = cp.array(data['PLUG_RA']) if cuda_available else data['PLUG_RA']
-                        dec_vals = cp.array(data['PLUG_DEC']) if cuda_available else data['PLUG_DEC']
-                        z_vals = cp.array(data['z']) if cuda_available else data['z']
-                        with tqdm(total=len(ra_vals), desc="Processing sky bins") as pbar_sky:
-                            sky_mask = (~cp.isnan(ra_vals) & ~cp.isnan(dec_vals) & ~cp.isnan(z_vals)) if cuda_available else (~np.isnan(ra_vals) & ~np.isnan(dec_vals) & ~np.isnan(z_vals))
-                            if config.get("apply_z_max_to_sky", True):
-                                sky_mask &= (z_vals < z_max)
-                            nan_z_max_count = int(len(ra_vals) - cp.sum(sky_mask).item()) if cuda_available else int(len(ra_vals) - np.sum(sky_mask))
-                            pbar_sky.update(nan_z_max_count)
-                            perform_sky_bin_analysis(
-                                ra_vals[sky_mask], dec_vals[sky_mask], z_vals[sky_mask],
-                                ra_bins=config.get("ra_bins", 36),
-                                dec_bins=config.get("dec_bins", 18),
-                                output_path=config.get("sky_output_path", "z_sky_mean.csv"),
-                                min_count=config.get("sky_bin_min_count", 200),
-                                use_cuda=cuda_available
-                            )
-                            pbar_sky.update(int(cp.sum(sky_mask).item()) if cuda_available else int(np.sum(sky_mask)))
-                    except Exception as e:
-                        update_status(f"Warning: Sky binning skipped: {e}")
-                    finally:
-                        del ra_vals, dec_vals, z_vals
-
-                # Density estimation from sky bins
-                df_sky = pd.read_csv(config['sky_output_path'])
-                valid_bins = df_sky[df_sky['count'] >= config['sky_bin_min_count']]
-                if not valid_bins.empty:
-                    z_mean = np.mean(valid_bins['mean_z'])
-                    rho_crit_z = cosmo.critical_density(z_mean).to(u.Msun / u.pc**3).value
-                    Omega_dm = config.get("Omega_DM", 0.268)
-                    local_dm_density = rho_crit_z * Omega_dm
-                    update_status(f"Estimated Local DM Density: {local_dm_density:.3e} (Ω_DM = {Omega_dm}, ρ_crit(z̄) = {rho_crit_z:.3e})")
-                    rho_crit_0 = cosmo.critical_density(0).to(u.Msun / u.pc**3).value
-                    update_status(f"Critical Density Comparison → ρ_crit(0) = {rho_crit_0:.3e}, ρ_crit(z̄) = {rho_crit_z:.3e}, ratio = {rho_crit_z / rho_crit_0:.3f}")
-
+                class_results = {}
+                if class_filter:
+                    update_status(f"Enabled object class filters: {', '.join(class_filter)}")
+                    data_all = data
+                    for class_name in class_filter:
+                        try:
+                            # CLASS-Werte als Strings vergleichen
+                            class_mask = np.array([x.decode('utf-8') if isinstance(x, bytes) else x for x in data_all['CLASS']]) == class_name
+                            class_data = data_all[class_mask]
+                            if len(class_data) < 100:
+                                update_status(f"Warning: CLASS={class_name} has too few entries ({len(class_data)}). Skipping.")
+                                class_results[class_name] = {"local_dm_density": 0.0, "valid_z_count": 0, "status": "skipped"}
+                                continue
+                            update_status(f"\n--- Running analysis for CLASS = {class_name} ({len(class_data)} entries) ---")
+                            result = run_single_class_analysis(class_data, class_name, config)
+                            class_results[class_name] = result
+                        except Exception as e:
+                            update_status(f"Error analyzing CLASS={class_name}: {e}")
+                            logging.error(f"Error analyzing CLASS={class_name}: {e}")
+                            class_results[class_name] = {"local_dm_density": 0.0, "valid_z_count": 0, "status": "failed"}
                 else:
-                    local_dm_density = 0.0
-                    update_status("Warning: No valid sky bins for density estimation.")
+                    update_status("No CLASS filtering specified. Running full dataset.")
+                    class_results["ALL"] = run_single_class_analysis(data, "ALL", config)
 
-                # Cross-check with 2MASS
-                csv_data = load_csv_data()
-                if '11_2mass_psc_validator.py' in csv_data:
-                    psc_density = csv_data['11_2mass_psc_validator.py'].get('local_source_density', 1.0)
-                    update_status(f"Cross-check: 2MASS density = {psc_density:.3f} arcmin⁻², FITS density = {local_dm_density:.3e} M☉/pc³ (unit mismatch, conversion pending)")
-
-                deviation = abs(local_dm_density - config['expected_dm_density'])
-                # Dynamischer Threshold mit konfigurierbarer Basisgrenze
-                threshold_base = config.get('density_threshold_base', 0.2)  # Standardwert 0.2, anpassbar in config
-                threshold = threshold_base * (1 + np.std(valid_bins['mean_z']) / config['expected_dm_density']) if not valid_bins.empty else threshold_base
-                config['thresholds']['local_DM_density'] = threshold
-                test_passed = deviation <= threshold
-                status = "Success" if test_passed else "Failure"
-                update_status(f"Test Result: {status} - Threshold: {threshold:.3f}")
-
+                # Ergebnisse in results.csv schreiben
                 results_path = "results.csv"
                 script_id = "10_external_data_validator.py"
                 timestamp = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
-
                 try:
                     if os.path.exists(results_path):
                         with open(results_path, "r", encoding="utf-8") as f:
@@ -240,54 +206,75 @@ def run_analysis():
                         header = ["script", "parameter", "value", "target", "deviation", "timestamp"]
                         data_rows = []
 
-                    new_rows = [[script_id, "local_dm_density", local_dm_density, config['expected_dm_density'], deviation, timestamp]]
-                    rho_ratio = rho_crit_z / rho_crit_0
-                    new_rows += [[script_id, "rho_crit_ratio", rho_ratio, 1.0, abs(rho_ratio - 1.0), timestamp]]
+                    new_rows = []
+                    for class_name, result in class_results.items():
+                        if result["status"] == "success":
+                            deviation = abs(result["local_dm_density"] - config['expected_dm_density'])
+                            threshold_base = config.get('density_threshold_base', 0.2)
+                            try:
+                                df_sky = pd.read_csv(f"z_sky_mean_{class_name.lower()}.csv")
+                                valid_bins = df_sky[df_sky['count'] >= config['sky_bin_min_count']]
+
+                                # Dynamische Schwelle abhängig von Streuung in z̄ (angepasst an Strukturvielfalt)
+                                if not valid_bins.empty:
+                                    z_mean_local = np.mean(valid_bins['mean_z'])
+                                    z_std_local = np.std(valid_bins['mean_z'])
+                                    epsilon = 1e-4  # zur Vermeidung von Division durch 0
+                                    threshold = threshold_base * (1 + z_std_local / (z_mean_local + epsilon))
+                                else:
+                                    threshold = threshold_base
+
+                            except Exception as e:
+                                update_status(f"Warning: Could not read sky bin CSV for CLASS={class_name}: {e}")
+                                threshold = threshold_base
+                            test_passed = deviation <= threshold
+                            status = "PASS" if test_passed else "FAIL"
+                            update_status(f"CLASS={class_name}: Test Result: {status} - Threshold: {threshold:.3f}")
+                            update_status(f"CLASS={class_name}: z̄ mean = {z_mean_local:.4f}, std = {z_std_local:.4f}, adaptive threshold = {threshold:.4f}")
+                            
+                            new_rows.append([
+                                script_id,
+                                f"local_dm_density_{class_name}",
+                                result["local_dm_density"],
+                                config['expected_dm_density'],
+                                deviation,
+                                timestamp
+                            ])
+                            new_rows.append([
+                                script_id,
+                                f"rho_crit_ratio_{class_name}",
+                                result["rho_crit_ratio"],
+                                1.0,
+                                abs(result["rho_crit_ratio"] - 1.0),
+                                timestamp
+                            ])
 
                     with open(results_path, "w", newline="", encoding="utf-8") as f:
                         writer = csv.writer(f)
                         writer.writerow(header)
                         writer.writerows(data_rows + new_rows)
-
                     update_status(f"Results saved to: {results_path}")
                 except Exception as e:
                     update_status(f"Warning: Could not write to results.csv: {e}")
 
-                # Histogram Heatmap
-                plt.figure(figsize=(10, 6))
-                plt.hist(valid_z, bins=hist_bins, range=hist_range, color='blue', alpha=0.7)
-                plt.title('Redshift Distribution (DM Density Proxy)')
-                plt.xlabel('Redshift (z)')
-                plt.ylabel('Count')
-                plt.grid(True)
-                plt.savefig('img/10_dm_density_heatmap.png')
-                plt.close()
-                update_status("Heatmap saved to: img/10_dm_density_heatmap.png")
+                # Cross-check mit 2MASS
+                # csv_data = load_csv_data()
+                # if '11_2mass_psc_validator.py' in csv_data:
+                #     psc_density = csv_data['11_2mass_psc_validator.py'].get('local_source_density', 1.0)
+                #     for class_name in class_results:
+                #         if class_results[class_name]["status"] == "success":
+                #             update_status(f"CLASS={class_name}: Cross-check: 2MASS density = {psc_density:.3f} arcmin⁻², FITS density = {class_results[class_name]['local_dm_density']:.3e} M☉/pc³ (unit mismatch, conversion pending)")
 
-                if config.get("save_histogram_csv", False):
-                    hist_path = os.path.join(os.getcwd(), config.get("histogram_csv_path", "z_histogram.csv"))
-                    try:
-                        hist, bin_edges = np.histogram(valid_z, bins=hist_bins, range=hist_range)
-                        ra_width = (hist_range[1] - hist_range[0]) / hist_bins * 3600  # Convert to arcmin
-                        dec_width = 180 / config.get("dec_bins", 18) * 3600  # Full dec range in arcmin
-                        area_arcmin2 = ra_width * dec_width
-                        with open(hist_path, "w", newline="", encoding="utf-8") as f_hist:
-                            writer = csv.writer(f_hist)
-                            writer.writerow(["bin_start", "bin_end", "count", "density_estimate"])
-                            for i in range(len(hist)):
-                                density = (hist[i] / area_arcmin2) * (config['expected_dm_density'] / np.mean(hist)) if np.mean(hist) > 0 else 0
-                                writer.writerow([bin_edges[i], bin_edges[i + 1], hist[i], density])
-                        update_status(f"Histogram data saved to: {hist_path}")
-                    except Exception as e:
-                        update_status(f"Warning: Could not write histogram CSV: {e}")
+                # Visualisierungsskripte ausführen
+                if config.get("sky_bin_analysis", True):
+                    for class_name in class_results:
+                        if class_results[class_name]["status"] == "success" and os.path.exists(f"z_sky_mean_{class_name.lower()}.csv"):
+                            run_visualization_script("10a_plot_z_sky_mean.py", f"z_sky_mean_{class_name.lower()}.csv")
+                            run_visualization_script("10b_neutrino_analysis.py", args=[f"z_sky_mean_{class_name.lower()}.csv"])
+                            run_visualization_script("10c_rg_entropy_flow.py", args=[f"z_sky_mean_{class_name.lower()}.csv"])
+                            run_visualization_script("10d_entropy_map.py", args=[f"z_sky_mean_{class_name.lower()}.csv"])
+                            run_visualization_script("10e_parameter_scan.py", args=[f"z_sky_mean_{class_name.lower()}.csv"])
 
-                if config.get("sky_bin_analysis", True) and os.path.exists(config.get("sky_output_path", "z_sky_mean.csv")):
-                    run_visualization_script("10a_plot_z_sky_mean.py")
-                    run_visualization_script("10b_neutrino_analysis.py")
-                    run_visualization_script("10c_rg_entropy_flow.py")
-                    run_visualization_script("10d_entropy_map.py")
-                    run_visualization_script("10e_parameter_scan.py")
-                    
                 update_status("FITS analysis completed.")
 
     except MemoryError as e:
@@ -361,19 +348,173 @@ def perform_sky_bin_analysis(ra_vals, dec_vals, z_vals, ra_bins, dec_bins, outpu
     except Exception as e:  # Handle any errors during binning
         update_status(f"Warning: Sky binning failed: {e}")  # Log warning
 
-# Function to run a visualization script
-def run_visualization_script(script_name):
+def run_single_class_analysis(data, class_name, config):
     """
-    Executes a specified visualization script using the system Python interpreter.
+    Führt die vollständige Analyse für eine spezifische Objektklasse aus, einschließlich
+    Redshift-Verarbeitung, Sky-Binning, Dichte-Berechnung, Plots und CSV-Ausgabe.
     
     Args:
+        data: FITS-Daten für die spezifische Klasse.
+        class_name (str): Name der Klasse (z. B. 'GALAXY', 'QSO', 'ALL').
+        config (dict): Konfigurationsdictionary.
+    
+    Returns:
+        dict: Ergebnisse der Analyse, z. B. {'local_dm_density': float, 'valid_z_count': int}.
+    """
+    z_max = config.get("z_max", 0.5)
+    hist_bins = config.get("hist_bins", 50)
+    hist_range = tuple(config.get("hist_range", [0.0, 0.5]))
+    sky_bin_analysis = config.get("sky_bin_analysis", True)
+    ra_bins = config.get("ra_bins", 36)
+    dec_bins = config.get("dec_bins", 18)
+    min_count = config.get("sky_bin_min_count", 200)
+    
+    # Redshift-Verarbeitung
+    try:
+        z_values = cp.array(data['z']) if cuda_available else data['z']
+        with tqdm(total=len(z_values), desc=f"Processing z-values ({class_name})") as pbar:
+            valid_z = z_values[~cp.isnan(z_values)] if cuda_available else z_values[~np.isnan(z_values)]
+            pbar.update(int(len(z_values) - len(valid_z)))
+            valid_z = valid_z[valid_z < z_max]
+            pbar.update(int(len(valid_z)))
+            valid_z = valid_z.get() if cuda_available else valid_z
+
+            # Optionales Clustering + Sigma-Clipping zur Filterung von Ausreißern
+            try:
+                z_filtering = config.get("z_filtering", {})
+                initial_count = len(valid_z)
+
+                # DBSCAN: Entdecke Dichtekerne in z-Verteilung
+                if z_filtering.get("enable_dbscan", False):
+                    from sklearn.cluster import DBSCAN
+                    db = DBSCAN(
+                        eps=z_filtering.get("eps", 0.003),
+                        min_samples=z_filtering.get("min_samples", 20)
+                    )
+                    labels = db.fit_predict(valid_z.reshape(-1, 1))
+                    core_mask = labels != -1  # Filtere Rauschen (-1)
+                    valid_z = valid_z[core_mask]
+                    update_status(f"CLASS={class_name}: DBSCAN filter removed {initial_count - len(valid_z)} z-values")
+
+                # Sigma-Clipping: Konfidenzintervallprüfung
+                if z_filtering.get("enable_sigma_clip", False):
+                    from scipy.stats import zscore
+                    z_scores = zscore(valid_z)
+                    sigma_thresh = z_filtering.get("sigma_threshold", 3.0)
+                    clip_mask = np.abs(z_scores) < sigma_thresh
+                    filtered_z = valid_z[clip_mask]
+                    update_status(f"CLASS={class_name}: Sigma-clipped {len(valid_z) - len(filtered_z)} z-values (σ < {sigma_thresh})")
+                    valid_z = filtered_z
+
+            except Exception as e:
+                update_status(f"CLASS={class_name}: z-filtering failed: {str(e)}")
+
+        update_status(f"CLASS={class_name}: valid_z count = {len(valid_z)}")
+        
+        if len(valid_z) < 1000:
+            update_status(f"Warning: CLASS={class_name} has insufficient valid redshift data (<1000 points).")
+            return {"local_dm_density": 0.0, "valid_z_count": len(valid_z), "status": "skipped"}
+        
+        # Sky-Binning
+        local_dm_density = 0.0
+        if sky_bin_analysis:
+            try:
+                ra_vals = cp.array(data['PLUG_RA']) if cuda_available else data['PLUG_RA']
+                dec_vals = cp.array(data['PLUG_DEC']) if cuda_available else data['PLUG_DEC']
+                z_vals = cp.array(data['z']) if cuda_available else data['z']
+                with tqdm(total=len(ra_vals), desc=f"Processing sky bins ({class_name})") as pbar_sky:
+                    sky_mask = (~cp.isnan(ra_vals) & ~cp.isnan(dec_vals) & ~cp.isnan(z_vals)) if cuda_available else (~np.isnan(ra_vals) & ~np.isnan(dec_vals) & ~np.isnan(z_vals))
+                    if config.get("apply_z_max_to_sky", True):
+                        sky_mask &= (z_vals < z_max)
+                    nan_z_max_count = int(len(ra_vals) - cp.sum(sky_mask).item()) if cuda_available else int(len(ra_vals) - np.sum(sky_mask))
+                    pbar_sky.update(nan_z_max_count)
+                    output_path = f"z_sky_mean_{class_name.lower()}.csv"
+                    perform_sky_bin_analysis(
+                        ra_vals[sky_mask], dec_vals[sky_mask], z_vals[sky_mask],
+                        ra_bins=ra_bins, dec_bins=dec_bins, output_path=output_path,
+                        min_count=min_count, use_cuda=cuda_available
+                    )
+                    pbar_sky.update(int(cp.sum(sky_mask).item()) if cuda_available else int(np.sum(sky_mask)))
+                
+                # Dichte-Schätzung aus Sky-Bins
+                df_sky = pd.read_csv(output_path)
+                valid_bins = df_sky[df_sky['count'] >= min_count]
+                if not valid_bins.empty:
+                    z_mean = np.mean(valid_bins['mean_z'])
+                    rho_crit_z = cosmo.critical_density(z_mean).to(u.Msun / u.pc**3).value
+                    Omega_dm = config.get("Omega_DM", 0.268)
+                    local_dm_density = rho_crit_z * Omega_dm
+                    update_status(f"CLASS={class_name}: Estimated Local DM Density: {local_dm_density:.3e} (Ω_DM = {Omega_dm}, ρ_crit(z̄) = {rho_crit_z:.3e})")
+                    rho_crit_0 = cosmo.critical_density(0).to(u.Msun / u.pc**3).value
+                    update_status(f"CLASS={class_name}: Critical Density Comparison → ρ_crit(0) = {rho_crit_0:.3e}, ρ_crit(z̄) = {rho_crit_z:.3e}, ratio = {rho_crit_z / rho_crit_0:.3f}")
+                else:
+                    update_status(f"Warning: CLASS={class_name} has no valid sky bins for density estimation.")
+            except Exception as e:
+                update_status(f"Warning: CLASS={class_name} sky binning failed: {e}")
+            finally:
+                del ra_vals, dec_vals, z_vals
+        
+        # Histogramme
+        try:
+            plt.figure(figsize=(10, 6))
+            plt.hist(valid_z, bins=hist_bins, range=hist_range, color='blue', alpha=0.7)
+            plt.title(f'Redshift Distribution (DM Density Proxy, CLASS={class_name})')
+            plt.xlabel('Redshift (z)')
+            plt.ylabel('Count')
+            plt.grid(True)
+            hist_path = f'img/10_dm_density_histogram_{class_name.lower()}.png'
+            plt.savefig(hist_path)
+            plt.close()
+            update_status(f"CLASS={class_name}: Heatmap saved to: {hist_path}")
+        except Exception as e:
+            update_status(f"Warning: CLASS={class_name} could not save histogram: {e}")
+        
+        # Histogram-CSV (optional)
+        if config.get("save_histogram_csv", False):
+            hist_path = f"z_histogram_{class_name.lower()}.csv"
+            try:
+                hist, bin_edges = np.histogram(valid_z, bins=hist_bins, range=hist_range)
+                ra_width = (hist_range[1] - hist_range[0]) / hist_bins * 3600
+                dec_width = 180 / dec_bins * 3600
+                area_arcmin2 = ra_width * dec_width
+                with open(hist_path, "w", newline="", encoding="utf-8") as f_hist:
+                    writer = csv.writer(f_hist)
+                    writer.writerow(["bin_start", "bin_end", "count", "density_estimate"])
+                    for i in range(len(hist)):
+                        density = (hist[i] / area_arcmin2) * (config['expected_dm_density'] / np.mean(hist)) if np.mean(hist) > 0 else 0
+                        writer.writerow([bin_edges[i], bin_edges[i + 1], hist[i], density])
+                update_status(f"CLASS={class_name}: Histogram data saved to: {hist_path}")
+            except Exception as e:
+                update_status(f"Warning: CLASS={class_name} could not write histogram CSV: {e}")
+        
+        return {
+            "local_dm_density": local_dm_density,
+            "valid_z_count": len(valid_z),
+            "status": "success",
+            "z_mean": z_mean if 'z_mean' in locals() else np.nan,
+            "rho_crit_ratio": rho_crit_z / rho_crit_0 if 'rho_crit_z' in locals() else np.nan
+        }
+    
+    except Exception as e:
+        update_status(f"Error: CLASS={class_name} analysis failed: {e}")
+        logging.error(f"CLASS={class_name} analysis failed: {e}")
+        return {"local_dm_density": 0.0, "valid_z_count": 0, "status": "failed"}
+
+# Function to run a visualization script
+def run_visualization_script(script_name, args=None):
+    """
+    Executes a specified visualization script using the system Python interpreter.
+
+    Args:
         script_name (str): Name of the script to execute.
+        args (list): Optional list of arguments to pass to the script.
     """
     try:
-        subprocess.run([sys.executable, script_name], check=True)  # Run script with error checking
-        update_status(f"Visualization script executed: {script_name}")  # Log successful execution
-    except Exception as e:  # Handle any errors during execution
-        update_status(f"Warning: Could not run {script_name}: {e}")  # Log warning
+        cmd = [sys.executable, script_name] + (args if isinstance(args, list) else [args])
+        subprocess.run(cmd, check=True)
+        update_status(f"Visualization script executed: {' '.join(cmd)}")
+    except Exception as e:
+        update_status(f"Warning: Could not run {script_name}: {e}")
 
 if __name__ == "__main__":  # Entry point when script is run directly
     run_analysis()  # Execute the main analysis function
