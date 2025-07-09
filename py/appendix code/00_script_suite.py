@@ -412,12 +412,27 @@ class ImageViewer:
             img_label = tk.Label(container, image=tk_img, bg="black", width=IMG_WIDTH, height=IMG_HEIGHT)
             img_label.pack(side="left", anchor="nw", padx=0, pady=0)
 
-            list_frame = tk.Frame(container, bg="black")
-            for i, name in enumerate(self.images):
+            # Split images into two columns if more than 10 images
+            max_per_column = 21
+            first_column = self.images[:max_per_column]
+            second_column = self.images[max_per_column:]
+
+            # First column
+            list_frame1 = tk.Frame(container, bg="black")
+            for i, name in enumerate(first_column):
                 fg = "#00ff00" if i == self.index else "#888888"
-                lbl = tk.Label(list_frame, text=name, fg=fg, bg="black", font=("Consolas", 10), anchor="w")
+                lbl = tk.Label(list_frame1, text=name, fg=fg, bg="black", font=("Consolas", 10), anchor="w")
                 lbl.pack(anchor="w")
-            list_frame.pack(side="left", anchor="n", padx=IMG_LIST_MARGIN)
+            list_frame1.pack(side="left", anchor="n", padx=IMG_LIST_MARGIN)
+
+            # Second column (if overflow exists)
+            if second_column:
+                list_frame2 = tk.Frame(container, bg="black")
+                for i, name in enumerate(second_column, start=max_per_column):
+                    fg = "#00ff00" if i == self.index else "#888888"
+                    lbl = tk.Label(list_frame2, text=name, fg=fg, bg="black", font=("Consolas", 10), anchor="w")
+                    lbl.pack(anchor="w")
+                list_frame2.pack(side="left", anchor="n", padx=IMG_LIST_MARGIN)
 
             self.output_widget.window_create(tk.END, window=container)
         except Exception as e:
@@ -432,11 +447,6 @@ class ImageViewer:
             return
 
         self.display_image()
-
-        if self.parent:
-            self.parent.bind("<MouseWheel>", self._on_mousewheel)
-            self.parent.bind("<Left>", self.show_prev)
-            self.parent.bind("<Right>", self.show_next)
 
         if self.parent:
             self.parent.bind("<MouseWheel>", self._on_mousewheel)
@@ -531,7 +541,7 @@ class MarkdownViewer:
 
             # Headers
             if line.startswith("# "):
-                self.output_widget.insert(tk.END, "\n" + line[2:] + "\n\n", "h1")
+                self.output_widget.insert(tk.END, line[2:] + "\n\n", "h1")
                 continue
 
             elif line.startswith("## "):
