@@ -942,7 +942,7 @@
       <section id="chapter5-5">
         <h3>5.4 Simulation Results</h3>
         <p>
-          The Meta-Space Model (MSM) simulations are driven by a comprehensive suite of scripts, coordinated through <code>00_script_suite.py</code>, which orchestrates tools like <code>02_monte_carlo_validator.py</code> and <code>04_empirical_validator.py</code>. These simulations leverage a Validator GUI for interactive result monitoring, enhancing reproducibility and alignment with physical observations. Three representative outputs from <code>results.csv</code> (dated July 02, 2025) are presented below to validate the model’s postulates, particularly CP7 (Entropic Origin of Physical Constants).
+          The Meta-Space Model (MSM) simulations are driven by a comprehensive suite of scripts, coordinated through <code>00_script_suite.py</code>, which orchestrates tools like <code>02_monte_carlo_validator.py</code> and <code>04_empirical_validator.py</code>. These simulations leverage a Script Suite for interactive result monitoring, enhancing reproducibility and alignment with physical observations. Three representative outputs from <code>results.csv</code> (dated July 02, 2025) are presented below to validate the model’s postulates, particularly CP7 (Entropic Origin of Physical Constants).
         </p>
         <p>
           1. Strong Coupling Constant (\( \alpha_s \)): The simulation yields \( \alpha_s = 0.118 \) (from <code>02_monte_carlo_validator.py</code>, timestamp 2025-07-02T19:54:38), with a deviation of 0.0 from the expected value. This matches the CODATA-2022 value of \( 0.1179 \pm 0.0009 \), confirming the model’s accuracy in predicting fundamental constants within the entropy-driven framework of \( \mathcal{M}_{\text{meta}} \).
@@ -954,7 +954,7 @@
           3. Dark Matter Density (\( \Omega_{\text{DM}} \)): The simulation returns \( \Omega_{\text{DM}} = 0.27 \) (from <code>04_empirical_validator.py</code>, timestamp 2025-07-02T18:39:48), with a deviation of 0.002 from the CODATA-2022 value of \( 0.268 \) (adjusted for \( h^2 = 0.11933 \)). This slight discrepancy suggests potential refinements in the cosmological entropy scale (CP8), warranting further investigation. The deviation can be attributed to rounding effects during the simulation process, where \( \Omega_{\text{DM}} \) is approximated to two decimal places, and to model assumptions, particularly the simplified entropic scaling of \( S(x, y, \tau) \) in \( \mathcal{M}_{\text{meta}} \) during the projection to \( \mathcal{M}_4 \). The current entropy gradient \( \nabla_\tau S \geq \epsilon \approx 10^{-3} \) (CP2, 5.1.2) may not fully capture the fine-scale cosmological perturbations observed in Planck data, suggesting a need for refined scaling factors in <code>08_cosmo_entropy_scale.py</code> to align with the target value of 0.268.
         </p>
         <p>
-          These results, reproducible via the referenced scripts and the Validator GUI, strengthen confidence in the MSM’s predictive power. The alignment with CODATA-2022 values validates the entropic origin of physical parameters, while deviations highlight areas for model enhancement.
+          These results, reproducible via the referenced scripts and the Script Suite, strengthen confidence in the MSM’s predictive power. The alignment with CODATA-2022 values validates the entropic origin of physical parameters, while deviations highlight areas for model enhancement.
         </p>
         <section id="chapter5-5">
           <h3>5.5 Conclusion</h3>
@@ -4612,7 +4612,7 @@
           <strong>Example:</strong> To understand how this works, consider quantum chromodynamics (QCD), which describes the strong force holding quarks together. A Monte-Carlo simulation, like rolling dice to test many possible outcomes, checks if a configuration produces the QCD coupling constant <span class="mathjax">\( \alpha_s \approx 0.118 \)</span> at the Z-boson mass scale <span class="mathjax">\( M_Z \approx 91.2 \, \text{GeV} \)</span>. The simulation ensures the configuration satisfies <span class="mathjax">\( \nabla_\tau S > 0 \)</span>, meaning it aligns with the MSM’s entropic flow. This is implemented using <code>02_monte_carlo_validator.py</code>, with results validated against CODATA standards for fundamental constants (<a href="#sec-a-3">A.3</a>, <a href="#sec-a-6">A.6</a>).
         </p>
         <p>
-          <strong>Validator GUI:</strong> To facilitate interaction with the simulation logic, the Meta-Space Model includes a graphical interface for executing and monitoring the numerical scripts. This Validator GUI, launched via <code>00_script_suite.py</code>, allows users to execute the simulation suite (scripts 01–09), observe real-time output, inspect configuration files, and track stability metrics (e.g., deviation from \( \alpha_s \), Higgs mass, or \( I_{\mu\nu} \)). This tool provides a user-friendly gateway into the entropic filtration process and supports visual analysis of projection outcomes. For details and screenshots, see <a href="#appendix-a">Appendix A</a>.
+          <strong>Script Suite:</strong> To facilitate interaction with the simulation logic, the Meta-Space Model includes a graphical interface for executing and monitoring the numerical scripts. This Script Suite, launched via <code>00_script_suite.py</code>, allows users to execute the simulation suite (scripts 01–11), observe real-time output, inspect configuration files, and track stability metrics (e.g., deviation from \( \alpha_s \), Higgs mass, or \( I_{\mu\nu} \)). This tool provides a user-friendly gateway into the entropic filtration process and supports visual analysis of projection outcomes. For details and screenshots, see <a href="#appendix-a">Appendix A</a>.
         </p>
         <h4>10.5.2 Gödel Filtering and Algorithmic Constraints</h4>
         <p>
@@ -7043,22 +7043,22 @@
         </p>
       </section>
       <section id="appendix-a">
-        <h2>Appendix A: Implementation Guidelines & Validator GUI</h2>
+        <h2>Appendix A: Implementation Guidelines & Script Suite</h2>
         <p>
           This appendix outlines the implementation guidelines for the Meta-Space Model (MSM), detailing entropic projection constraints, optimization strategies, and algorithmic pipelines. The provided scripts compute key physical quantities such as the strong coupling constant (<span class="math">\(\alpha_s\)</span>) and Higgs mass (<span class="math">\(m_H\)</span>) using spherical harmonics (<span class="math">\(Y_{lm}\)</span>) and entropic projections on the meta-space manifold \(\mathcal{M}_{\text{meta}} = S^3 \times CY_3 \times \mathbb{R}_\tau\). All scripts can be executed using the unified interface provided by <code>00_script_suite.py</code> (started via <code>suite.bat</code>), which orchestrates the execution of scripts 01-10 for streamlined computation and validation.<br>
-          Additionally, the Validator GUI enhances this process by offering an interactive interface to monitor and validate simulation results in real-time. A screenshot of the GUI is included below, showcasing its functionality for reviewing outputs. For further exploration and reproducibility, the tool and associated codebase are available at the <a href="https://github.com/tz-dev/The-Meta-Space-Model/tree/main/py/appendix%20code" target="_blank">GitHub repository of Meta-Space Model</a>. This integration makes the MSM infrastructure transparent and accessible.
+          Additionally, the Script Suite enhances this process by offering an interactive interface to monitor and validate simulation results in real-time. A screenshot of the GUI is included below, showcasing its functionality for reviewing outputs. For further exploration and reproducibility, the tool and associated codebase are available at the <a href="https://github.com/tz-dev/The-Meta-Space-Model/tree/main/py/appendix%20code" target="_blank">GitHub repository of Meta-Space Model</a>. This integration makes the MSM infrastructure transparent and accessible.
         </p>
         <div class="diagram-container">
           <div class="diagram-box">
             <figure>
-              <figcaption>Validator GUI Interface</figcaption>
-              <img src="img/app_a_gui.png" alt="Screenshot of Validator GUI" width="1100px" style="margin-bottom: 20px">
+              <figcaption>Script Suite Interface</figcaption>
+              <img src="img/app_a_gui.png" alt="Screenshot of Script Suite" width="1100px" style="margin-bottom: 20px">
             </figure>
           </div>
           <div class="description-box">
             <h5>Description</h5>
             <p>
-              The Validator GUI, powered by <code>00_script_suite.py</code>, serves as a graphical launcher for the MSM Python simulation suite. Key functionalities include buttons for executing scripts 01–10, enabled sequentially based on <code>results.csv</code> updates, real-time display of output, code, and JSON configurations in a scrolled text area, and a progress bar for tracking script execution and package installation. It also features options for installing required packages (e.g., NumPy, CuPy, tkinter) and accessing the <code>img</code> folder, with automatic clearing of script-related CSV rows before re-execution to ensure data consistency.
+              The Script Suite, powered by <code>00_script_suite.py</code>, serves as a graphical launcher for the MSM Python simulation suite. Key functionalities include buttons for executing scripts 01–10, enabled sequentially based on <code>results.csv</code> updates, real-time display of output, code, and JSON configurations in a scrolled text area, and a progress bar for tracking script execution and package installation. It also features options for installing required packages (e.g., NumPy, CuPy, tkinter) and accessing the <code>img</code> folder, with automatic clearing of script-related CSV rows before re-execution to ensure data consistency.
             </p>
           </div>
         </div>
@@ -8036,12 +8036,12 @@
           <tbody>
             <tr>
               <td>suite.bat</td>
-              <td>Windows batch launcher for <code>00_script_suite.py</code>; checks Python installation, installs missing python packages, and starts the Validator GUI with version and error handling</td>
+              <td>Windows batch launcher for <code>00_script_suite.py</code>; checks Python installation, installs missing python packages, and starts the Script Suite with version and error handling</td>
               <td>-</td>
             </tr>
             <tr>
               <td>00_script_suite.py</td>
-              <td>GUI wrapper to sequentially execute all scripts 01–09; supports config loading and output validation</td>
+              <td>GUI wrapper to sequentially execute all scripts 01–11; supports config loading and output validation</td>
               <td>-</td>
             </tr>
             <tr>
@@ -9171,7 +9171,7 @@
         <p>
           <strong>Repository:</strong> The full source code used to generate the empirical results, heatmaps, and stability metrics throughout this document is publicly available at the official Meta-Space Model GitHub repository:  
           <a href="https://github.com/tz-dev/The-Meta-Space-Model" target="_blank">github.com/tz-dev/The-Meta-Space-Model</a>.<br>
-          The repository includes simulation scripts (01–09), configuration files, and a graphical validator interface as described in <a href="#appendix-a">Appendix A</a>.  
+          The repository includes simulation scripts (01–11), configuration files, and a graphical validator interface as described in <a href="#appendix-a">Appendix A</a>.  
           This open access ensures reproducibility and allows readers to explore all numerical procedures described in Chapters 7–11.
         </p>
         <p>
@@ -9180,6 +9180,7 @@
         <ul>
           <li>Aharonov, Y., & Bohm, D. (1959). Significance of electromagnetic potentials in the quantum theory. <em>Physical Review, 115</em>(3), 485–491. https://doi.org/10.1103/PhysRev.115.485 (Inspiration for time-symmetric interpretations in entropic causality, Section 4.2).</li>
           <li>Bekenstein, J. D. (1973). Black holes and entropy. <em>Physical Review D, 7</em>(8), 2333–2346. https://doi.org/10.1103/PhysRevD.7.2333 (Foundational for entropy–area relations, Section 7.5).</li>
+          <li>BaBar Collaboration. (2019). CP-violating asymmetries in B decays. <em>Physical Review Letters</em>. https://doi.org/10.1103/PhysRevLett.122.211803 (Validation of CP-phase metrics, Section D.5.2).</li>
           <li>Chaitin, G. J. (1987). <em>Algorithmic information theory</em>. Cambridge University Press. (Relevant for simulation thresholds and redundancy, Section 8.3).</li>
           <li>CMS Collaboration. (2020). Measurement of the strong coupling constant from inclusive jet production at the LHC. <em>Journal of High Energy Physics, 2020</em>(3), 122. https://doi.org/10.1007/JHEP03(2020)122 (Validation of \( \alpha_s \), Sections 7.2, D.4).</li>
           <li>CODATA. (2018). CODATA recommended values of the fundamental physical constants: 2018. <em>Reviews of Modern Physics, 91</em>(2), 025010. https://doi.org/10.1103/RevModPhys.91.025010 (Anchoring physical constants, Sections 11.4, D.4).</li>
@@ -9188,8 +9189,10 @@
           <li>Gross, D. J., & Wilczek, F. (1973). Ultraviolet behavior of non-Abelian gauge theories. <em>Physical Review Letters, 30</em>(26), 1343–1346. https://doi.org/10.1103/PhysRevLett.30.1343 (Asymptotic freedom in QCD, EP1, Sections 6.3.1, 7.2).</li>
           <li>Havil, J. (2003). <em>Gamma: Exploring Euler's constant</em>. Princeton University Press. ISBN: 978-0-691-09983-5 (Convergence properties, Section 14.10).</li>
           <li>Hawking, S. W. (1975). Particle creation by black holes. <em>Communications in Mathematical Physics, 43</em>(3), 199–220. https://doi.org/10.1007/BF02345020 (Black hole thermodynamics, Section 7.5).</li>
+          <li>KamLAND Collaboration. (2021). Precision measurements of neutrino oscillations with KamLAND. <em>Physical Review D, 103</em>(7), 073005. https://doi.org/10.1103/PhysRevD.103.073005 (Neutrino oscillation validation, Sections A.7.1.2, A.7.1.5, D.5.6).</li>
           <li>Kuhn, T. S. (1962). <em>The structure of scientific revolutions</em>. University of Chicago Press. (Paradigm shifts, Section 12.5).</li>
           <li>Lakatos, I. (1978). <em>The methodology of scientific research programmes</em>. Cambridge University Press. (Epistemic structure, Section 12.5).</li>
+          <li>Lattice QCD Collaborations (HotQCD, BMW, et al.). Spectral lattice results for \( \alpha_s \) and QCD thermodynamics. <em>JHEP</em>, <em>PRD</em>. (Validation of renormalization flow and entropy models, Sections 7.2, A.5, A.7).</li>
           <li>Maldacena, J. (1998). The large N limit of superconformal field theories and supergravity. <em>Advances in Theoretical and Mathematical Physics, 2</em>(2), 231–252. https://doi.org/10.4310/ATMP.1998.v2.n2.a1 (Holographic thinking, Section 6.3.14).</li>
           <li>Maldacena, J. (1999). The AdS/CFT correspondence and holography. <em>International Journal of Modern Physics A, 14</em>(10), 1515–1530. https://doi.org/10.1142/S0217751X99000766 (Holographic projection, Section 6.3.14).</li>
           <li>Nakahara, M. (2003). <em>Geometry, topology and physics</em> (2nd ed.). CRC Press. https://doi.org/10.1201/9781420056945 (Gauge holonomies and Calabi–Yau topology, EP2, Section 15.2).</li>
