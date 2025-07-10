@@ -8042,97 +8042,78 @@
             <tr>
               <td>00_script_suite.py</td>
               <td>GUI wrapper to sequentially execute all scripts 01–11; supports config loading and output validation</td>
-              <td>-</td>
             </tr>
             <tr>
               <td>01_qcd_spectral_field.py</td>
               <td>Computes QCD strong coupling constant (\(\alpha_s \approx 0.118\)) from entropic spectral field projections on \( S^3 \times CY_3 \times \mathbb{R}_\tau\)</td>
-              <td>10.6.1 (Field Parametrization), 11.4.2 (Projected Validation Summary)</td>
             </tr>
             <tr>
               <td>02_monte_carlo_validator.py</td>
               <td>Validates QCD/Higgs parameters via Monte-Carlo sampling on \( S^3 \); used for \(\alpha_s\), \( m_H \), \(\Omega_{\text{DM}}\)</td>
-              <td>10.5.1 (Simulation Logic), 11.1.3 (Monte Carlo Heuristics)</td>
             </tr>
             <tr>
               <td>03_higgs_spectral_field.py</td>
               <td>Parameterizes Higgs field \(\psi_\alpha\) and computes \( m_H \approx 125 \, \text{GeV} \) using spectral noise gradients</td>
-              <td>10.5.1 (Inverse Field Problem), 11.4.1 (Empirical Higgs Field)</td>
             </tr>
             <tr>
               <td>04_empirical_validator.py</td>
               <td>Validates all simulation outputs (\(\alpha_s\), \(m_H\), \(\Omega_{\text{DM}}\), stability, mass drift, oscillation, spectral norms) against empirical targets and thresholds</td>
-              <td>11.4.1 (Empirical Higgs Field), 11.4.2 (Projected Validation Summary), D.4.1 (Deviation Map), D.4.2 (Parameter Accuracy)</td>
             </tr>
             <tr>
               <td>05_s3_spectral_base.py</td>
               <td>Generates spherical harmonics \( Y_{lm} \) on \( S^3 \) and validates spectral norm within admissible range \([10^3, 10^6]\)</td>
-              <td>10.6.1 (Field Parametrization), 15.1.2 (Spherical Mode Structure), 15.2.2 (Holomorphic CY\(_3\) Modes)</td>
             </tr>
             <tr>
               <td>06_cy3_spectral_base.py</td>
               <td>Computes SU(3)-compatible holonomy basis on \( CY_3 \), validates spectral norm, and plots spectral structure</td>
-              <td>10.6.1 (Field Parametrization), 15.1.2 (Spherical Mode Structure), 15.2.2 (Holomorphic CY\(_3\) Modes)</td>
             </tr>
             <tr>
               <td>07_gravity_curvature_analysis.py</td>
               <td>Constructs gravitational tensor \( I_{\mu\nu} \) via second-order gradients of smoothed entropy field; enforces stability threshold</td>
-              <td>10.6.1 (Field Parametrization), 7.5.1 (Informational Curvature), 12.4.3 (Cosmological Projection)</td>
             </tr>
             <tr>
               <td>07a_curvature_simulation.py</td>
               <td>Estimates curvature trace \( I_{\mu\nu} \approx \langle|\nabla^2 S|\rangle \) from entropic field \( S \); validates flatness consistency (Ω<sub>k</sub> ≈ 0)</td>
-              <td>5.3.2 (Field Geometry and Laplacian Traces), 6.3.10 (EP8 – Emergent Curvature Indicators)</td>
             </tr>
             <tr>
               <td>08_cosmo_entropy_scale.py</td>
               <td>Projects and scales entropy gradient to reproduce cosmological dark matter density \( \Omega_{\text{DM}} \approx 0.27 \)</td>
-              <td>10.6.1 (Field Parametrization), 7.5.1 (Informational Curvature), 12.4.3 (Cosmological Projection)</td>
             </tr>
             <tr>
               <td>09_test_proposal_sim.py</td>
               <td>Simulates BEC mass drift and neutrino oscillation probability \( P_{ee}(L) \) using MSM entropy projections</td>
-              <td>10.5.1 (Simulation Logic), 11.1.3 (Heuristic Setup), D.5.1–D.5.7 (Empirical Tests)</td>
             </tr>
             <tr>
               <td>10_external_data_validator.py</td>
               <td>Processes SDSS FITS redshift data; bins sky coordinates, estimates dark matter density, logs deviation metrics</td>
-              <td>10.6.1 (Projection Filters), 12.4.3 (Cosmological Data Alignment)</td>
             </tr>
             <tr>
               <td>10a_plot_z_sky_mean.py</td>
               <td>Generates redshift heatmap from binned sky data; computes isotropy statistics and visual diagnostics</td>
-              <td>10.6.1 (Projection Filters), 11.4.3 (Cosmic Lensing and Holographic Saturation), 12.2.1 (Projectional Diagnostics of \( z_{\text{sky}} \)), 12.4.3 (Cosmological Data Alignment)</td>
             </tr>
             <tr>
               <td>10b_neutrino_analysis.py</td>
               <td>Computes neutrino survival probability \( P_{ee}(L,E) \) from redshift baselines; logs oscillation metrics per class</td>
-              <td>6.3.13 (EP12 – Oscillatory Coherence), 10.5.1 (Simulation-Based Validation Architecture), D.5.6 (Optical Lattices with State Superposition)</td>
             </tr>
             <tr>
               <td>10c_rg_entropy_flow.py</td>
               <td>Derives \( \alpha_s(\tau) \) from redshift-inferred scale using QCD RG flow; compares to empirical coupling values</td>
-              <td>7.2.1 (Entropic RG Equation), 10.6.1 (Projection Filters), 11.5 (Spectral RG Flows)</td>
             </tr>
             <tr>
               <td>10d_entropy_map.py</td>
               <td>Computes entropy-weighted sky map based on redshift deviation; includes hemispheric and correlational metrics</td>
-              <td>7.2.1 (Entropic RG Equation), 10.6.1 (Field Parametrization and Spectral Basis), 11.5 (Spectral RG Flows)</td>
             </tr>
             <tr>
               <td>10e_parameter_scan.py</td>
               <td>Scans \( \Delta m^2, \theta \) parameter space; minimizes std(\( P_{ee} \)) across redshift baselines for oscillation fit</td>
-              <td>6.3.13 (EP12 – Oscillatory Coherence), 10.5.1 (Simulation-Based Validation Architecture), D.5.5 (Parameter-Space Projection Metrics)</td>
             </tr>
             <tr>
               <td>11_2mass_psc_validator.py</td>
               <td>Analyzes 2MASS PSC data for source density; converts to redshift estimate and validates against MSM projections</td>
-              <td>10.6.1 (Field Parametrization and Spectral Basis), 11.4.3 (Cosmic Lensing and Holographic Saturation), 12.4.3 (Cosmological Relevance)</td>
             </tr>
             <tr>
               <td>12_summary.py</td>
               <td>Generates structured Markdown summary of all MSM scripts (01–11); parses <code>results.csv</code> and contextualizes outputs via postulates and empirical anchors</td>
-              <td>11.4.2 (Projected Validation Summary), D.4.2 (Parameter Accuracy)</td>
             </tr>
           </tbody>
         </table>
