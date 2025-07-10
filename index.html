@@ -7305,6 +7305,7 @@
           <li><code>01_qcd_spectral_field.py</code>: Computes \( \alpha_s \) via spherical harmonics \( Y_{lm} \) under entropy projection and redundancy filters.</li>
           <li><code>03_higgs_spectral_field.py</code>: Generates Higgs field \( \psi_\alpha \) as a squared amplitude plus noise, then computes \( m_H \) through entropy gradients. Stability is assessed against threshold.</li>
           <li><code>07_gravity_curvature_analysis.py</code>: Constructs the gravitational tensor \( I_{\mu\nu} \) from second-order derivatives of an entropy-smoothed field. Iterative refinement ensures stability metric ≥ 0.5.</li>
+          <li><code>07a_curvature_simulation.py</code>: Computes the curvature trace \( I_{\mu\nu} \approx \langle|\nabla^2 S|\rangle \) from the entropic field \( S(x, y, \tau) \) to check empirical flatness (Ω<sub>k</sub> ≈ 0)</li>
           <li><code>08_cosmo_entropy_scale.py</code>: Projects and scales the entropy gradient from <code>s_field.npy</code> to reproduce the cosmological dark matter fraction \( \Omega_{\text{DM}} \approx 0.27 \).</li>
         </ul>
         </p>
@@ -7359,6 +7360,34 @@
         <p>
           <strong>Related sections:</strong> 10.6.1 (field parametrization), 7.5.1 (informational curvature), 12.4.3 (cosmological projection), 15.1.2 (spectral coherence on \( S^3 \)), 15.2.2 (CY₃ holomorphic structure), 16.3 (holographic formulation). <strong>Validation:</strong> CODATA (\( \alpha_s \)), LHC (\( m_H \)), Planck (\( \Omega_{\text{DM}} \)).
         </p>
+        <section id="a5-1">
+          <h5>A.5.1 Curvature Estimation from Entropic Field</h5>
+          <p>
+            This script estimates the curvature trace \( I_{\mu\nu} \approx \langle|\nabla^2 S|\rangle \) from the entropic field \( S(x, y, \tau) \) defined on the meta-space manifold \( \mathcal{M}_{\text{meta}} = S^3 \times CY_3 \times \mathbb{R}_\tau \). It serves as a purely geometric consistency check of spatial flatness (Ω<sub>k</sub> ≈ 0) based on the Laplacian of the entropic field.
+          </p>
+          <p>
+            <strong>Motivation:</strong> Within the MSM, geometric curvature is not imposed but arises from intrinsic field structure. The scalar trace of the Laplacian of \( S \) across the available simulation axes provides a non-metric indicator of curvature. Comparing this emergent quantity to observational flatness constraints provides a structural test of MSM’s geometric assumptions.
+          </p>
+          <p>
+            <strong>Script functionality:</strong>
+            <ul>
+              <li>Loads entropic field from <code>img/s_field.npy</code></li>
+              <li>Computes Laplacian \( \nabla^2 S = \sum_i \partial^2 S / \partial x_i^2 \)</li>
+              <li>Estimates scalar curvature \( I_{\mu\nu} := \langle|\nabla^2 S|\rangle \)</li>
+              <li>Compares to empirical target from config file</li>
+              <li>Appends results to <code>results.csv</code></li>
+            </ul>
+          </p>
+          <p>
+            <strong>Output:</strong> Scalar curvature value, deviation from target, validation status.
+          </p>
+          <p>
+            <strong>Validated postulates:</strong> CP1 (meta-space geometry), CP3 (geometric emergence), CP6 (simulation consistency), EP8 (extended quantum gravity).
+          </p>
+          <p>
+            <strong>Related sections:</strong> 7.5.4 (Comparison: \( I_{\mu\nu} \) vs. \( G_{\mu\nu} \)), 9.1.1 (Gravitational Emergence), D.4.4 (Curvature Metrics). <strong>Validation:</strong> Planck 2018 (spatial flatness constraint \( \Omega_k \approx 0 \)).
+          </p>
+        </section>
       </section>
       <section id="a6">
         <h3>A.6 Detail Heuristic Simulations</h3>
@@ -8049,6 +8078,11 @@
               <td>07_gravity_curvature_analysis.py</td>
               <td>Constructs gravitational tensor \( I_{\mu\nu} \) via second-order gradients of smoothed entropy field; enforces stability threshold</td>
               <td>10.6.1 (Field Parametrization), 7.5.1 (Informational Curvature), 12.4.3 (Cosmological Projection)</td>
+            </tr>
+            <tr>
+              <td>07a_curvature_simulation.py</td>
+              <td>Estimates curvature trace \( I_{\mu\nu} \approx \langle|\nabla^2 S|\rangle \) from entropic field \( S \); validates flatness consistency (Ω<sub>k</sub> ≈ 0)</td>
+              <td>5.3.2 (Field Geometry and Laplacian Traces), 6.3.10 (EP8 – Emergent Curvature Indicators)</td>
             </tr>
             <tr>
               <td>08_cosmo_entropy_scale.py</td>
