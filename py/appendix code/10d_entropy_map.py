@@ -32,7 +32,7 @@ def load_config(path="config_external.json"):
 def main(input_csv="z_sky_mean.csv"):
     config = load_config()
 
-    # Extrahiere Klassennamen aus dem Dateinamen
+    # Extract clasnames from filenames
     class_name = os.path.basename(input_csv).replace("z_sky_mean_", "").replace(".csv", "").upper()
     output_plot = f"img/10d_z_entropy_weight_map_{class_name.lower()}.png"
 
@@ -46,7 +46,7 @@ def main(input_csv="z_sky_mean.csv"):
     if len(df) < min_valid_bins:
         print(f"[10d] Warning: Only {len(df)} valid sky bins (required: ≥{min_valid_bins}). Skipping entropy analysis.")
         
-        # Ergebnis in results.csv speichern
+        # Save results to csv
         script_id = "10d_entropy_map.py"
         timestamp = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
         results_path = "results.csv"
@@ -69,7 +69,7 @@ def main(input_csv="z_sky_mean.csv"):
 
             with open(results_path, "a", newline="", encoding="utf-8") as f:
                 writer = csv.writer(f)
-                # Schreibe Header nur, wenn die Datei leer ist
+                # Only write header if file es empty
                 if not os.path.exists(results_path) or os.path.getsize(results_path) == 0:
                     header = ["script", "parameter", "value", "target", "deviation", "timestamp"]
                     writer.writerow(header)
@@ -78,16 +78,16 @@ def main(input_csv="z_sky_mean.csv"):
         except Exception as e:
             print(f"[10d] Error writing to results.csv: {e}")
         
-        return  # Analyse abbrechen
+        return  # stop analysis
 
     print(f"[10d] Loaded {len(df)} valid sky bins from {input_csv}.")
 
-    # Robuste Entropiegewichtung mittels Median und MAD
+    # robust entropy weights via median & MAD
     z_median = df["mean_z"].median()
     mad = np.median(np.abs(df["mean_z"] - z_median))
-    mad_scaled = mad * 1.4826  # Approximation zur Standardabweichung für normalverteilte Daten
+    mad_scaled = mad * 1.4826  # Approximation to standard deviance
 
-    if mad_scaled == 0:  # Fallback auf Standardabweichung, falls MAD=0 (z. B. bei wenigen Bins)
+    if mad_scaled == 0:  # Fallback to standard deviance if MAD=0
         z_mean = df["mean_z"].mean()
         z_std = df["mean_z"].std()
         scale = z_std if z_std > 0 else 1e-6
@@ -95,22 +95,22 @@ def main(input_csv="z_sky_mean.csv"):
     else:
         df["entropy_weight"] = np.exp(- (df["mean_z"] - z_median)**2 / (2 * mad_scaled**2))
 
-    # Normierte Shannon-Entropie (S_ρ)
+    # Normalized Shannon-entropy (S_ρ)
     w = df["entropy_weight"] / df["entropy_weight"].sum()  # Normalisierte Gewichte
     S_rho = -np.sum(w * np.log(w + 1e-10)) / np.log(len(w)) if len(w) > 0 else np.nan
 
-    # Hemisphären-Statistik
+    # Hemisphere statistic
     north_mask = df["dec_min"] >= 0
     south_mask = df["dec_min"] < 0
     entropy_weight_std = df["entropy_weight"].std()
     north_std = df[north_mask]["entropy_weight"].std() if north_mask.any() else np.nan
     south_std = df[south_mask]["entropy_weight"].std() if south_mask.any() else np.nan
 
-    # Korrelation zwischen entropy_weight und mean_z
+    # Correlation entropy_weight and mean_z
     correlation = df["entropy_weight"].corr(df["mean_z"]) if len(df) > 1 else np.nan
 
-    # Threshold-Warnsystem
-    # Dynamisches Thresholding: adaptiv auf Nord/Süd-Streuung
+    # Threshold-warning system
+    # Dynamic Thresholding: adaptive to north/south-scattering
     threshold = 1.25 * np.median([north_std, south_std]) if np.isfinite(north_std) and np.isfinite(south_std) else 0.2
     status = "PASS" if entropy_weight_std < threshold else "FAIL"
 
@@ -130,7 +130,7 @@ def main(input_csv="z_sky_mean.csv"):
 
     # Plot
     plt.figure(figsize=(12, 6))
-    cmap = plt.cm.viridis  # Änderung zu viridis für Konsistenz mit 10b
+    cmap = plt.cm.viridis  # Change to viridis to be consistent with 10b
     cmap.set_bad("lightgrey")
 
     im = plt.imshow(
@@ -153,7 +153,7 @@ def main(input_csv="z_sky_mean.csv"):
     plt.close()
     print(f"[10d] Saved entropy map to {output_plot}")
 
-    # Ergebnis in results.csv speichern
+    # Write results to csv
     script_id = "10d_entropy_map.py"
     timestamp = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
     results_path = "results.csv"
@@ -186,7 +186,7 @@ def main(input_csv="z_sky_mean.csv"):
     except Exception as e:
         print(f"[10d] Error writing to results.csv: {e}")
 
-    # Summary-Ausgabe
+    # Summary
     print("\n=====================================")
     print(f"     Meta-Space Model: Entropy Map Summary ({class_name})")
     print("=====================================")

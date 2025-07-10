@@ -1,12 +1,13 @@
 # Script: 00_script_suite.py
 # Description: Graphical launcher for the Meta-Space Model (MSM) Python simulation suite.
 # Features:
-#   - GUI with buttons for scripts 01–11, sequentially enabled based on results.csv.
+#   - GUI with buttons for scripts 01–12, sequentially enabled based on results.csv.
 #   - Real-time output, code, and JSON-config display in a scrolled text area.
-#   - Buttons for package installation and image viewer.
+#   - Buttons for package installation.
+#   - Image viewer & Markdown renderer
 #   - Progress bar below output field for script execution and package installation.
-#   - Auto-clears script-related CSV rows before re-execution.
-#   - Mouse wheel scrolling restricted to ImageViewer when active.
+#   - Auto-clears script-related CSV rows and other outputs (.txt, .log etc) before re-execution.
+#   - Mouse wheel scrolling for ImageViewer when active.
 # Dependencies: tkinter, subprocess, threading, csv, json, tabulate, logging, PIL
 
 import tkinter as tk
@@ -98,7 +99,8 @@ CONFIG_MAP = {
 
 REQUIRED_PACKAGES = sorted(set([
     "numpy", "cupy", "matplotlib", "json", "csv", "logging", "glob", "os", "datetime",
-    "tqdm", "scipy", "tkinter", "tabulate", "platform", "astropy", "pillow"
+    "tqdm", "scipy", "tkinter", "tabulate", "platform", "astropy", "pillow",
+    "subprocess", "sys", "threading", "time", "warnings", "pandas"
 ]))
 
 FONT_SIZE = [12]
@@ -361,7 +363,8 @@ def reset_results(output_widget, buttons, viewer):
                 except Exception as e:
                     print(f"Failed to delete {file}: {e}")
 
-        msg = "results.csv, all .csv, .txt, .log files in base directory, and all .png files in img/ have been cleared.\n"
+        msg = "All results and generated files of these types have been cleared: \n\n  - .csv\n  - .log\n  - .txt\n  - .png"
+
         output_widget.configure(state='normal')
         output_widget.delete('1.0', tk.END)
         output_widget.insert(tk.END, msg)
@@ -498,12 +501,15 @@ class MarkdownViewer:
         self.output_widget.tag_configure("h1", font=("Arial", bs + 6, "bold", "underline"), foreground="#d35400", spacing3=6)
         self.output_widget.tag_configure("h2", font=("Arial", bs + 4, "bold", "underline"), foreground="#5dade2", spacing3=4)
         self.output_widget.tag_configure("h3", font=("Arial", bs + 2, "bold"), foreground="#f1c40f", spacing3=2)
-        self.output_widget.tag_configure("bold", font=("Consolas", bs + 2, "bold"), foreground="#ffffff")
+        self.output_widget.tag_configure("bold", font=("Consolas", bs + 2, "bold"))
         self.output_widget.tag_configure("italic", font=("Consolas", bs + 2, "italic"), foreground="#cccccc")
         self.output_widget.tag_configure("bullet", lmargin1=30, lmargin2=50, spacing3=2)
         self.output_widget.tag_configure("codeblock", font=("Courier", bs + 2), background="#1e1e1e", foreground="#eeeeee", lmargin1=20, spacing3=2)
         self.output_widget.tag_configure("inlinecode", font=("Courier", bs + 1), background="#333333", foreground="#eeeeee")
         self.output_widget.tag_configure("separator", foreground="#66ff99")
+        self.output_widget.tag_configure("status_pass", font=("Consolas", bs), foreground="#00cc66")
+        self.output_widget.tag_configure("status_fail", font=("Consolas", bs), foreground="#ff4d4d")
+        self.output_widget.tag_configure("status_na",   font=("Consolas", bs), foreground="#aaaaaa")
 
     def show(self, filepath):
         """Display and render a markdown file in the output widget."""
@@ -545,11 +551,11 @@ class MarkdownViewer:
                 continue
 
             elif line.startswith("## "):
-                self.output_widget.insert(tk.END, "\n" + line[3:] + "\n", "h2")
+                self.output_widget.insert(tk.END, "\n" + line[3:] + "\n\n", "h2")
                 continue
 
             elif line.startswith("### "):
-                self.output_widget.insert(tk.END, "\n" + line[4:] + "\n", "h3")
+                self.output_widget.insert(tk.END, line[4:] + "\n", "h3")
                 continue
 
             # List items
@@ -581,6 +587,16 @@ class MarkdownViewer:
                     else:
                         self.output_widget.insert(tk.END, part, "inlinecode")
                 self.output_widget.insert(tk.END, "\n")
+                continue
+
+            # **PASS✅**", "- **FAIL❌**", "- **N/A➖**"
+            status_match = re.match(r"^\s*[-•]\s+\*\*(PASS✅|FAIL❌|N/A➖)\*\*", line)
+            if status_match:
+                status_token = status_match.group(1)
+                tag = "status_pass" if "PASS" in status_token else "status_fail" if "FAIL" in status_token else "status_na"
+                self.output_widget.insert(tk.END, "• ", "bullet")
+                self.output_widget.insert(tk.END, status_token, tag)
+                self.output_widget.insert(tk.END, "\n", "bullet")
                 continue
 
             # Bold (**text**) – rendered after inline code
@@ -711,7 +727,7 @@ def create_gui():
 
     tk.Button(button_frame, text="Show results.csv", width=30,
               command=lambda: show_results(output_text, viewer)).pack(pady=(20, 5))
-    tk.Button(button_frame, text="Reset results.csv", width=30,
+    tk.Button(button_frame, text="Reset all results", width=30,
               command=lambda: reset_results(output_text, buttons, viewer)).pack(pady=5)
     tk.Button(button_frame, text="Open Image Viewer", width=30,
               command=viewer.show).pack(pady=5)

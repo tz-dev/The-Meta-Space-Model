@@ -158,7 +158,7 @@ def validate(entries, cfg):
                 'timestamp': datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
             })
 
-    # Filter: entferne Einträge mit nicht-finiten Werten (z.B. nan)
+    # Filter our non-dimensional values
     filtered_entries = [
         e for e in filtered_entries
         if isinstance(e['value'], (int, float)) and np.isfinite(e['value'])
@@ -169,7 +169,7 @@ def validate(entries, cfg):
     for e in tqdm(filtered_entries, desc="Validating entries", unit="entry"):
         param = 'm_h' if e['parameter'] == 'm_H' else e['parameter']
         
-        # --- NEU: Klassenspezifisches neutrino_metric matching ---
+        # --- Class specific neutrino_metric matching ---
         if param.startswith("oscillation_metric_"):
             base = "oscillation_metric"
             if base not in cfg['targets']:
@@ -181,7 +181,7 @@ def validate(entries, cfg):
             base = "entropy_weight_std"
             target = cfg['targets'].get(base, 0.2)
 
-            # Dynamischer Schwellenwert aus results.csv berechnen
+            # Calculate dynamic threshold from results.csv
             class_suffix = param.split('_')[-1]
             try:
                 values = [
@@ -210,7 +210,7 @@ def validate(entries, cfg):
         status = None
         deviation = None
 
-        # Punktziel (auch für oscillation_metric_<CLASS>)
+        # Point target (also for oscillation_metric_<CLASS>)
         if isinstance(target, (int, float)) and param not in ['stability_metric', 'scaling_metric', 'Y_lm_norm', 'holonomy_norm']:
             deviation = abs(value - target)
             status = 'PASS' if deviation <= threshold else 'FAIL'
@@ -387,7 +387,7 @@ def main():
         plot_heatmaps()
         pbar.update(1)
 
-    # Manuelle Ergänzung: I_mu_nu aus Script 07 validieren
+    # Validate I_mu_nu aufrom script 07
     if any(e['parameter'] == 'I_mu_nu' for e in entries):
         try:
             I_mu_nu_entry = next(e for e in entries if e['parameter'] == 'I_mu_nu')

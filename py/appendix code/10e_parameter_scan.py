@@ -80,7 +80,7 @@ def main(input_csv="z_sky_mean.csv"):
     best_theta = theta_vals[idx[1]]
     timestamp = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
 
-    # Ergebnis in results.csv
+    # Write to results.csv
     script_id = "10e_parameter_scan.py"
     param_name = f"oscillation_scan_min_{class_name}"
     results_path = "results.csv"
@@ -98,7 +98,7 @@ def main(input_csv="z_sky_mean.csv"):
 
         with open(results_path, "a", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
-            # Schreibe Header nur, wenn die Datei leer ist
+            # Only write header if file is empty
             if not os.path.exists(results_path) or os.path.getsize(results_path) == 0:
                 header = ["script", "parameter", "value", "target", "deviation", "timestamp"]
                 writer.writerow(header)

@@ -106,7 +106,7 @@ def analyze_rg_flow(input_csv="z_sky_mean.csv", output_summary="rg_flow_summary.
     print(f"Plot: 10c_alpha_s_rg_flow.png")
     print("=====================================\n")
 
-    # Ergebnisse in results.csv speichern
+    # Save to csv
     results_path = "results.csv"
     script_id = "10c_rg_entropy_flow.py"
     timestamp = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
@@ -115,7 +115,7 @@ def analyze_rg_flow(input_csv="z_sky_mean.csv", output_summary="rg_flow_summary.
 
         with open(results_path, "a", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
-            # Schreibe Header nur, wenn die Datei leer ist
+            # Only write header if file is empty
             if not os.path.exists(results_path) or os.path.getsize(results_path) == 0:
                 header = ["script", "parameter", "value", "target", "deviation", "timestamp"]
                 writer.writerow(header)

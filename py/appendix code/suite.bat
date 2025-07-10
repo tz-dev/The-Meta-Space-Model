@@ -27,7 +27,7 @@ if "!PYTHON_VERSION:~0,2!" neq "3." (
 )
 
 :: List of required packages
-set "PACKAGES=tkinter tabulate"
+set "PACKAGES=tkinter tabulate subprocess threading sys io os re csv json logging PIL"
 
 :: Check and install missing packages
 set "MISSING_PACKAGES="

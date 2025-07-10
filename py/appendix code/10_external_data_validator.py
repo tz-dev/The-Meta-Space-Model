@@ -157,7 +157,7 @@ def run_analysis():
                 if isinstance(class_filter, str):
                     class_filter = [class_filter]
 
-                # Überprüfen der CLASS-Spalte
+                # Check class row
                 try:
                     class_values = data['CLASS']
                     unique_classes = np.unique([x.decode('utf-8') if isinstance(x, bytes) else x for x in class_values])
@@ -173,7 +173,7 @@ def run_analysis():
                     data_all = data
                     for class_name in class_filter:
                         try:
-                            # CLASS-Werte als Strings vergleichen
+                            # compare values from CLASS as string
                             class_mask = np.array([x.decode('utf-8') if isinstance(x, bytes) else x for x in data_all['CLASS']]) == class_name
                             class_data = data_all[class_mask]
                             if len(class_data) < 100:
@@ -191,7 +191,7 @@ def run_analysis():
                     update_status("No CLASS filtering specified. Running full dataset.")
                     class_results["ALL"] = run_single_class_analysis(data, "ALL", config)
 
-                # Ergebnisse in results.csv schreiben
+                # write results to results.csv
                 results_path = "results.csv"
                 script_id = "10_external_data_validator.py"
                 timestamp = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
@@ -215,11 +215,11 @@ def run_analysis():
                                 df_sky = pd.read_csv(f"z_sky_mean_{class_name.lower()}.csv")
                                 valid_bins = df_sky[df_sky['count'] >= config['sky_bin_min_count']]
 
-                                # Dynamische Schwelle abhängig von Streuung in z̄ (angepasst an Strukturvielfalt)
+                                # Dynamic Threshold depending from scattering in z̄
                                 if not valid_bins.empty:
                                     z_mean_local = np.mean(valid_bins['mean_z'])
                                     z_std_local = np.std(valid_bins['mean_z'])
-                                    epsilon = 1e-4  # zur Vermeidung von Division durch 0
+                                    epsilon = 1e-4  # Do not divide by 0
                                     threshold = threshold_base * (1 + z_std_local / (z_mean_local + epsilon))
                                 else:
                                     threshold = threshold_base
@@ -257,15 +257,7 @@ def run_analysis():
                 except Exception as e:
                     update_status(f"Warning: Could not write to results.csv: {e}")
 
-                # Cross-check mit 2MASS
-                # csv_data = load_csv_data()
-                # if '11_2mass_psc_validator.py' in csv_data:
-                #     psc_density = csv_data['11_2mass_psc_validator.py'].get('local_source_density', 1.0)
-                #     for class_name in class_results:
-                #         if class_results[class_name]["status"] == "success":
-                #             update_status(f"CLASS={class_name}: Cross-check: 2MASS density = {psc_density:.3f} arcmin⁻², FITS density = {class_results[class_name]['local_dm_density']:.3e} M☉/pc³ (unit mismatch, conversion pending)")
-
-                # Visualisierungsskripte ausführen
+                # Run scripts
                 if config.get("sky_bin_analysis", True):
                     for class_name in class_results:
                         if class_results[class_name]["status"] == "success" and os.path.exists(f"z_sky_mean_{class_name.lower()}.csv"):
@@ -315,16 +307,16 @@ def perform_sky_bin_analysis(ra_vals, dec_vals, z_vals, ra_bins, dec_bins, outpu
                 count = len(region_z)  # Count data points in bin
                 mean_z = np.mean(region_z) if count >= min_count else np.nan  # Calculate mean z, set to NaN if below min_count
 
-                # Berechne die Fläche des Bins mit sphärischer Geometrie (verbesserte Annäherung)
+                # Calculate area of bin with pheric geometry
                 if count > 0:
                     from astropy.coordinates import SkyCoord
                     from astropy.units import deg
                     center_ra = (ra_min + ra_max) / 2
                     center_dec = (dec_min + dec_max) / 2
-                    # Annäherung der Fläche in Quadratgrad (vereinfacht, bis WCS verfügbar)
+                    # Approximation of area
                     ra_width = (ra_max - ra_min) * deg
                     dec_width = (dec_max - dec_min) * deg
-                    area_deg2 = ra_width.value * np.cos(np.radians(center_dec)) * dec_width.value  # Berücksichtigt Kosinus-Term für sphärische Geometrie
+                    area_deg2 = ra_width.value * np.cos(np.radians(center_dec)) * dec_width.value  # consider cosinus for spheric geometry
                     comoving_dist = cosmo.comoving_distance(mean_z).value  # in Mpc
                     area_pc2 = area_deg2 * (u.deg ** 2).to(u.radian ** 2) * (comoving_dist * u.Mpc) ** 2
                     mean_density = (count / area_pc2.value) * (cosmo.critical_density(mean_z).to(u.Msun / u.pc ** 3).value / cosmo.critical_density(0).to(u.Msun / u.pc ** 3).value) if area_pc2.value > 0 else np.nan
@@ -350,16 +342,16 @@ def perform_sky_bin_analysis(ra_vals, dec_vals, z_vals, ra_bins, dec_bins, outpu
 
 def run_single_class_analysis(data, class_name, config):
     """
-    Führt die vollständige Analyse für eine spezifische Objektklasse aus, einschließlich
-    Redshift-Verarbeitung, Sky-Binning, Dichte-Berechnung, Plots und CSV-Ausgabe.
-    
+    Performs the complete analysis for a specific object class, including
+    redshift processing, sky binning, density calculation, plotting, and CSV output.
+
     Args:
-        data: FITS-Daten für die spezifische Klasse.
-        class_name (str): Name der Klasse (z. B. 'GALAXY', 'QSO', 'ALL').
-        config (dict): Konfigurationsdictionary.
-    
+        data: FITS data for the specific class.
+        class_name (str): Name of the class (e.g., 'GALAXY', 'QSO', 'ALL').
+        config (dict): Configuration dictionary.
+
     Returns:
-        dict: Ergebnisse der Analyse, z. B. {'local_dm_density': float, 'valid_z_count': int}.
+        dict: Results of the analysis, e.g., {'local_dm_density': float, 'valid_z_count': int}.
     """
     z_max = config.get("z_max", 0.5)
     hist_bins = config.get("hist_bins", 50)
@@ -369,7 +361,7 @@ def run_single_class_analysis(data, class_name, config):
     dec_bins = config.get("dec_bins", 18)
     min_count = config.get("sky_bin_min_count", 200)
     
-    # Redshift-Verarbeitung
+    # Redshift
     try:
         z_values = cp.array(data['z']) if cuda_available else data['z']
         with tqdm(total=len(z_values), desc=f"Processing z-values ({class_name})") as pbar:
@@ -379,12 +371,12 @@ def run_single_class_analysis(data, class_name, config):
             pbar.update(int(len(valid_z)))
             valid_z = valid_z.get() if cuda_available else valid_z
 
-            # Optionales Clustering + Sigma-Clipping zur Filterung von Ausreißern
+            # Optional clustering + sigma-Clipping filtering extreme values
             try:
                 z_filtering = config.get("z_filtering", {})
                 initial_count = len(valid_z)
 
-                # DBSCAN: Entdecke Dichtekerne in z-Verteilung
+                # DBSCAN: check density coeres in z-distribution
                 if z_filtering.get("enable_dbscan", False):
                     from sklearn.cluster import DBSCAN
                     db = DBSCAN(
@@ -436,7 +428,7 @@ def run_single_class_analysis(data, class_name, config):
                     )
                     pbar_sky.update(int(cp.sum(sky_mask).item()) if cuda_available else int(np.sum(sky_mask)))
                 
-                # Dichte-Schätzung aus Sky-Bins
+                # Density estimation based on bins
                 df_sky = pd.read_csv(output_path)
                 valid_bins = df_sky[df_sky['count'] >= min_count]
                 if not valid_bins.empty:
@@ -454,7 +446,7 @@ def run_single_class_analysis(data, class_name, config):
             finally:
                 del ra_vals, dec_vals, z_vals
         
-        # Histogramme
+        # Histograms
         try:
             plt.figure(figsize=(10, 6))
             plt.hist(valid_z, bins=hist_bins, range=hist_range, color='blue', alpha=0.7)

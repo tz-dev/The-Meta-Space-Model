@@ -202,8 +202,8 @@ def run_analysis():
         if valid_densities:
             update_status(f"Source Density Map: min={np.min(valid_densities):.3f}, max={np.max(valid_densities):.3f}")
 
-        # Umrechnung von mean_density → mean_z (modellbasiert)
-        # Annahme aus index.html: rho_expected ≈ 0.22 sources/arcmin² ↔ z ≈ 1.0
+        # mean_density → mean_z
+        # From book: rho_expected ≈ 0.22 sources/arcmin² ↔ z ≈ 1.0
         rho_expected = 0.22
         output_path = "z_sky_mean_2mass.csv"
         with open(output_path, 'w', newline='', encoding='utf-8') as f:
@@ -281,7 +281,7 @@ def run_analysis():
     plt.close()
     update_status("Heatmap saved to: img/11_source_density_heatmap.png")
 
-    # Optional: 10a–10e auf z_sky_mean_2mass.csv anwenden
+    # Run 10a–10e using z_sky_mean_2mass.csv
     if os.path.exists("z_sky_mean_2mass.csv"):
         for script in [
             "10a_plot_z_sky_mean.py",

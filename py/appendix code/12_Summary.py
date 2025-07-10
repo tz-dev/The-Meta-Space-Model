@@ -50,7 +50,7 @@ SCRIPT_INFO = {
 - Redundancy (CP5): R_π = H[ρ] - I[ρ|O], where H[ρ] = ln(S_filter + ε), I[ρ|O] = ln(1 + Σw_i).
 - α_s computation (EP1): α_s = α_target * (S_min / S_filter), normalized to CODATA (0.118).
 - m_H computation (EP11): m_H = m_H_target * (S_min / S_filter), normalized to 125.0 GeV.
-- RG Flow (EP13): α_s(τ) computed via 3-loop β-function, evaluated at τ ≈ 1 GeV⁻¹.
+- RG Flow (EP13): α_s(τ) computed via 3-loop β-function, evaluated at τ ≈ 1GeV⁻¹.
 - Monte Carlo validation: Ensures consistency via random sampling on S^3.
 - Uses CUDA (cupy) for GPU acceleration if available, fallback to NumPy.""",
         "postulates": ["CP1: Geometric basis (S^3 × CY_3 × ℝ_τ)", "CP3: Projection principle (δS_proj = 0)", "CP5: Entropy-coherent stability (R_π < threshold)", "CP6: Computational consistency via Monte Carlo and CUDA/NumPy", "CP7: Entropy-driven matter (α_s, m_H derived from ∇_τS)", "EP1: Empirical QCD coupling (α_s ≈ 0.118)", "EP11: Empirical Higgs mass (m_H ≈ 125.0 GeV)", "EP13: Renormalization group consistency (α_s(τ) ≈ 0.30 at τ ≈ 1 GeV⁻¹)"],
@@ -208,7 +208,6 @@ SCRIPT_INFO = {
     }
 }
 
-
 def load_config(path="config_summary.json"):
     """Load configuration file if available."""
     try:
@@ -303,15 +302,29 @@ def main():
                                 min_val, max_val = [float(x) for x in target.strip("[]").split(",")]
                                 status = "PASS" if min_val <= value_f <= max_val else "FAIL"
                             else:
-                                deviation_val = float(val_row["deviation"].iloc[0])
-                                threshold = float(target) if target != "N/A" else float("inf")
-                                status = "PASS" if deviation_val <= threshold else "FAIL"
+                                try:
+                                    status = str(val_row["status"].iloc[0]).upper()
+                                except Exception:
+                                    try:
+                                        deviation_val = float(val_row["deviation"].iloc[0])
+                                        threshold = float(val_row["threshold"].iloc[0]) if "threshold" in val_row.columns else float("inf")
+                                        status = "PASS" if deviation_val <= threshold else "FAIL"
+                                    except Exception:
+                                        status = "N/A"
                         except Exception:
                             status = "N/A"
                 
-                results.append(f"- **{param}**: Value={value}, Target={target}, Deviation={deviation}, Status={status}")
+                # Format status as emoji-marked Markdown for viewer highlighting
+                if status == "PASS":
+                    status_md = "PASS✅"
+                elif status == "FAIL":
+                    status_md = "FAIL❌"
+                else:
+                    status_md = "N/A➖"
+
+                results.append(f"- **{param}**: Value={value}, Target={target}, Deviation={deviation}, Status={status_md}")
             markdown_content.append("\n".join(results))
-            markdown_content.append(f"\n**Outputs**: {', '.join(outputs)}")
+            markdown_content.append(f"\n**Outputs**: {', '.join(outputs)}" + "\n")
         else:
             markdown_content.append("No results found in results.csv for this script.")
         
