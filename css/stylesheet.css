@@ -300,12 +300,12 @@ img {
   .diagram-box {
     flex: 2; 
     padding: 10px;
+    background-color: #fff;
   }
 
   .diagram-box figure {
     margin: 0;
     border: 1px solid #999;
-    background-color: #fff;
   }
 
   .diagram-box figcaption {
