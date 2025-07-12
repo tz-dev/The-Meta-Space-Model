@@ -2006,6 +2006,11 @@
             <li>Qualitative simulation using <code>09_test_proposal_sim.py</code> to model flavor transitions in Bose-Einstein condensates (BEC) or optical lattices (D.5.1, D.5.6), testing for entropy-induced oscillation patterns. Failure to observe entropy-aligned flavor transitions or evidence of Hilbert-space mass mixing would falsify EP12.</li>
           </ul>
           </p>
+          <p>
+            <strong>Numerical Validation:</strong> Additional empirical support for EP12 is provided by the simulation scripts <code>10b_neutrino_analysis.py</code> and <code>10e_parameter_scan.py</code>.<br>
+            The former analyzes redshift-based baseline distributions to compute survival probabilities \( P_{ee} \) across multiple energy scales. The latter explores the parameter space \((\Delta m^2, \theta)\), identifying regions with minimal projection-weighted deviations.<br>
+            Both confirm that neutrino oscillations in the MSM align with empirical observations.
+          </p>
         </section>
         <section id="ep13">
           <h4>6.3.13 Extended Postulate EP13 – Topological Effects (Chern-Simons, Monopoles, Instantons)</h4>
@@ -3219,7 +3224,11 @@
         </table>
         <p>
           This aligns with QFT β-function analyses (Peskin & Schroeder, 1995) but grounds interactions in entropy geometry, validated by Lattice-QCD.<br>
-          <strong>A specific MSM projection of the RG flow</strong> \( \alpha_s(\tau) \) <strong>yields</strong> \( \alpha_s \approx 0.30 \) <strong>at</strong> \( \tau \approx 1\,\text{GeV} \), <strong>consistent with CMS data (2021), as validated by a modified version of</strong> <code>02_monte_carlo_validator.py</code>.
+          <strong>A specific MSM projection of the RG flow</strong> \( \alpha_s(\tau) \) <strong>yields</strong> \( \alpha_s \approx 0.30 \) <strong>at</strong> \( \tau \approx 1\,\text{GeV} \), <strong>consistent with CMS data (2021).</strong><br>
+        </p>
+        <p>
+          <strong>Numerical Validation:</strong> This result is confirmed by both <code>02_monte_carlo_validator.py</code> and the standalone RG analysis script <code>10c_rg_entropy_flow.py</code>.<br>
+          The latter derives \( \alpha_s(\tau) \) from the redshift distribution in <code>z_sky_mean.csv</code>, showing convergence to the expected value via entropy-based flow.
         </p>
         <h4>7.2.5 Summary</h4>
         <p>
@@ -4958,12 +4967,16 @@
         <h4>11.2.3 Empirical Cross-Consistency</h4>
         <p>
           Configurations align with:
-        <ul>
-          <li>CODATA constants (e.g., \( \alpha \), \( G \)) showing τ-drift (CP7, 5.1.7).</li>
-          <li>LHC resonances matching entropy bifurcations (10.7.1, validated by ATLAS/CMS).</li>
-          <li>JWST/Planck signals (e.g., CMB anisotropies) reflecting holographic coherence (EP14, 6.3.14).</li>
-        </ul>
-        These confirm projectional logic, not predictive fit.
+          <ul>
+            <li>CODATA constants (e.g., \( \alpha \), \( G \)) showing τ-drift (CP7, 5.1.7).</li>
+            <li>LHC resonances matching entropy bifurcations (10.7.1, validated by ATLAS/CMS).</li>
+            <li>JWST/Planck signals (e.g., CMB anisotropies) reflecting holographic coherence (EP14, 6.3.14).</li>
+          </ul>
+        </p>
+        <p>
+          <strong>External Validation:</strong> For structural source density expectations (e.g., ~200 sources/arcmin²), <code>11_2mass_psc_validator.py</code> analyzes 2MASS PSC data via sky binning and threshold checks.<br>
+          Results support <strong>EP6</strong> and corroborate the spatial projection hypothesis from \( \mathcal{M}_{\text{meta}} \) to \( \mathcal{M}_4 \).<br>
+          These confirm projectional logic, not predictive fit.
         </p>
         <h4 id="sec-11-2-4">11.2.4 Summary</h4>
         <p>
