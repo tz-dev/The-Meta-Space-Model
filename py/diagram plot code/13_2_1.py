@@ -36,4 +36,4 @@ ax2.set_aspect('equal')
 fig.text(0.5, 0.015, 'Transition: Geometric to Projectional Horizons (CP2, CP3, CP4)', ha='center', fontsize=10, color='red')
 
 plt.tight_layout()
-plt.show()
+plt.savefig('13_2_1.png', dpi=300, bbox_inches='tight')

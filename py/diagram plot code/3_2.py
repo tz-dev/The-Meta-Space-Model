@@ -37,5 +37,4 @@ nx.draw_networkx_labels(G, pos, labels=nodes, font_size=9, font_color='black', v
 # Finalize
 ax.set_axis_off()
 plt.tight_layout()
-plt.savefig("3_1_2.png")
-plt.show()
+plt.savefig("3_1_2.png", dpi=300)

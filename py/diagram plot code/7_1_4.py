@@ -49,4 +49,4 @@ ax.text(1.1, -0.05, r"$I_{\mu\nu} := \nabla_\mu \nabla_\nu S$", fontsize=14, ha=
 # Title
 # Layout and display
 plt.tight_layout()
-plt.show()
+plt.savefig('7_1_4.png', dpi=300, bbox_inches='tight')

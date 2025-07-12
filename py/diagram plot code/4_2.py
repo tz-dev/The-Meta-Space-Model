@@ -30,4 +30,3 @@ ax.grid(True)
 # Adjust layout and save
 plt.tight_layout()
 plt.savefig('4_2.png', dpi=300, bbox_inches='tight')
-plt.show()

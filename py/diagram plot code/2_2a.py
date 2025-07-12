@@ -33,4 +33,4 @@ ax.set_ylabel('y')
 ax.set_zlabel('z')
 
 plt.tight_layout()
-plt.show()
+plt.savefig("2_2a.png", dpi=300)

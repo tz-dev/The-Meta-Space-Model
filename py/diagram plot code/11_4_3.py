@@ -43,4 +43,4 @@ ax.grid(True, ls='--')
 ax.text(0.05, 0.95, 'Entropic limits correlate with JWST observations (P6)', transform=ax.transAxes, fontsize=10, color='red')
 
 plt.tight_layout()
-plt.show()
+plt.savefig('11_4_3.png', dpi=300, bbox_inches='tight')

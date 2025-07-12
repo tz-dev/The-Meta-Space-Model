@@ -36,4 +36,4 @@ ax.grid(True, ls='--')
 ax.text(0.05, 0.95, 'Small but finite set of configurations (CP3, CP6)', transform=ax.transAxes, fontsize=10, color='red')
 
 plt.tight_layout()
-plt.show()
+plt.savefig('10_2_4.png', dpi=300, bbox_inches='tight')

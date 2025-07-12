@@ -32,4 +32,4 @@ ax.set_ylabel("y")
 ax.set_zlabel("$V_{\\mathrm{eff}}$")
 
 plt.tight_layout()
-plt.show()
+plt.savefig('7_4_1.png', dpi=300, bbox_inches='tight')

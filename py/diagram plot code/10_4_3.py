@@ -38,4 +38,4 @@ ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), ncol=2, title='Legend'
 ax.grid(True, ls='--')
 
 plt.tight_layout()
-plt.show()
+plt.savefig('10_4_3.png', dpi=300, bbox_inches='tight')

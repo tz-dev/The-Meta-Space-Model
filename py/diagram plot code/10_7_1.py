@@ -34,4 +34,4 @@ ax.grid(True, ls='--')
 ax.text(0.25, 0.75, 'Projection-induced Symmetry Breaking (CP3, EP11)', transform=ax.transAxes, fontsize=10, color='red')
 
 plt.tight_layout()
-plt.show()
+plt.savefig('10_7_1.png', dpi=300, bbox_inches='tight')

@@ -34,4 +34,4 @@ ax.legend(loc='upper right')
 ax.grid(True, ls='--')
 
 plt.tight_layout()
-plt.show()
+plt.savefig('13_1_2.png', dpi=300, bbox_inches='tight')

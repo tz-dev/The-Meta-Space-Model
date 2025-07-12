@@ -37,4 +37,4 @@ ax2.set_yticks([])
 ax2.set_zticks([])
 
 plt.tight_layout()
-plt.show()
+plt.savefig("2_2b.png", dpi=300)

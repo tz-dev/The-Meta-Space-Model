@@ -42,4 +42,4 @@ ax.set_ylim(0, 1)
 ax.axis('off')
 
 plt.tight_layout()
-plt.show()
+plt.savefig('10_3_1.png', dpi=300, bbox_inches='tight')

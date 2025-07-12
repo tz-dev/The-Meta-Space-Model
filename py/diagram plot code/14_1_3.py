@@ -37,4 +37,4 @@ ax2.text(0, -1.2, r"$\oint A_\mu dx^\mu = 2\pi n$", ha='center', fontsize=12)
 fig.text(0.5, 0.03, 'Topological Quantization as Projectability Criterion (CP3, CP4, CP8)', ha='center', fontsize=10, color='darkred')
 
 plt.tight_layout()
-plt.show()
+plt.savefig('14_1_3.png', dpi=300, bbox_inches='tight')

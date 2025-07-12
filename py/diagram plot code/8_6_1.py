@@ -35,4 +35,4 @@ ax.grid(True, which="both", ls="--")
 ax.text(1e-22, 1e10, r'$\hbar_{\text{eff}} \approx 1$ (normalized)', color='red')
 
 plt.tight_layout()
-plt.show()
+plt.savefig('8_6_1.png', dpi=300, bbox_inches='tight')

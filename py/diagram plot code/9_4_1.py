@@ -47,4 +47,4 @@ nx.draw_networkx_edge_labels(G, pos, edge_labels, font_size=8, label_pos=0.5)
 ax.set_axis_off()
 
 plt.tight_layout()
-plt.show()
+plt.savefig('9_4_1.png', dpi=300, bbox_inches='tight')

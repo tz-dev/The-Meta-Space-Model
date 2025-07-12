@@ -62,5 +62,4 @@ ax.grid(True)
 ax.view_init(elev=20, azim=45)
 
 # Save and show
-plt.savefig('projection_funnel_3d_exponential_adjusted.png', dpi=300, bbox_inches='tight')
-plt.show()
+plt.savefig('2_3.png', dpi=300, bbox_inches='tight')

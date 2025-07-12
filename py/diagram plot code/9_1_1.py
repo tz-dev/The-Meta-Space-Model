@@ -30,4 +30,4 @@ ax2.set_ylabel('y')
 ax2.set_title('MSM Tensor: $I_{\\mu\\nu}$ (Entropic)')
 
 plt.tight_layout()
-plt.show()
+plt.savefig('9_1_1.png', dpi=300, bbox_inches='tight')
