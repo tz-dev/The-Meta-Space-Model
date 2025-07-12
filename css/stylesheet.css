@@ -305,7 +305,6 @@ img {
   .diagram-box figure {
     margin: 0;
     border: 1px solid #999;
-    border-radius: 3px;
     background-color: #fff;
   }
 
@@ -322,7 +321,7 @@ img {
     max-width: 100%;
     height: auto;
     display: block;
-    margin: 10px auto;
+    margin: 0px auto;
   }
 
   .description-box {
