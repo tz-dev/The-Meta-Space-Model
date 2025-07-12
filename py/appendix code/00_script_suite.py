@@ -695,7 +695,7 @@ def create_gui():
         "                                - Use mouse wheel to scroll images in the Image Viewer.\n\n"
         "                                INSTRUCTIONS:\n\n"
         "                                - Click a script button to run it (enabled ONLY after the previous script succeeds).\n"
-        "                                - Click 'Show results.csv' to check or 'Reset results' to clear calculated values, plots etc.\n"
+        "                                - Click 'Show results.csv' to check or 'Reset all results' to clear calculated values, plots etc.\n"
         "                                - View plotted diagrams by clicking the 'Open Image Viewer' button.\n\n"
         "                                EXTERNAL DATA REQUIREMENTS:\n\n"
         "                                - For script 10 ('10_external_data_validator.py'), download the SDSS spectral catalog:\n"
